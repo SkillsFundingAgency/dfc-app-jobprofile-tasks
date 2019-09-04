@@ -3,8 +3,8 @@ using System.Threading.Tasks;
 
 namespace DFC.App.JobProfileOverview.Data.Contracts
 {
-    public interface IDraftJobProfileOverviewSegmentService
+    public interface IDraftJobProfileTasksSegmentService
     {
-        Task<JobProfileTaskSegmentModel> GetSitefinityData(string canonicalName);
+        Task<JobProfileTasksSegmentModel> GetSitefinityData(string canonicalName);
     }
 }
