@@ -1,0 +1,18 @@
+﻿@model DFC.App.JobProfileTasks.ViewModels.IndexViewModel
+
+<html>
+<body>
+    @if (Model.Documents?.Count() > 0)
+    {
+        <p>Found @Model.Documents.Count() document(s)</p>
+        <ul>
+            @foreach (var document in Model.Documents)
+            {
+                <li>
+                    <a href="/segment/@document.CanonicalName">@document.CanonicalName</a>
+                </li>
+            }
+        </ul>
+    }
+</body>
+</html>
