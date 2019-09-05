@@ -1,19 +1,17 @@
 ﻿using DFC.App.JobProfileTasks.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System.Diagnostics;
 
 namespace DFC.App.JobProfileTasks.Controllers
 {
     public class HomeController : Controller
     {
-        public IActionResult Index()
-        {
-            return View();
-        }
+        private readonly ILogger<HomeController> logger;
 
-        public IActionResult Privacy()
+        public HomeController(ILogger<HomeController> logger)
         {
-            return View();
+            this.logger = logger;
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
