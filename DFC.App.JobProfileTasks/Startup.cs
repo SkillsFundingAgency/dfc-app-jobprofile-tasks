@@ -1,8 +1,7 @@
 ﻿using AutoMapper;
-using DFC.App.JobProfileOverview.Data.Contracts;
-using DFC.App.JobProfileOverview.DraftSegmentService;
 using DFC.App.JobProfileTasks.Data.Contracts;
 using DFC.App.JobProfileTasks.Data.Models;
+using DFC.App.JobProfileTasks.DraftSegmentService;
 using DFC.App.JobProfileTasks.Repository.CosmosDb;
 using DFC.App.JobProfileTasks.Repository.SitefinityApi;
 using DFC.App.JobProfileTasks.SegmentService;

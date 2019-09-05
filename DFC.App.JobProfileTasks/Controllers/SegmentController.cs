@@ -11,13 +11,13 @@ namespace DFC.App.JobProfileTasks.Controllers
     public class SegmentController : Controller
     {
         private readonly ILogger<SegmentController> logger;
-        private readonly IJobProfileTasksSegmentService jobProfileOverviewSegmentService;
+        private readonly IJobProfileTasksSegmentService jobProfileTasksSegmentService;
         private readonly AutoMapper.IMapper mapper;
 
-        public SegmentController(ILogger<SegmentController> logger, IJobProfileTasksSegmentService jobProfileOverviewSegmentService, AutoMapper.IMapper mapper)
+        public SegmentController(ILogger<SegmentController> logger, IJobProfileTasksSegmentService jobProfileTasksSegmentService, AutoMapper.IMapper mapper)
         {
             this.logger = logger;
-            this.jobProfileOverviewSegmentService = jobProfileOverviewSegmentService;
+            this.jobProfileTasksSegmentService = jobProfileTasksSegmentService;
             this.mapper = mapper;
         }
 
@@ -29,7 +29,7 @@ namespace DFC.App.JobProfileTasks.Controllers
             logger.LogInformation($"{nameof(Index)} has been called");
 
             var viewModel = new IndexViewModel();
-            var segmentModels = await jobProfileOverviewSegmentService.GetAllAsync().ConfigureAwait(false);
+            var segmentModels = await jobProfileTasksSegmentService.GetAllAsync().ConfigureAwait(false);
 
             if (segmentModels != null)
             {
@@ -54,7 +54,7 @@ namespace DFC.App.JobProfileTasks.Controllers
         {
             logger.LogInformation($"{nameof(Document)} has been called with: {article}");
 
-            var careerPathSegmentModel = await jobProfileOverviewSegmentService.GetByNameAsync(article, Request.IsDraftRequest()).ConfigureAwait(false);
+            var careerPathSegmentModel = await jobProfileTasksSegmentService.GetByNameAsync(article, Request.IsDraftRequest()).ConfigureAwait(false);
 
             if (careerPathSegmentModel != null)
             {
@@ -66,6 +66,28 @@ namespace DFC.App.JobProfileTasks.Controllers
             }
 
             logger.LogWarning($"{nameof(Document)} has returned no content for: {article}");
+
+            return NoContent();
+        }
+
+        [HttpGet]
+        [Route("{controller}/{article}/contents")]
+        public async Task<IActionResult> Body(string article)
+        {
+            logger.LogInformation($"{nameof(Body)} has been called with: {article}");
+
+            var model = await jobProfileTasksSegmentService.GetByNameAsync(article, Request.IsDraftRequest()).ConfigureAwait(false);
+
+            if (model != null)
+            {
+                var viewModel = mapper.Map<BodyViewModel>(model);
+
+                logger.LogInformation($"{nameof(Body)} has succeeded for: {article}");
+
+                return this.NegotiateContentResult(viewModel);
+            }
+
+            logger.LogWarning($"{nameof(Body)} has returned no content for: {article}");
 
             return NoContent();
         }

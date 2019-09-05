@@ -1,9 +1,9 @@
-﻿using DFC.App.JobProfileOverview.Data.Contracts;
+﻿using DFC.App.JobProfileTasks.Data.Contracts;
 using DFC.App.JobProfileTasks.Data.Models;
 using System;
 using System.Threading.Tasks;
 
-namespace DFC.App.JobProfileOverview.DraftSegmentService
+namespace DFC.App.JobProfileTasks.DraftSegmentService
 {
     public class DraftJobProfileTasksSegmentService : IDraftJobProfileTasksSegmentService
     {

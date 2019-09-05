@@ -1,5 +1,4 @@
-﻿using DFC.App.JobProfileOverview.Data.Contracts;
-using DFC.App.JobProfileTasks.Data.Contracts;
+﻿using DFC.App.JobProfileTasks.Data.Contracts;
 using DFC.App.JobProfileTasks.Data.Models;
 using System;
 using System.Collections.Generic;
@@ -14,10 +13,10 @@ namespace DFC.App.JobProfileTasks.SegmentService
 
         public JobProfileTasksSegmentService(
             ICosmosRepository<JobProfileTasksSegmentModel> repository,
-            IDraftJobProfileTasksSegmentService jobProfileOverviewSegmentService)
+            IDraftJobProfileTasksSegmentService jobProfileTasksSegmentService)
         {
             this.repository = repository;
-            this.jobProfileTasksSegmentService = jobProfileOverviewSegmentService;
+            this.jobProfileTasksSegmentService = jobProfileTasksSegmentService;
         }
 
         public async Task<IEnumerable<JobProfileTasksSegmentModel>> GetAllAsync()

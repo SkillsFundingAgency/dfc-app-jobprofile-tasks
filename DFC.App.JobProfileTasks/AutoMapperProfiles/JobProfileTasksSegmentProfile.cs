@@ -5,15 +5,17 @@ using Microsoft.AspNetCore.Html;
 
 namespace DFC.App.JobProfileTasks.AutoMapperProfiles
 {
-    public class JobProfileOverviewSegmentProfile : Profile
+    public class JobProfileTasksSegmentProfile : Profile
     {
-        public JobProfileOverviewSegmentProfile()
+        public JobProfileTasksSegmentProfile()
         {
-            CreateMap<JobProfileTasksSegmentModel, IndexDocumentViewModel>()
-                .ForMember(d => d.CanonicalName, s => s.MapFrom(x => x.CanonicalName));
+            CreateMap<JobProfileTasksSegmentModel, IndexDocumentViewModel>();
 
             CreateMap<JobProfileTasksSegmentModel, DocumentViewModel>()
                 .ForMember(d => d.Content, s => s.MapFrom(x => new HtmlString(x.Content)));
+
+            CreateMap<JobProfileTasksSegmentModel, BodyViewModel>()
+                    .ForMember(d => d.Content, s => s.MapFrom(x => new HtmlString(x.Content)));
         }
     }
 }

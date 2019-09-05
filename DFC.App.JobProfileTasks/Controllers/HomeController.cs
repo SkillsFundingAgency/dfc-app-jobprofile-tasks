@@ -1,4 +1,4 @@
-﻿using DFC.App.JobProfileTasks.Models;
+﻿using DFC.App.JobProfileTasks.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Diagnostics;

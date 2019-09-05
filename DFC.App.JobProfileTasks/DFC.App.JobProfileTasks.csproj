@@ -32,4 +32,10 @@
     <ProjectReference Include="..\DFC.App.JobProfileTasks.SegmentService\DFC.App.JobProfileTasks.SegmentService.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Update="appsettings.json">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
 </Project>
