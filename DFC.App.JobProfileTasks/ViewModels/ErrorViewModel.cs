@@ -1,6 +1,4 @@
-using System;
-
-namespace DFC.App.JobProfileTasks.Models
+namespace DFC.App.JobProfileTasks.ViewModels
 {
     public class ErrorViewModel
     {

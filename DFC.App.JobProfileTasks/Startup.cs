@@ -1,20 +1,32 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using AutoMapper;
+using DFC.App.JobProfileTasks.Data.Contracts;
+using DFC.App.JobProfileTasks.Data.Models;
+using DFC.App.JobProfileTasks.DraftSegmentService;
+using DFC.App.JobProfileTasks.Repository.CosmosDb;
+using DFC.App.JobProfileTasks.Repository.SitefinityApi;
+using DFC.App.JobProfileTasks.SegmentService;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Azure.Documents;
+using Microsoft.Azure.Documents.Client;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System;
 
 namespace DFC.App.JobProfileTasks
 {
     public class Startup
     {
+        public const string CosmosDbConfigAppSettings = "Configuration:CosmosDbConnections:JobProfileSegment";
+        public const string SitefinityApiAppSettings = "SitefinityApi";
+        private readonly IConfiguration configuration;
+
         public Startup(IConfiguration configuration)
         {
-            Configuration = configuration;
+            this.configuration = configuration;
         }
-
-        public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -25,6 +37,17 @@ namespace DFC.App.JobProfileTasks
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
+
+            var cosmosDbConnection = configuration.GetSection(CosmosDbConfigAppSettings).Get<CosmosDbConnection>();
+            var documentClient = new DocumentClient(new Uri(cosmosDbConnection.EndpointUrl), cosmosDbConnection.AccessKey);
+            var sitefinityApiConnection = configuration.GetSection(SitefinityApiAppSettings).Get<SitefinityAPIConnectionSettings>();
+
+            services.AddSingleton(cosmosDbConnection);
+            services.AddSingleton<IDocumentClient>(documentClient);
+            services.AddSingleton<ICosmosRepository<JobProfileTasksSegmentModel>, CosmosRepository<JobProfileTasksSegmentModel>>();
+            services.AddSingleton<IJobProfileTasksSegmentService, JobProfileTasksSegmentService>();
+            services.AddSingleton<IDraftJobProfileTasksSegmentService, DraftJobProfileTasksSegmentService>();
+            services.AddAutoMapper(typeof(Startup).Assembly);
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
@@ -47,13 +70,7 @@ namespace DFC.App.JobProfileTasks
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
-
-            app.UseMvc(routes =>
-            {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
-            });
+            app.UseMvcWithDefaultRoute();
         }
     }
 }

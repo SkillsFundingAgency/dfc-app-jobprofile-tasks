@@ -55,13 +55,13 @@ By default, the appsettings include a local Azure Cosmos Emulator configuration 
 
 To run this product locally, you will need to configure the list of dependencies. Once configured and the configuration files updated, it should be F5 to run and debug locally. The application can be run using IIS Express or full IIS.
 
-To run the project, start the web application. Once running, browse to the main entrypoint which is the "https://localhost:44397/segments". This will list all of the Job Profile Overview segments available and from here, you can navigate to the individual Job Profile Overview segments.
+To run the project, start the web application. Once running, browse to the main entrypoint which is the "https://localhost:44352/segments". This will list all of the Job Profile task segments available and from here, you can navigate to the individual Job Profile Tasks segments.
 
-The Job Profile Overview app is designed to be run from within the Job Profiles app, which in turn is run from within the Composite UI, therefore running the Job Profile Overview app outside of the other apps will only show simple views of the data.
+The Job Profile task app is designed to be run from within the Job Profiles app, which in turn is run from within the Composite UI, therefore running the Job Profile Tasks app outside of the other apps will only show simple views of the data.
 
 ## Deployments
 
-This Job Profile Overview app will be deployed as an individual deployment for consumption by the Composite UI.
+This Job Profile task app will be deployed as an individual deployment for consumption by the Composite UI.
 
 ## Assets
 
