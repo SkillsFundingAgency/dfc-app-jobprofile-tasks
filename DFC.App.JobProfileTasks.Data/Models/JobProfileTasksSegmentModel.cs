@@ -11,14 +11,10 @@ namespace DFC.App.JobProfileTasks.Data.Models
         public Guid DocumentId { get; set; }
 
         [Required]
-        [JsonProperty(PropertyName = "canonicalName")]
         public string CanonicalName { get; set; }
 
-        [JsonProperty(PropertyName = "content")]
-        public string Content { get; set; }
+        public DateTime Created { get; set; } = DateTime.UtcNow;
 
-        [Display(Name = "Last Reviewed")]
-        [JsonProperty(PropertyName = "lastReviewed")]
-        public DateTime LastReviewed { get; set; }
+        public int PartitionKey => Created.Second;
     }
 }
