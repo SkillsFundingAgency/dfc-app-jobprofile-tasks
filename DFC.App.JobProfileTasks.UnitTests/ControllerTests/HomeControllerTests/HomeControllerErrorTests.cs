@@ -1,6 +1,4 @@
-﻿using DFC.App.JobProfileTasks.ViewModels;
-using FakeItEasy;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Xunit;
 
 namespace DFC.App.JobProfileTasks.UnitTests.ControllerTests.HomeControllerTests

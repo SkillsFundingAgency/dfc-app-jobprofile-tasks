@@ -2,6 +2,7 @@
 using DFC.App.JobProfileTasks.Data.Models;
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace DFC.App.JobProfileTasks.SegmentService
@@ -37,6 +38,50 @@ namespace DFC.App.JobProfileTasks.SegmentService
             }
 
             return await repository.GetAsync(d => d.CanonicalName.ToLower() == canonicalName.ToLowerInvariant()).ConfigureAwait(false);
+        }
+
+        public async Task<JobProfileTasksSegmentModel> CreateAsync(JobProfileTasksSegmentModel overviewSegmentModel)
+        {
+            if (overviewSegmentModel == null)
+            {
+                throw new ArgumentNullException(nameof(overviewSegmentModel));
+            }
+
+            if (overviewSegmentModel.Data == null)
+            {
+                overviewSegmentModel.Data = new JobProfileTasksDataSegmentModel();
+            }
+
+            var result = await repository.CreateAsync(overviewSegmentModel).ConfigureAwait(false);
+
+            return result == HttpStatusCode.Created
+                ? await GetByIdAsync(overviewSegmentModel.DocumentId).ConfigureAwait(false)
+                : null;
+        }
+
+        public async Task<JobProfileTasksSegmentModel> ReplaceAsync(JobProfileTasksSegmentModel overviewSegmentModel)
+        {
+            if (overviewSegmentModel == null)
+            {
+                throw new ArgumentNullException(nameof(overviewSegmentModel));
+            }
+
+            if (overviewSegmentModel.Data == null)
+            {
+                overviewSegmentModel.Data = new JobProfileTasksDataSegmentModel();
+            }
+
+            var result = await repository.UpdateAsync(overviewSegmentModel.DocumentId, overviewSegmentModel).ConfigureAwait(false);
+
+            return result == HttpStatusCode.OK
+                ? await GetByIdAsync(overviewSegmentModel.DocumentId).ConfigureAwait(false)
+                : null;
+        }
+
+        public async Task<bool> DeleteAsync(Guid documentId, int partitionKeyValue)
+        {
+            var result = await repository.DeleteAsync(documentId, partitionKeyValue).ConfigureAwait(false);
+            return result == HttpStatusCode.NoContent;
         }
     }
 }

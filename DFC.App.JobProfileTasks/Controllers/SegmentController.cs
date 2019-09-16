@@ -1,8 +1,10 @@
 ﻿using DFC.App.JobProfileTasks.Data.Contracts;
+using DFC.App.JobProfileTasks.Data.Models;
 using DFC.App.JobProfileTasks.Extensions;
 using DFC.App.JobProfileTasks.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -90,6 +92,65 @@ namespace DFC.App.JobProfileTasks.Controllers
             logger.LogWarning($"{nameof(Body)} has returned no content for: {article}");
 
             return NoContent();
+        }
+
+        [HttpPut]
+        [HttpPost]
+        [Route("{controller}")]
+        public async Task<IActionResult> CreateOrUpdate([FromBody]JobProfileTasksSegmentModel createOrUpdateSegmentModel)
+        {
+            logger.LogInformation($"{nameof(CreateOrUpdate)} has been called");
+
+            if (createOrUpdateSegmentModel == null)
+            {
+                return BadRequest();
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var existingCareerPathSegmentModel = await jobProfileTasksSegmentService.GetByIdAsync(createOrUpdateSegmentModel.DocumentId).ConfigureAwait(false);
+
+            if (existingCareerPathSegmentModel == null)
+            {
+                var createdResponse = await jobProfileTasksSegmentService.CreateAsync(createOrUpdateSegmentModel).ConfigureAwait(false);
+
+                logger.LogInformation($"{nameof(CreateOrUpdate)} has created content for: {createOrUpdateSegmentModel.CanonicalName}");
+
+                return new CreatedAtActionResult(nameof(Document), "Segment", new { article = createdResponse.CanonicalName }, createdResponse);
+            }
+            else
+            {
+                var updatedResponse = await jobProfileTasksSegmentService.ReplaceAsync(createOrUpdateSegmentModel).ConfigureAwait(false);
+
+                logger.LogInformation($"{nameof(CreateOrUpdate)} has updated content for: {createOrUpdateSegmentModel.CanonicalName}");
+
+                return new OkObjectResult(updatedResponse);
+            }
+        }
+
+        [HttpDelete]
+        [Route("{controller}/{documentId}")]
+        public async Task<IActionResult> Delete(Guid documentId)
+        {
+            logger.LogInformation($"{nameof(Delete)} has been called");
+
+            var jobProfileOverviewSegmentModel = await jobProfileTasksSegmentService.GetByIdAsync(documentId).ConfigureAwait(false);
+
+            if (jobProfileOverviewSegmentModel == null)
+            {
+                logger.LogWarning($"{nameof(Document)} has returned no content for: {documentId}");
+
+                return NotFound();
+            }
+
+            await jobProfileTasksSegmentService.DeleteAsync(documentId, jobProfileOverviewSegmentModel.PartitionKey).ConfigureAwait(false);
+
+            logger.LogInformation($"{nameof(Delete)} has deleted content for: {jobProfileOverviewSegmentModel.CanonicalName}");
+
+            return Ok();
         }
     }
 }
