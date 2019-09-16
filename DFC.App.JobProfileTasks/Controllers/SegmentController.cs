@@ -137,18 +137,18 @@ namespace DFC.App.JobProfileTasks.Controllers
         {
             logger.LogInformation($"{nameof(Delete)} has been called");
 
-            var jobProfileOverviewSegmentModel = await jobProfileTasksSegmentService.GetByIdAsync(documentId).ConfigureAwait(false);
+            var jobProfileTasksSegmentModel = await jobProfileTasksSegmentService.GetByIdAsync(documentId).ConfigureAwait(false);
 
-            if (jobProfileOverviewSegmentModel == null)
+            if (jobProfileTasksSegmentModel == null)
             {
                 logger.LogWarning($"{nameof(Document)} has returned no content for: {documentId}");
 
                 return NotFound();
             }
 
-            await jobProfileTasksSegmentService.DeleteAsync(documentId, jobProfileOverviewSegmentModel.PartitionKey).ConfigureAwait(false);
+            await jobProfileTasksSegmentService.DeleteAsync(documentId, jobProfileTasksSegmentModel.PartitionKey).ConfigureAwait(false);
 
-            logger.LogInformation($"{nameof(Delete)} has deleted content for: {jobProfileOverviewSegmentModel.CanonicalName}");
+            logger.LogInformation($"{nameof(Delete)} has deleted content for: {jobProfileTasksSegmentModel.CanonicalName}");
 
             return Ok();
         }
