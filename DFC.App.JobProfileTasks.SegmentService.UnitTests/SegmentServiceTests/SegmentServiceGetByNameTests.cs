@@ -22,7 +22,7 @@ namespace DFC.App.JobProfileTasks.SegmentService.UnitTests.SegmentServiceTests
         }
 
         [Fact]
-        public async Task SegmentServiceGetByNameReturnsSuccess()
+        public async Task GetByNameReturnsSuccess()
         {
             // arrange
             var documentId = Guid.NewGuid();
@@ -39,7 +39,7 @@ namespace DFC.App.JobProfileTasks.SegmentService.UnitTests.SegmentServiceTests
         }
 
         [Fact]
-        public async Task SegmentServiceGetByNameReturnsArgumentNullExceptionWhenNullIsUsed()
+        public async Task GetByNameReturnsArgumentNullExceptionWhenNullIsUsed()
         {
             // arrange
 
@@ -51,7 +51,7 @@ namespace DFC.App.JobProfileTasks.SegmentService.UnitTests.SegmentServiceTests
         }
 
         [Fact]
-        public async Task SegmentServiceGetByNameReturnsNullWhenMissingInRepository()
+        public async Task GetByNameReturnsNullWhenMissingInRepository()
         {
             // arrange
             JobProfileTasksSegmentModel expectedResult = null;
