@@ -12,7 +12,7 @@ namespace DFC.App.JobProfileTasks.UnitTests.ControllerTests.SegmentControllerTes
     {
         [Theory]
         [MemberData(nameof(HtmlMediaTypes))]
-        public async void SegmentControllerIndexHtmlReturnsSuccess(string mediaTypeName)
+        public async void ReturnsSuccessForHtmlMediaType(string mediaTypeName)
         {
             // Arrange
             const int resultsCount = 2;
@@ -39,7 +39,7 @@ namespace DFC.App.JobProfileTasks.UnitTests.ControllerTests.SegmentControllerTes
 
         [Theory]
         [MemberData(nameof(HtmlMediaTypes))]
-        public async void PagesControllerIndexHtmlReturnsSuccessWhenNoData(string mediaTypeName)
+        public async void ReturnsSuccessWhenNoData(string mediaTypeName)
         {
             // Arrange
             const int resultsCount = 0;
