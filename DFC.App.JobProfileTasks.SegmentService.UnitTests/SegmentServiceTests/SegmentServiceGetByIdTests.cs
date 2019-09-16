@@ -22,7 +22,7 @@ namespace DFC.App.JobProfileTasks.SegmentService.UnitTests.SegmentServiceTests
         }
 
         [Fact]
-        public async Task SegmentServiceGetByIdReturnsSuccess()
+        public async Task GetByIdReturnsSuccess()
         {
             // arrange
             var documentId = Guid.NewGuid();
@@ -39,7 +39,7 @@ namespace DFC.App.JobProfileTasks.SegmentService.UnitTests.SegmentServiceTests
         }
 
         [Fact]
-        public async Task SegmentServiceGetByIdReturnsNullWhenMissingInRepository()
+        public async Task GetByIdReturnsNullWhenMissingInRepository()
         {
             // arrange
             var documentId = Guid.NewGuid();

@@ -11,7 +11,7 @@ namespace DFC.App.JobProfileTasks.UnitTests.ControllerTests.SegmentControllerTes
     {
         [Theory]
         [MemberData(nameof(HtmlMediaTypes))]
-        public async void SegmentControllerBodyHtmlReturnsSuccess(string mediaTypeName)
+        public async void ReturnsSuccessForHtmlMediaType(string mediaTypeName)
         {
             // Arrange
             const string article = "an-article-name";
@@ -38,7 +38,7 @@ namespace DFC.App.JobProfileTasks.UnitTests.ControllerTests.SegmentControllerTes
 
         [Theory]
         [MemberData(nameof(JsonMediaTypes))]
-        public async void SegmentControllerBodyJsonReturnsSuccess(string mediaTypeName)
+        public async void ReturnsSuccessForJsonMediaType(string mediaTypeName)
         {
             // Arrange
             const string article = "an-article-name";
@@ -65,7 +65,7 @@ namespace DFC.App.JobProfileTasks.UnitTests.ControllerTests.SegmentControllerTes
 
         [Theory]
         [MemberData(nameof(InvalidMediaTypes))]
-        public async void SegmentControllerBodyReturnsNotAcceptable(string mediaTypeName)
+        public async void ReturnsNotAcceptableForInvalidMediaType(string mediaTypeName)
         {
             // Arrange
             const string article = "an-article-name";

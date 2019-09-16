@@ -11,7 +11,7 @@ namespace DFC.App.JobProfileTasks.UnitTests.ControllerTests.SegmentControllerTes
     {
         [Theory]
         [MemberData(nameof(HtmlMediaTypes))]
-        public async void SegmentControllerDocumentHtmlReturnsSuccess(string mediaTypeName)
+        public async void ReturnsSuccessForHtmlMediaType(string mediaTypeName)
         {
             // Arrange
             const string article = "an-article-name";
@@ -36,7 +36,7 @@ namespace DFC.App.JobProfileTasks.UnitTests.ControllerTests.SegmentControllerTes
 
         [Theory]
         [MemberData(nameof(HtmlMediaTypes))]
-        public async void SegmentControllerDocumentHtmlReturnsNoContentWhenNoData(string mediaTypeName)
+        public async void ReturnsNoContentWhenNoData(string mediaTypeName)
         {
             // Arrange
             const string article = "an-article-name";
