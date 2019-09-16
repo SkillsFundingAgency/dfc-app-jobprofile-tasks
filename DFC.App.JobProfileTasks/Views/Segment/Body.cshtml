@@ -13,4 +13,12 @@
     <dd class="col-sm-10">
         @Html.DisplayFor(model => model.CanonicalName)
     </dd>
+
+    <dt class="col-sm-2">
+        @Html.DisplayNameFor(model => model.Created)
+    </dt>
+    <dd class="col-sm-10">
+        @Html.DisplayFor(model => model.Created)
+    </dd>
 </dl>
+<partial name="BodyData" model="Model.Data" />

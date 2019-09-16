@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <Content Remove="appsettings-template.json" />
+    <Content Remove="appsettings.json" />
   </ItemGroup>
 
   <ItemGroup>
@@ -15,6 +16,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="appsettings.json">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
     <None Include="appsettings-template.json">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </None>

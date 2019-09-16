@@ -13,6 +13,8 @@ namespace DFC.App.JobProfileTasks.AutoMapperProfiles
             CreateMap<JobProfileTasksSegmentModel, DocumentViewModel>();
 
             CreateMap<JobProfileTasksSegmentModel, BodyViewModel>();
+
+            CreateMap<JobProfileTasksDataSegmentModel, BodyDataViewModel>();
         }
     }
 }
