@@ -1,5 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Net.Http.Headers;
+using System.Net.Mime;
+using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -14,13 +16,8 @@ namespace DFC.App.JobProfileTasks.IntegrationTests.ControllerTests
             this.factory = factory;
         }
 
-        public static IEnumerable<object[]> HealthOkRouteData => new List<object[]>
-        {
-            new object[] { "/health/ping" },
-        };
-
         [Theory]
-        [MemberData(nameof(HealthOkRouteData))]
+        [InlineData("health/ping")]
         public async Task GetHealthOkEndpointsReturnSuccess(string url)
         {
             // Arrange
@@ -33,6 +30,25 @@ namespace DFC.App.JobProfileTasks.IntegrationTests.ControllerTests
 
             // Assert
             response.EnsureSuccessStatusCode();
+        }
+
+        [Theory]
+        [InlineData(MediaTypeNames.Text.Html)]
+        [InlineData(MediaTypeNames.Application.Json)]
+        public async Task ReturnSuccessAndCorrectContentType(string mediaType)
+        {
+            // Arrange
+            var uri = new Uri("health", UriKind.Relative);
+            var client = factory.CreateClient();
+            client.DefaultRequestHeaders.Accept.Clear();
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(mediaType));
+
+            // Act
+            var response = await client.GetAsync(uri).ConfigureAwait(false);
+
+            // Assert
+            response.EnsureSuccessStatusCode();
+            Assert.Equal($"{mediaType}; charset={Encoding.UTF8.WebName}", response.Content.Headers.ContentType.ToString());
         }
     }
 }
