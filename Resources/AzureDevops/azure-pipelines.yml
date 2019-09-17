@@ -1,6 +1,6 @@
 variables:
     ArmTemplateRoot: '$(Build.SourcesDirectory)\Resources\ArmTemplates'     
-    SolutionBaseName: 'DFC.App.JobProfileOverviewTasks'
+    SolutionBaseName: 'DFC.App.JobProfileTasks'
     BuildPlatform: 'any cpu'
     BuildConfiguration: 'release'
 
