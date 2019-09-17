@@ -33,6 +33,22 @@ namespace DFC.App.JobProfileTasks.Repository.CosmosDb
 
         private Uri DocumentCollectionUri => UriFactory.CreateDocumentCollectionUri(cosmosDbConnection.DatabaseId, cosmosDbConnection.CollectionId);
 
+        public async Task<bool> PingAsync()
+        {
+            var query = documentClient.CreateDocumentQuery<T>(DocumentCollectionUri, new FeedOptions { MaxItemCount = 1, EnableCrossPartitionQuery = true })
+                                       .AsDocumentQuery();
+
+            if (query == null)
+            {
+                return false;
+            }
+
+            var models = await query.ExecuteNextAsync<T>().ConfigureAwait(false);
+            var firstModel = models.FirstOrDefault();
+
+            return firstModel != null;
+        }
+
         public async Task<IEnumerable<T>> GetAllAsync()
         {
             var query = documentClient.CreateDocumentQuery<T>(DocumentCollectionUri, new FeedOptions { EnableCrossPartitionQuery = true })
@@ -58,7 +74,7 @@ namespace DFC.App.JobProfileTasks.Repository.CosmosDb
 
             if (query == null)
             {
-                return default(T);
+                return default;
             }
 
             var models = await query.ExecuteNextAsync<T>().ConfigureAwait(false);
@@ -68,7 +84,7 @@ namespace DFC.App.JobProfileTasks.Repository.CosmosDb
                 return models.FirstOrDefault();
             }
 
-            return default(T);
+            return default;
         }
 
         public async Task<HttpStatusCode> CreateAsync(T model)

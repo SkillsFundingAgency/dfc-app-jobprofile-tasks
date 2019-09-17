@@ -20,6 +20,11 @@ namespace DFC.App.JobProfileTasks.SegmentService
             this.jobProfileTasksSegmentService = jobProfileTasksSegmentService;
         }
 
+        public async Task<bool> PingAsync()
+        {
+            return await repository.PingAsync().ConfigureAwait(false);
+        }
+
         public async Task<IEnumerable<JobProfileTasksSegmentModel>> GetAllAsync()
         {
             return await repository.GetAllAsync().ConfigureAwait(false);

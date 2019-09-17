@@ -1,4 +1,5 @@
 ﻿using DFC.App.JobProfileTasks.Controllers;
+using DFC.App.JobProfileTasks.Data.Contracts;
 using FakeItEasy;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -11,10 +12,13 @@ namespace DFC.App.JobProfileTasks.UnitTests.ControllerTests.HealthControllerTest
     {
         public BaseHealthController()
         {
-            FakeLogger = A.Fake<ILogger<HealthController>>();
+            Logger = A.Fake<ILogger<HealthController>>();
+            JobProfileTasksSegmentService = A.Fake<IJobProfileTasksSegmentService>();
         }
 
-        protected ILogger<HealthController> FakeLogger { get; }
+        protected ILogger<HealthController> Logger { get; }
+
+        protected IJobProfileTasksSegmentService JobProfileTasksSegmentService { get; }
 
         protected HealthController BuildHealthController(string mediaTypeName)
         {
@@ -22,7 +26,7 @@ namespace DFC.App.JobProfileTasks.UnitTests.ControllerTests.HealthControllerTest
 
             httpContext.Request.Headers[HeaderNames.Accept] = mediaTypeName;
 
-            var controller = new HealthController(FakeLogger)
+            var controller = new HealthController(Logger, JobProfileTasksSegmentService)
             {
                 ControllerContext = new ControllerContext()
                 {
