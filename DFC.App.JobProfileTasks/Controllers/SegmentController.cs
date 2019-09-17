@@ -86,7 +86,7 @@ namespace DFC.App.JobProfileTasks.Controllers
 
                 logger.LogInformation($"{nameof(Body)} has succeeded for: {article}");
 
-                return this.NegotiateContentResult(viewModel);
+                return this.NegotiateContentResult(viewModel, model.Data);
             }
 
             logger.LogWarning($"{nameof(Body)} has returned no content for: {article}");
