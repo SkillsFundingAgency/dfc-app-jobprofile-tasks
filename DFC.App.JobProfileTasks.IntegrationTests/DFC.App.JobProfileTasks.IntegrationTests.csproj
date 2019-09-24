@@ -4,6 +4,7 @@
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <CodeAnalysisRuleSet>../UnitTests.CodeAnalysis.ruleset</CodeAnalysisRuleSet>
     <IsPackable>false</IsPackable>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -37,6 +38,9 @@
   <ItemGroup>
     <None Update="appsettings-template.json">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Update="appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
 

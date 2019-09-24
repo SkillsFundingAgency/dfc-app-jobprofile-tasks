@@ -19,15 +19,15 @@ namespace DFC.App.JobProfileTasks.UnitTests.ControllerTests.SegmentControllerTes
             var createdJobProfileTasksSegmentModel = A.Fake<JobProfileTasksSegmentModel>();
             var controller = BuildSegmentController(mediaTypeName);
 
-            A.CallTo(() => FakeJobProfileSegmentService.GetByIdAsync(A<Guid>.Ignored)).Returns(existingJobProfileTasksSegmentModel);
-            A.CallTo(() => FakeJobProfileSegmentService.CreateAsync(A<JobProfileTasksSegmentModel>.Ignored)).Returns(createdJobProfileTasksSegmentModel);
+            A.CallTo(() => JobProfileSegmentService.GetByIdAsync(A<Guid>.Ignored)).Returns(existingJobProfileTasksSegmentModel);
+            A.CallTo(() => JobProfileSegmentService.CreateAsync(A<JobProfileTasksSegmentModel>.Ignored)).Returns(createdJobProfileTasksSegmentModel);
 
             // Act
             var result = await controller.CreateOrUpdate(tasksSegmentModel).ConfigureAwait(false);
 
             // Assert
-            A.CallTo(() => FakeJobProfileSegmentService.GetByIdAsync(A<Guid>.Ignored)).MustHaveHappenedOnceExactly();
-            A.CallTo(() => FakeJobProfileSegmentService.CreateAsync(A<JobProfileTasksSegmentModel>.Ignored)).MustHaveHappenedOnceExactly();
+            A.CallTo(() => JobProfileSegmentService.GetByIdAsync(A<Guid>.Ignored)).MustHaveHappenedOnceExactly();
+            A.CallTo(() => JobProfileSegmentService.CreateAsync(A<JobProfileTasksSegmentModel>.Ignored)).MustHaveHappenedOnceExactly();
 
             var okResult = Assert.IsType<CreatedAtActionResult>(result);
 
@@ -46,15 +46,15 @@ namespace DFC.App.JobProfileTasks.UnitTests.ControllerTests.SegmentControllerTes
             JobProfileTasksSegmentModel updatedJobTasksSegmentModel = null;
             var controller = BuildSegmentController(mediaTypeName);
 
-            A.CallTo(() => FakeJobProfileSegmentService.GetByIdAsync(A<Guid>.Ignored)).Returns(existingJobProfileTasksSegmentModel);
-            A.CallTo(() => FakeJobProfileSegmentService.ReplaceAsync(A<JobProfileTasksSegmentModel>.Ignored)).Returns(updatedJobTasksSegmentModel);
+            A.CallTo(() => JobProfileSegmentService.GetByIdAsync(A<Guid>.Ignored)).Returns(existingJobProfileTasksSegmentModel);
+            A.CallTo(() => JobProfileSegmentService.ReplaceAsync(A<JobProfileTasksSegmentModel>.Ignored)).Returns(updatedJobTasksSegmentModel);
 
             // Act
             var result = await controller.CreateOrUpdate(jobProfileTasksSegmentModel).ConfigureAwait(false);
 
             // Assert
-            A.CallTo(() => FakeJobProfileSegmentService.GetByIdAsync(A<Guid>.Ignored)).MustHaveHappenedOnceExactly();
-            A.CallTo(() => FakeJobProfileSegmentService.ReplaceAsync(A<JobProfileTasksSegmentModel>.Ignored)).MustHaveHappenedOnceExactly();
+            A.CallTo(() => JobProfileSegmentService.GetByIdAsync(A<Guid>.Ignored)).MustHaveHappenedOnceExactly();
+            A.CallTo(() => JobProfileSegmentService.ReplaceAsync(A<JobProfileTasksSegmentModel>.Ignored)).MustHaveHappenedOnceExactly();
 
             var okResult = Assert.IsType<OkObjectResult>(result);
 

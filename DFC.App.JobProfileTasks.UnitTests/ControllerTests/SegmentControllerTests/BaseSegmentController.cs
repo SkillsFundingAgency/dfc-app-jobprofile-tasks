@@ -1,5 +1,6 @@
 ﻿using DFC.App.JobProfileTasks.Controllers;
 using DFC.App.JobProfileTasks.Data.Contracts;
+using DFC.App.JobProfileTasks.SegmentService;
 using FakeItEasy;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -14,9 +15,10 @@ namespace DFC.App.JobProfileTasks.UnitTests.ControllerTests.SegmentControllerTes
     {
         public BaseSegmentController()
         {
-            FakeLogger = A.Fake<ILogger<SegmentController>>();
-            FakeJobProfileSegmentService = A.Fake<IJobProfileTasksSegmentService>();
-            FakeMapper = A.Fake<AutoMapper.IMapper>();
+            Logger = A.Fake<ILogger<SegmentController>>();
+            JobProfileSegmentService = A.Fake<IJobProfileTasksSegmentService>();
+            Mapper = A.Fake<AutoMapper.IMapper>();
+            FormatContentService = A.Fake<IFormatContentService>();
         }
 
         public static IEnumerable<object[]> HtmlMediaTypes => new List<object[]>
@@ -35,11 +37,13 @@ namespace DFC.App.JobProfileTasks.UnitTests.ControllerTests.SegmentControllerTes
             new string[] { MediaTypeNames.Application.Json },
         };
 
-        protected ILogger<SegmentController> FakeLogger { get; }
+        protected ILogger<SegmentController> Logger { get; }
 
-        protected IJobProfileTasksSegmentService FakeJobProfileSegmentService { get; }
+        protected IJobProfileTasksSegmentService JobProfileSegmentService { get; }
 
-        protected AutoMapper.IMapper FakeMapper { get; }
+        protected AutoMapper.IMapper Mapper { get; }
+
+        protected IFormatContentService FormatContentService { get; }
 
         protected SegmentController BuildSegmentController(string mediaTypeName)
         {
@@ -47,7 +51,7 @@ namespace DFC.App.JobProfileTasks.UnitTests.ControllerTests.SegmentControllerTes
 
             httpContext.Request.Headers[HeaderNames.Accept] = mediaTypeName;
 
-            var controller = new SegmentController(FakeLogger, FakeJobProfileSegmentService, FakeMapper)
+            var controller = new SegmentController(Logger, JobProfileSegmentService, Mapper, FormatContentService)
             {
                 ControllerContext = new ControllerContext()
                 {

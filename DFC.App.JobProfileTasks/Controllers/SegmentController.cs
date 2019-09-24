@@ -12,15 +12,24 @@ namespace DFC.App.JobProfileTasks.Controllers
 {
     public class SegmentController : Controller
     {
+        private const string EnvironmentsLeadingText = "Your working environment may be";
+        private const string LocationLeadingText = "You could work";
+        private const string UniformLeadingText = "You may need to wear";
+        private const string EnvironmentsConjunction = "and";
+        private const string LocationConjunction = "or";
+        private const string UniformConjunction = "and";
+
         private readonly ILogger<SegmentController> logger;
         private readonly IJobProfileTasksSegmentService jobProfileTasksSegmentService;
         private readonly AutoMapper.IMapper mapper;
+        private readonly IFormatContentService formatContentService;
 
-        public SegmentController(ILogger<SegmentController> logger, IJobProfileTasksSegmentService jobProfileTasksSegmentService, AutoMapper.IMapper mapper)
+        public SegmentController(ILogger<SegmentController> logger, IJobProfileTasksSegmentService jobProfileTasksSegmentService, AutoMapper.IMapper mapper, IFormatContentService formatContentService)
         {
             this.logger = logger;
             this.jobProfileTasksSegmentService = jobProfileTasksSegmentService;
             this.mapper = mapper;
+            this.formatContentService = formatContentService;
         }
 
         [HttpGet]
@@ -83,6 +92,13 @@ namespace DFC.App.JobProfileTasks.Controllers
             if (model != null)
             {
                 var viewModel = mapper.Map<BodyViewModel>(model);
+
+                if (model.Data != null)
+                {
+                    viewModel.Data.Environment = formatContentService.GetParagraphText(EnvironmentsLeadingText, model.Data.Environments.Select(x => x.Description), EnvironmentsConjunction);
+                    viewModel.Data.Location = formatContentService.GetParagraphText(LocationLeadingText, model.Data.Locations.Select(x => x.Description), LocationConjunction);
+                    viewModel.Data.Uniform = formatContentService.GetParagraphText(UniformLeadingText, model.Data.Uniforms.Select(x => x.Description), UniformConjunction);
+                }
 
                 logger.LogInformation($"{nameof(Body)} has succeeded for: {article}");
 
