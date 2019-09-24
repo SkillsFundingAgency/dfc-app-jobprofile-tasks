@@ -14,7 +14,7 @@ namespace DFC.App.JobProfileTasks.AutoMapperProfiles
 
             CreateMap<JobProfileTasksSegmentModel, BodyViewModel>();
 
-            CreateMap<JobProfileTasksDataSegmentModel, BodyDataViewModel>();
+            CreateMap<JobProfileTasksDataSegmentModel, BodyDataViewModel>().ForAllOtherMembers(x => x.Ignore());
         }
     }
 }

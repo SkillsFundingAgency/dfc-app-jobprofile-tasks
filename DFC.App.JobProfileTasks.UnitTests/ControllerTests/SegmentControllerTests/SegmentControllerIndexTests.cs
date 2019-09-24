@@ -19,15 +19,15 @@ namespace DFC.App.JobProfileTasks.UnitTests.ControllerTests.SegmentControllerTes
             var expectedResults = A.CollectionOfFake<JobProfileTasksSegmentModel>(resultsCount);
             var controller = BuildSegmentController(mediaTypeName);
 
-            A.CallTo(() => FakeJobProfileSegmentService.GetAllAsync()).Returns(expectedResults);
-            A.CallTo(() => FakeMapper.Map<IndexDocumentViewModel>(A<JobProfileTasksSegmentModel>.Ignored)).Returns(A.Fake<IndexDocumentViewModel>());
+            A.CallTo(() => JobProfileSegmentService.GetAllAsync()).Returns(expectedResults);
+            A.CallTo(() => Mapper.Map<IndexDocumentViewModel>(A<JobProfileTasksSegmentModel>.Ignored)).Returns(A.Fake<IndexDocumentViewModel>());
 
             // Act
             var result = await controller.Index().ConfigureAwait(false);
 
             // Assert
-            A.CallTo(() => FakeJobProfileSegmentService.GetAllAsync()).MustHaveHappenedOnceExactly();
-            A.CallTo(() => FakeMapper.Map<IndexDocumentViewModel>(A<JobProfileTasksSegmentModel>.Ignored)).MustHaveHappened(resultsCount, Times.Exactly);
+            A.CallTo(() => JobProfileSegmentService.GetAllAsync()).MustHaveHappenedOnceExactly();
+            A.CallTo(() => Mapper.Map<IndexDocumentViewModel>(A<JobProfileTasksSegmentModel>.Ignored)).MustHaveHappened(resultsCount, Times.Exactly);
 
             var viewResult = Assert.IsType<ViewResult>(result);
             var model = Assert.IsAssignableFrom<IndexViewModel>(viewResult.ViewData.Model);
@@ -46,15 +46,15 @@ namespace DFC.App.JobProfileTasks.UnitTests.ControllerTests.SegmentControllerTes
             IEnumerable<JobProfileTasksSegmentModel> expectedResults = null;
             var controller = BuildSegmentController(mediaTypeName);
 
-            A.CallTo(() => FakeJobProfileSegmentService.GetAllAsync()).Returns(expectedResults);
-            A.CallTo(() => FakeMapper.Map<IndexDocumentViewModel>(A<JobProfileTasksSegmentModel>.Ignored)).Returns(A.Fake<IndexDocumentViewModel>());
+            A.CallTo(() => JobProfileSegmentService.GetAllAsync()).Returns(expectedResults);
+            A.CallTo(() => Mapper.Map<IndexDocumentViewModel>(A<JobProfileTasksSegmentModel>.Ignored)).Returns(A.Fake<IndexDocumentViewModel>());
 
             // Act
             var result = await controller.Index().ConfigureAwait(false);
 
             // Assert
-            A.CallTo(() => FakeJobProfileSegmentService.GetAllAsync()).MustHaveHappenedOnceExactly();
-            A.CallTo(() => FakeMapper.Map<IndexDocumentViewModel>(A<JobProfileTasksSegmentModel>.Ignored)).MustHaveHappened(resultsCount, Times.Exactly);
+            A.CallTo(() => JobProfileSegmentService.GetAllAsync()).MustHaveHappenedOnceExactly();
+            A.CallTo(() => Mapper.Map<IndexDocumentViewModel>(A<JobProfileTasksSegmentModel>.Ignored)).MustHaveHappened(resultsCount, Times.Exactly);
 
             var viewResult = Assert.IsType<ViewResult>(result);
             var model = Assert.IsAssignableFrom<IndexViewModel>(viewResult.ViewData.Model);
