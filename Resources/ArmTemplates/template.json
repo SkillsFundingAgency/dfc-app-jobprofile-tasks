@@ -47,6 +47,9 @@
         "sharedAppServicePlanResourceGroup": {
             "type": "string",
             "defaultValue": ""
+        },
+        "cosmosDbCollectionName": {
+            "type": "string"
         }
     },
     "variables": {
@@ -54,7 +57,6 @@
         "appServicePlanName": "[if(greater(length(parameters('sharedAppServicePlanName')), 0), parameters('sharedAppServicePlanName'), concat(variables('resourcePrefix'), '-asp'))]",
         "appServicePlanResourceGroup": "[if(greater(length(parameters('SharedAppServicePlanResourceGroup')), 0), parameters('SharedAppServicePlanResourceGroup'), resourceGroup().name)]",
         "buildingBlocksDfcBaseUrl": "https://raw.githubusercontent.com/SkillsFundingAgency/dfc-devops/master/ArmTemplates/",
-        "cosmosDbCollectionName": "tasksSegments",
         "cosmosDbCollectionPartitionKey": "/PartitionKey",
         "cosmosDbDatabaseName": "dfc-app-jobprofiles",
         "cosmosDbEndpoint": "[concat('https://', parameters('cosmosDbName'), '.documents.azure.com:443/')]",
@@ -169,7 +171,7 @@
                             },
                             {
                                 "name": "Configuration__CosmosDbConnections__JobProfileSegment__CollectionId",
-                                "value": "[variables('cosmosDbCollectionName')]"
+                                "value": "[parameters('cosmosDbCollectionName')]"
                             },
                             {
                                 "name": "Configuration__CosmosDbConnections__JobProfileSegment__PartitionKey",
@@ -185,7 +187,7 @@
         },
         {
             "apiVersion": "2017-05-10",
-            "name": "[variables('cosmosDbCollectionName')]",
+            "name": "[parameters('cosmosDbCollectionName')]",
             "type": "Microsoft.Resources/deployments",
             "resourceGroup": "[parameters('cosmosDbResourceGroup')]",
             "properties": {
@@ -202,7 +204,7 @@
                         "value": "[variables('cosmosDbDatabaseName')]"
                     },
                     "collectionName": {
-                        "value": "[variables('cosmosDbCollectionName')]"
+                        "value": "[parameters('cosmosDbCollectionName')]"
                     },
                     "provisionRequestUnits": {
                         "value": false
