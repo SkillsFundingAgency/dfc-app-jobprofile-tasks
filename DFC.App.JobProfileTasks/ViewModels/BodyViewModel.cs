@@ -11,8 +11,6 @@ namespace DFC.App.JobProfileTasks.ViewModels
         [Display(Name = "Canonical Name")]
         public string CanonicalName { get; set; }
 
-        public DateTime Created { get; set; }
-
         public BodyDataViewModel Data { get; set; }
     }
 }

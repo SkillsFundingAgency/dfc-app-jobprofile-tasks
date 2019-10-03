@@ -1,5 +1,5 @@
 ﻿using DFC.App.JobProfileTasks.Controllers;
-using DFC.App.JobProfileTasks.Data.Contracts;
+using DFC.App.JobProfileTasks.SegmentService;
 using FakeItEasy;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

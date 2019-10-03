@@ -10,12 +10,18 @@ namespace DFC.App.JobProfileTasks.Data.Models
         [JsonProperty(PropertyName = "id")]
         public Guid DocumentId { get; set; }
 
+        [JsonProperty(PropertyName = "_etag")]
+        public string Etag { get; set; }
+
         [Required]
         public string CanonicalName { get; set; }
 
-        public DateTime Created { get; set; } = DateTime.UtcNow;
+        public DateTime LastReviewed { get; set; }
 
-        public int PartitionKey => Created.Second;
+        public string PartitionKey => SocLevelTwo;
+
+        [Required]
+        public string SocLevelTwo { get; set; }
 
         public JobProfileTasksDataSegmentModel Data { get; set; }
     }

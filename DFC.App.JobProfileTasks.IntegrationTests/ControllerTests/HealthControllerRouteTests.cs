@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DFC.App.JobProfileTasks.IntegrationTests.Data;
+using System;
 using System.Net.Http.Headers;
 using System.Net.Mime;
 using System.Text;
@@ -7,13 +8,14 @@ using Xunit;
 
 namespace DFC.App.JobProfileTasks.IntegrationTests.ControllerTests
 {
-    public class HealthControllerRouteTests : IClassFixture<CustomWebApplicationFactory<Startup>>
+    public class HealthControllerRouteTests : IClassFixture<CustomWebApplicationFactory<Startup>>, IClassFixture<DataSeeding>
     {
         private readonly CustomWebApplicationFactory<Startup> factory;
 
-        public HealthControllerRouteTests(CustomWebApplicationFactory<Startup> factory)
+        public HealthControllerRouteTests(CustomWebApplicationFactory<Startup> factory, DataSeeding seeding)
         {
             this.factory = factory;
+            seeding?.AddData(factory).GetAwaiter().GetResult();
         }
 
         [Theory]

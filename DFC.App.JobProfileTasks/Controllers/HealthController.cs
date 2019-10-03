@@ -1,5 +1,5 @@
-﻿using DFC.App.JobProfileTasks.Data.Contracts;
-using DFC.App.JobProfileTasks.Extensions;
+﻿using DFC.App.JobProfileTasks.Extensions;
+using DFC.App.JobProfileTasks.SegmentService;
 using DFC.App.JobProfileTasks.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;

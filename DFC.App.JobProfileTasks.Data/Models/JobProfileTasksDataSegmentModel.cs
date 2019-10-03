@@ -5,13 +5,6 @@ namespace DFC.App.JobProfileTasks.Data.Models
 {
     public class JobProfileTasksDataSegmentModel
     {
-        public JobProfileTasksDataSegmentModel()
-        {
-            Locations = new List<JobProfileTasksDataLocationSegmentModel>();
-            Environments = new List<JobProfileTasksDataEnvironmentSegmentModel>();
-            Uniforms = new List<JobProfileTasksDataUniformSegmentModel>();
-        }
-
         public DateTime LastReviewed { get; set; }
 
         public string Introduction { get; set; }

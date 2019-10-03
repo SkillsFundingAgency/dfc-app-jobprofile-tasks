@@ -36,6 +36,7 @@ namespace DFC.App.JobProfileTasks.IntegrationTests.ControllerTests
             {
                 DocumentId = documentId,
                 CanonicalName = documentId.ToString().ToLowerInvariant(),
+                SocLevelTwo = "12PostSoc",
                 Data = new JobProfileTasksDataSegmentModel(),
             };
             var client = factory.CreateClient();
@@ -61,8 +62,8 @@ namespace DFC.App.JobProfileTasks.IntegrationTests.ControllerTests
             var tasksSegmentModel = new JobProfileTasksSegmentModel()
             {
                 DocumentId = dataSeeding.Article2Id,
-                Created = dataSeeding.Created,
                 CanonicalName = "article2_modified",
+                SocLevelTwo = dataSeeding.Article2SocCode,
                 Data = new JobProfileTasksDataSegmentModel(),
             };
             var client = factory.CreateClient();

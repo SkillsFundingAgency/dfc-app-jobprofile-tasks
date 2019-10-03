@@ -20,8 +20,7 @@ namespace DFC.App.JobProfileTasks.IntegrationTests.Data
             Article1Name = Article1Id.ToString();
             Article2Name = Article2Id.ToString();
             Article3Name = Article3Id.ToString();
-
-            Created = DateTime.UtcNow;
+            Article2SocCode = "23456";
         }
 
         public Guid Article1Id { get; private set; }
@@ -36,7 +35,7 @@ namespace DFC.App.JobProfileTasks.IntegrationTests.Data
 
         public string Article3Name { get; private set; }
 
-        public DateTime Created { get; private set; }
+        public string Article2SocCode { get; private set; }
 
         public async Task AddData(CustomWebApplicationFactory<Startup> factory)
         {
@@ -70,29 +69,27 @@ namespace DFC.App.JobProfileTasks.IntegrationTests.Data
 
         private List<JobProfileTasksSegmentModel> CreateModels()
         {
-            var models = new List<JobProfileTasksSegmentModel>()
+            return new List<JobProfileTasksSegmentModel>
             {
-                new JobProfileTasksSegmentModel()
+                new JobProfileTasksSegmentModel
                 {
-                    Created = Created,
                     DocumentId = Article1Id,
+                    SocLevelTwo = "12345",
                     CanonicalName = Article1Name,
                 },
-                new JobProfileTasksSegmentModel()
+                new JobProfileTasksSegmentModel
                 {
-                    Created = Created,
                     DocumentId = Article2Id,
+                    SocLevelTwo = Article2SocCode,
                     CanonicalName = Article2Name,
                 },
-                new JobProfileTasksSegmentModel()
+                new JobProfileTasksSegmentModel
                 {
-                    Created = Created,
                     DocumentId = Article3Id,
+                    SocLevelTwo = "34567",
                     CanonicalName = Article3Name,
                 },
             };
-
-            return models;
         }
     }
 }
