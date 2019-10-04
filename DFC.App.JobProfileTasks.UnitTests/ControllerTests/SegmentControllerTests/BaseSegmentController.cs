@@ -1,5 +1,4 @@
 ﻿using DFC.App.JobProfileTasks.Controllers;
-using DFC.App.JobProfileTasks.Data.Contracts;
 using DFC.App.JobProfileTasks.SegmentService;
 using FakeItEasy;
 using Microsoft.AspNetCore.Http;
@@ -15,8 +14,8 @@ namespace DFC.App.JobProfileTasks.UnitTests.ControllerTests.SegmentControllerTes
     {
         public BaseSegmentController()
         {
-            Logger = A.Fake<ILogger<SegmentController>>();
-            JobProfileSegmentService = A.Fake<IJobProfileTasksSegmentService>();
+            FakeLogger = A.Fake<ILogger<SegmentController>>();
+            FakeJobProfileSegmentService = A.Fake<IJobProfileTasksSegmentService>();
             Mapper = A.Fake<AutoMapper.IMapper>();
             FormatContentService = A.Fake<IFormatContentService>();
         }
@@ -37,9 +36,9 @@ namespace DFC.App.JobProfileTasks.UnitTests.ControllerTests.SegmentControllerTes
             new string[] { MediaTypeNames.Application.Json },
         };
 
-        protected ILogger<SegmentController> Logger { get; }
+        protected ILogger<SegmentController> FakeLogger { get; }
 
-        protected IJobProfileTasksSegmentService JobProfileSegmentService { get; }
+        protected IJobProfileTasksSegmentService FakeJobProfileSegmentService { get; }
 
         protected AutoMapper.IMapper Mapper { get; }
 
@@ -51,7 +50,7 @@ namespace DFC.App.JobProfileTasks.UnitTests.ControllerTests.SegmentControllerTes
 
             httpContext.Request.Headers[HeaderNames.Accept] = mediaTypeName;
 
-            var controller = new SegmentController(Logger, JobProfileSegmentService, Mapper, FormatContentService)
+            var controller = new SegmentController(FakeLogger, FakeJobProfileSegmentService, Mapper, FormatContentService)
             {
                 ControllerContext = new ControllerContext()
                 {

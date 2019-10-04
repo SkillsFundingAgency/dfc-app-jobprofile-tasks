@@ -16,7 +16,7 @@ namespace DFC.App.JobProfileTasks.IntegrationTests.ControllerTests
         {
             this.factory = factory;
             this.dataSeeding = dataSeeding ?? throw new ArgumentNullException(nameof(dataSeeding));
-            dataSeeding.AddData(factory).Wait();
+            dataSeeding.AddData(factory).GetAwaiter().GetResult();
         }
 
         [Fact]

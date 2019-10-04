@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace DFC.App.JobProfileTasks.Data.Contracts
+namespace DFC.App.JobProfileTasks.SegmentService
 {
     public interface IFormatContentService
     {

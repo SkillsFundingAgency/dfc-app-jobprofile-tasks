@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace DFC.App.JobProfileTasks.Data.Contracts
+namespace DFC.App.JobProfileTasks.SegmentService
 {
     public interface IJobProfileTasksSegmentService
     {
@@ -15,10 +15,8 @@ namespace DFC.App.JobProfileTasks.Data.Contracts
 
         Task<JobProfileTasksSegmentModel> GetByNameAsync(string canonicalName, bool isDraft = false);
 
-        Task<JobProfileTasksSegmentModel> CreateAsync(JobProfileTasksSegmentModel tasksSegmentModel);
+        Task<UpsertJobProfileTasksModelResponse> UpsertAsync(JobProfileTasksSegmentModel tasksSegmentModel);
 
-        Task<JobProfileTasksSegmentModel> ReplaceAsync(JobProfileTasksSegmentModel tasksSegmentModel);
-
-        Task<bool> DeleteAsync(Guid documentId, int partitionKeyValue);
+        Task<bool> DeleteAsync(Guid documentId);
     }
 }

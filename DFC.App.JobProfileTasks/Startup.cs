@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using DFC.App.JobProfileTasks.Data.Contracts;
 using DFC.App.JobProfileTasks.Data.Models;
 using DFC.App.JobProfileTasks.DraftSegmentService;
 using DFC.App.JobProfileTasks.Repository.CosmosDb;
@@ -54,7 +53,7 @@ namespace DFC.App.JobProfileTasks
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IMapper mapper)
         {
             if (env.IsDevelopment())
             {
@@ -72,6 +71,8 @@ namespace DFC.App.JobProfileTasks
             app.UseStaticFiles();
             app.UseCookiePolicy();
             app.UseMvcWithDefaultRoute();
+
+            mapper?.ConfigurationProvider.AssertConfigurationIsValid();
         }
     }
 }

@@ -1,30 +1,29 @@
-﻿using DFC.App.JobProfileTasks.Data.Contracts;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 namespace DFC.App.JobProfileTasks.SegmentService
 {
-    public class FormatContentService: IFormatContentService
+    public class FormatContentService : IFormatContentService
     {
         public string GetParagraphText(string openingText, IEnumerable<string> dataItems, string separator)
         {
-            if (dataItems.Any())
+            if (dataItems == null || !dataItems.Any())
             {
-                switch (dataItems.Count())
-                {
-                    case 1:
-                        return $"{openingText} {dataItems.FirstOrDefault()}.";
-
-                    case 2:
-                        return $"{openingText} {string.Join($" {separator} ", dataItems)}.";
-
-                    default:
-                        return
-                            $"{openingText} {string.Join(", ", dataItems.Take(dataItems.Count() - 1))} {separator} {dataItems.Last()}.";
-                }
+                return string.Empty;
             }
 
-            return string.Empty;
+            switch (dataItems.Count())
+            {
+                case 1:
+                    return $"{openingText} {dataItems.FirstOrDefault()}.";
+
+                case 2:
+                    return $"{openingText} {string.Join($" {separator} ", dataItems)}.";
+
+                default:
+                    return
+                        $"{openingText} {string.Join(", ", dataItems.Take(dataItems.Count() - 1))} {separator} {dataItems.Last()}.";
+            }
         }
     }
 }

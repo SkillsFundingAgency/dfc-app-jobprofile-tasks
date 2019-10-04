@@ -1,5 +1,5 @@
-﻿using DFC.App.JobProfileTasks.Data.Contracts;
-using DFC.App.JobProfileTasks.Data.Models;
+﻿using DFC.App.JobProfileTasks.Data.Models;
+using DFC.App.JobProfileTasks.Repository.CosmosDb;
 using System;
 using System.Collections.Generic;
 using System.Net;
@@ -10,14 +10,10 @@ namespace DFC.App.JobProfileTasks.SegmentService
     public class JobProfileTasksSegmentService : IJobProfileTasksSegmentService
     {
         private readonly ICosmosRepository<JobProfileTasksSegmentModel> repository;
-        private readonly IDraftJobProfileTasksSegmentService jobProfileTasksSegmentService;
 
-        public JobProfileTasksSegmentService(
-            ICosmosRepository<JobProfileTasksSegmentModel> repository,
-            IDraftJobProfileTasksSegmentService jobProfileTasksSegmentService)
+        public JobProfileTasksSegmentService(ICosmosRepository<JobProfileTasksSegmentModel> repository)
         {
             this.repository = repository;
-            this.jobProfileTasksSegmentService = jobProfileTasksSegmentService;
         }
 
         public async Task<bool> PingAsync()
@@ -45,7 +41,7 @@ namespace DFC.App.JobProfileTasks.SegmentService
             return await repository.GetAsync(d => d.CanonicalName.ToLower() == canonicalName.ToLowerInvariant()).ConfigureAwait(false);
         }
 
-        public async Task<JobProfileTasksSegmentModel> CreateAsync(JobProfileTasksSegmentModel tasksSegmentModel)
+        public async Task<UpsertJobProfileTasksModelResponse> UpsertAsync(JobProfileTasksSegmentModel tasksSegmentModel)
         {
             if (tasksSegmentModel == null)
             {
@@ -57,35 +53,18 @@ namespace DFC.App.JobProfileTasks.SegmentService
                 tasksSegmentModel.Data = new JobProfileTasksDataSegmentModel();
             }
 
-            var result = await repository.CreateAsync(tasksSegmentModel).ConfigureAwait(false);
+            var result = await repository.UpsertAsync(tasksSegmentModel).ConfigureAwait(false);
 
-            return result == HttpStatusCode.Created
-                ? await GetByIdAsync(tasksSegmentModel.DocumentId).ConfigureAwait(false)
-                : null;
+            return new UpsertJobProfileTasksModelResponse
+            {
+                JobProfileTasksSegmentModel = tasksSegmentModel,
+                ResponseStatusCode = result,
+            };
         }
 
-        public async Task<JobProfileTasksSegmentModel> ReplaceAsync(JobProfileTasksSegmentModel tasksSegmentModel)
+        public async Task<bool> DeleteAsync(Guid documentId)
         {
-            if (tasksSegmentModel == null)
-            {
-                throw new ArgumentNullException(nameof(tasksSegmentModel));
-            }
-
-            if (tasksSegmentModel.Data == null)
-            {
-                tasksSegmentModel.Data = new JobProfileTasksDataSegmentModel();
-            }
-
-            var result = await repository.UpdateAsync(tasksSegmentModel.DocumentId, tasksSegmentModel).ConfigureAwait(false);
-
-            return result == HttpStatusCode.OK
-                ? await GetByIdAsync(tasksSegmentModel.DocumentId).ConfigureAwait(false)
-                : null;
-        }
-
-        public async Task<bool> DeleteAsync(Guid documentId, int partitionKeyValue)
-        {
-            var result = await repository.DeleteAsync(documentId, partitionKeyValue).ConfigureAwait(false);
+            var result = await repository.DeleteAsync(documentId).ConfigureAwait(false);
             return result == HttpStatusCode.NoContent;
         }
     }

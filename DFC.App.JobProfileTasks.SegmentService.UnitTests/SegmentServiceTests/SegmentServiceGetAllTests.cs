@@ -1,5 +1,5 @@
-﻿using DFC.App.JobProfileTasks.Data.Contracts;
-using DFC.App.JobProfileTasks.Data.Models;
+﻿using DFC.App.JobProfileTasks.Data.Models;
+using DFC.App.JobProfileTasks.Repository.CosmosDb;
 using FakeItEasy;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -10,14 +10,12 @@ namespace DFC.App.JobProfileTasks.SegmentService.UnitTests.SegmentServiceTests
     public class SegmentServiceGetAllTests
     {
         private readonly ICosmosRepository<JobProfileTasksSegmentModel> repository;
-        private readonly IDraftJobProfileTasksSegmentService draftJobProfileTasksSegmentService;
         private readonly IJobProfileTasksSegmentService jobProfileTasksSegmentService;
 
         public SegmentServiceGetAllTests()
         {
             repository = A.Fake<ICosmosRepository<JobProfileTasksSegmentModel>>();
-            draftJobProfileTasksSegmentService = A.Fake<IDraftJobProfileTasksSegmentService>();
-            jobProfileTasksSegmentService = new JobProfileTasksSegmentService(repository, draftJobProfileTasksSegmentService);
+            jobProfileTasksSegmentService = new JobProfileTasksSegmentService(repository);
         }
 
         [Fact]
@@ -33,7 +31,7 @@ namespace DFC.App.JobProfileTasks.SegmentService.UnitTests.SegmentServiceTests
 
             // assert
             A.CallTo(() => repository.GetAllAsync()).MustHaveHappenedOnceExactly();
-            A.Equals(results, expectedResults);
+            Assert.Equal(expectedResults, results);
         }
 
         [Fact]
@@ -49,7 +47,7 @@ namespace DFC.App.JobProfileTasks.SegmentService.UnitTests.SegmentServiceTests
 
             // assert
             A.CallTo(() => repository.GetAllAsync()).MustHaveHappenedOnceExactly();
-            A.Equals(results, expectedResults);
+            Assert.Equal(expectedResults, results);
         }
     }
 }

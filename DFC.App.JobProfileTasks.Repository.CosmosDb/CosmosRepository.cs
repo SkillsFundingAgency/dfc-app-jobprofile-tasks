@@ -26,8 +26,8 @@ namespace DFC.App.JobProfileTasks.Repository.CosmosDb
 
             if (env.IsDevelopment())
             {
-                CreateDatabaseIfNotExistsAsync().Wait();
-                CreateCollectionIfNotExistsAsync().Wait();
+                CreateDatabaseIfNotExistsAsync().GetAwaiter().GetResult();
+                CreateCollectionIfNotExistsAsync().GetAwaiter().GetResult();
             }
         }
 
@@ -87,26 +87,28 @@ namespace DFC.App.JobProfileTasks.Repository.CosmosDb
             return default;
         }
 
-        public async Task<HttpStatusCode> CreateAsync(T model)
+        public async Task<HttpStatusCode> UpsertAsync(T model)
         {
-            var result = await documentClient.CreateDocumentAsync(DocumentCollectionUri, model).ConfigureAwait(false);
+            var accessCondition = new AccessCondition { Condition = model.Etag, Type = AccessConditionType.IfMatch };
+            var result = await documentClient.UpsertDocumentAsync(DocumentCollectionUri, model, new RequestOptions { AccessCondition = accessCondition, PartitionKey = new PartitionKey(model.PartitionKey) }).ConfigureAwait(false);
 
             return result.StatusCode;
         }
 
-        public async Task<HttpStatusCode> UpdateAsync(Guid documentId, T model)
+        public async Task<HttpStatusCode> DeleteAsync(Guid documentId)
         {
             var documentUri = CreateDocumentUri(documentId);
+            var existingDocument = await GetAsync(f => f.DocumentId == documentId).ConfigureAwait(false);
 
-            var result = await documentClient.ReplaceDocumentAsync(documentUri, model).ConfigureAwait(false);
+            if (existingDocument == null)
+            {
+                return HttpStatusCode.NotFound;
+            }
 
-            return result.StatusCode;
-        }
+            var accessCondition = new AccessCondition { Condition = existingDocument.Etag, Type = AccessConditionType.IfMatch };
+            var partitionKey = new PartitionKey(existingDocument.PartitionKey);
 
-        public async Task<HttpStatusCode> DeleteAsync(Guid documentId, int partitionKeyValue)
-        {
-            var documentUri = CreateDocumentUri(documentId);
-            var result = await documentClient.DeleteDocumentAsync(documentUri, new RequestOptions() { PartitionKey = new PartitionKey(partitionKeyValue) }).ConfigureAwait(false);
+            var result = await documentClient.DeleteDocumentAsync(documentUri, new RequestOptions { AccessCondition = accessCondition, PartitionKey = partitionKey }).ConfigureAwait(false);
             return result.StatusCode;
         }
 
