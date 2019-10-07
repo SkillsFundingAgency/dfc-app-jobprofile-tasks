@@ -2,7 +2,6 @@
 using DFC.App.JobProfileTasks.Data.Models;
 using DFC.App.JobProfileTasks.DraftSegmentService;
 using DFC.App.JobProfileTasks.Repository.CosmosDb;
-using DFC.App.JobProfileTasks.Repository.SitefinityApi;
 using DFC.App.JobProfileTasks.SegmentService;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -19,7 +18,6 @@ namespace DFC.App.JobProfileTasks
     public class Startup
     {
         public const string CosmosDbConfigAppSettings = "Configuration:CosmosDbConnections:JobProfileSegment";
-        public const string SitefinityApiAppSettings = "SitefinityApi";
         private readonly IConfiguration configuration;
 
         public Startup(IConfiguration configuration)
@@ -39,7 +37,6 @@ namespace DFC.App.JobProfileTasks
 
             var cosmosDbConnection = configuration.GetSection(CosmosDbConfigAppSettings).Get<CosmosDbConnection>();
             var documentClient = new DocumentClient(new Uri(cosmosDbConnection.EndpointUrl), cosmosDbConnection.AccessKey);
-            var sitefinityApiConnection = configuration.GetSection(SitefinityApiAppSettings).Get<SitefinityAPIConnectionSettings>();
 
             services.AddSingleton(cosmosDbConnection);
             services.AddSingleton<IDocumentClient>(documentClient);
