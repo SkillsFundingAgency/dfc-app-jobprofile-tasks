@@ -1,0 +1,24 @@
+{
+  "IsEncrypted": false,
+  "Values": {
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "FUNCTIONS_WORKER_RUNTIME": "dotnet",
+    "service-bus-connection-string": "[Placeholder]",
+    "dummy-segment-topic-name": "jobprofiles-tasks-segment-topic",
+    "dummy-segment-subscription-name": "jobprofiles-tasks-dummy"
+    //"patch-segment-topic-name": "jobprofiles-tasks-segment-topic",
+    //"patch-segment-subscription-name": "jobprofiles-tasks-patch",
+    //"post-segment-topic-name": "jobprofiles-tasks-segment-topic",
+    //"post-segment-subscription-name": "jobprofiles-tasks-post",
+    //"delete-topic-name": "jobprofiles-tasks-delete-topic",
+    //"delete-subscription-name": "jobprofiles-tasks-delete"
+  },
+  "JobProfileTasksSegmentClientOptions": {
+    "Timeout": "00:00:30",
+    "BaseAddress": "https://localhost",
+    "GetEndpoint": "segment/{0}/contents",
+    "PatchEndpoint": "segment/{0}/content-type/markup",
+    "PostEndpoint": "segment",
+    "DeleteEndpoint": "segment/{0}"
+  }
+}
