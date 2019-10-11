@@ -2,9 +2,15 @@
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
+        "appServiceDomain": {
+            "type": "string"
+        },        
         "appSharedResourceGroup": {
             "type": "string"
         },
+        "appSharedServiceBusName": {
+            "type": "string"
+        },        
         "appSharedStorageAccountName": {
             "type": "string"
         },
@@ -60,6 +66,7 @@
         "cosmosDbDatabaseName": "dfc-app-jobprofiles",
         "cosmosDbEndpoint": "[concat('https://', parameters('cosmosDbName'), '.documents.azure.com:443/')]",
         "resourcePrefix": "[tolower(concat('dfc-', parameters('Environment'), '-app-jobproftasks'))]",
+        "urlJobprofileTasks": "[toLower(concat('https://', variables('webAppName'), '.', parameters('appServiceDomain')))]",        
         "webAppName": "[concat(variables('ResourcePrefix'), '-as')]",
         "webAppInsightsName": "[concat(variables('webAppName'), '-ai')]",
         "functionAppName": "[concat(variables('ResourcePrefix'), '-fa')]",
@@ -250,6 +257,58 @@
                             {
                                 "name": "AzureWebJobsStorage",
                                 "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',parameters('appSharedStorageAccountName'),';AccountKey=',listKeys(resourceId(parameters('appSharedResourceGroup'), 'Microsoft.Storage/storageAccounts', parameters('appSharedStorageAccountName')), providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]).keys[0].value, ';EndpointSuffix=core.windows.net')]"
+                            },
+                            {
+                                "name": "Values__service-bus-connection-string",
+                                "value": "[listKeys(resourceId(parameters('appSharedResourceGroup'), 'Microsoft.ServiceBus/namespaces/authorizationRules', parameters('appSharedServiceBusName'), 'ReadWrite'), '2017-04-01').primaryConnectionString]"
+                            },
+                            {
+                                "name": "Values__patch-profile-topic-name",
+                                "value": "jobprofiles-tasks-profile-topic"
+                            },
+                            {
+                                "name": "Values__patch-profile-subscription-name",
+                                "value": "jobprofiles-tasks-patch"
+                            },
+                            {
+                                "name": "Values__post-profile-topic-name",
+                                "value": "jobprofiles-tasks-profile-topic"
+                            },
+                            {
+                                "name": "Values__post-profile-subscription-name",
+                                "value": "jobprofiles-tasks-refresh"
+                            },
+                            {
+                                "name": "Values__delete-topic-name",
+                                "value": "jobprofiles-tasks-delete-topic"
+                            },
+                            {
+                                "name": "Values__delete-subscription-name",
+                                "value": "jobprofiles-tasks-delete"
+                            },
+                            {
+                                "name": "JobProfileTasksSegmentClientOptions__Timeout",
+                                "value": "00:00:30"
+                            },
+                            {
+                                "name": "JobProfileTasksSegmentClientOptions__BaseAddress",
+                                "value": "[variables('urlJobprofileTasks')]"
+                            },
+                            {
+                                "name": "JobProfileTasksSegmentClientOptions__GetEndpoint",
+                                "value": "segment/{0}/contents"
+                            },
+                            {
+                                "name": "JobProfileTasksSegmentClientOptions__PatchEndpoint",
+                                "value": "segment/{0}/content-type/markup"
+                            },
+                            {
+                                "name": "JobProfileTasksSegmentClientOptions__PostEndpoint",
+                                "value": "segment"
+                            },
+                            {
+                                "name": "JobProfileTasksSegmentClientOptions__DeleteEndpoint",
+                                "value": "segment/{0}"
                             }
                         ]
                     }
