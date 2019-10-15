@@ -40,9 +40,6 @@
         "cosmosDbKey": {
             "type": "securestring"
         },
-        "cosmosDbResourceGroup": {
-            "type": "string"
-        },
         "environment": {
             "type": "string"
         },
@@ -56,6 +53,13 @@
         },
         "cosmosDbCollectionName": {
             "type": "string"
+        },
+        "cmsSubscriptionSqlFilter": {
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
+                "description": "Filter to apply to subscription (no filter applied if left blank)"
+            }
         }
     },
     "variables": {
@@ -70,7 +74,9 @@
         "webAppName": "[concat(variables('ResourcePrefix'), '-as')]",
         "webAppInsightsName": "[concat(variables('webAppName'), '-ai')]",
         "functionAppName": "[concat(variables('ResourcePrefix'), '-fa')]",
-        "functionAppInsightsName": "[concat(variables('functionAppName'), '-ai')]"
+        "functionAppInsightsName": "[concat(variables('functionAppName'), '-ai')]",
+        "cmsTopicName": "cms-messages",
+        "cmsSubscriptionName": "job-profile-overview"
     },
     "resources": [
         {
@@ -263,32 +269,16 @@
                                 "value": "[listKeys(resourceId(parameters('appSharedResourceGroup'), 'Microsoft.ServiceBus/namespaces/authorizationRules', parameters('appSharedServiceBusName'), 'ReadWrite'), '2017-04-01').primaryConnectionString]"
                             },
                             {
-                                "name": "Values__patch-profile-topic-name",
-                                "value": "jobprofiles-tasks-profile-topic"
+                                "name": "Values__cms-messages-topic",
+                                "value": "[variables('cmsTopicName')]"
                             },
                             {
-                                "name": "Values__patch-profile-subscription-name",
-                                "value": "jobprofiles-tasks-patch"
-                            },
-                            {
-                                "name": "Values__post-profile-topic-name",
-                                "value": "jobprofiles-tasks-profile-topic"
-                            },
-                            {
-                                "name": "Values__post-profile-subscription-name",
-                                "value": "jobprofiles-tasks-refresh"
-                            },
-                            {
-                                "name": "Values__delete-topic-name",
-                                "value": "jobprofiles-tasks-delete-topic"
-                            },
-                            {
-                                "name": "Values__delete-subscription-name",
-                                "value": "jobprofiles-tasks-delete"
+                                "name": "Values__cms-messages-subscription",
+                                "value": "[variables('cmsSubscriptionName')]"
                             },
                             {
                                 "name": "JobProfileTasksSegmentClientOptions__Timeout",
-                                "value": "00:00:30"
+                                "value": "00:00:10"
                             },
                             {
                                 "name": "JobProfileTasksSegmentClientOptions__BaseAddress",
@@ -322,7 +312,7 @@
             "apiVersion": "2017-05-10",
             "name": "[parameters('cosmosDbCollectionName')]",
             "type": "Microsoft.Resources/deployments",
-            "resourceGroup": "[parameters('cosmosDbResourceGroup')]",
+            "resourceGroup": "[parameters('appSharedResourceGroup')]",
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
@@ -344,6 +334,33 @@
                     },
                     "partitionKey": {
                         "value": "[variables('cosmosDbCollectionPartitionKey')]"
+                    }
+                }
+            }
+        },
+        {
+            "apiVersion": "2017-05-10",
+            "name": "[variables('cmsSubscriptionName')]",
+            "type": "Microsoft.Resources/deployments",
+            "resourceGroup": "[parameters('appSharedResourceGroup')]",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[concat(variables('BuildingBlocksDfcBaseUrl'), 'ServiceBus/servicebus-topic-subscription.json')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "serviceBusNamespaceName": {
+                        "value": "[parameters('appSharedServiceBusName')]"
+                    },
+                    "serviceBusTopicName": {
+                        "value": "[variables('cmsTopicName')]"
+                    },
+                    "serviceBusTopicSubscriptionName": {
+                        "value": "[variables('cmsSubscriptionName')]"
+                    },
+                    "subscriptionSqlFilter": {
+                        "value": "[parameters('cmsSubscriptionSqlFilter')]"
                     }
                 }
             }
