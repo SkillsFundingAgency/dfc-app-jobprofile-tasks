@@ -76,7 +76,8 @@
         "functionAppName": "[concat(variables('ResourcePrefix'), '-fa')]",
         "functionAppInsightsName": "[concat(variables('functionAppName'), '-ai')]",
         "cmsTopicName": "cms-messages",
-        "cmsSubscriptionName": "job-profile-overview"
+        "cmsSubscriptionName": "job-profile-overview",
+        "refreshTopicName": "job-profile-refresh"
     },
     "resources": [
         {
@@ -191,6 +192,14 @@
                             {
                                 "name": "Configuration__CosmosDbConnections__JobProfileSegment__PartitionKey",
                                 "value": "[variables('cosmosDbCollectionPartitionKey')]"
+                            },
+                            {
+                                "name": "ServiceBusOptions__ServiceBusConnectionString",
+                                "value": "[listKeys(resourceId(parameters('appSharedResourceGroup'), 'Microsoft.ServiceBus/namespaces/authorizationRules', parameters('appSharedServiceBusName'), 'ReadWrite'), '2017-04-01').primaryConnectionString]"
+                            },
+                            {
+                                "name": "ServiceBusOptions__topicName",
+                                "value": "[variables('refreshTopicName')]"
                             }
                         ]
                     }
