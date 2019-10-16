@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <Content Remove="appsettings-template.json" />
+    <Content Remove="appsettings.json" />
   </ItemGroup>
 
   <ItemGroup>
@@ -16,6 +17,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="appsettings.json">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
     <None Include="appsettings-template.json">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </None>
@@ -26,7 +30,7 @@
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.7.1" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
-    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.9.4">
+    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.9.6">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
