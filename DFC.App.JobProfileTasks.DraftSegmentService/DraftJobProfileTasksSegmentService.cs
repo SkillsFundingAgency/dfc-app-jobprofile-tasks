@@ -1,5 +1,4 @@
-﻿using DFC.App.JobProfileTasks.Data.Contracts;
-using DFC.App.JobProfileTasks.Data.Models;
+﻿using DFC.App.JobProfileTasks.Data.Models;
 using System;
 using System.Threading.Tasks;
 

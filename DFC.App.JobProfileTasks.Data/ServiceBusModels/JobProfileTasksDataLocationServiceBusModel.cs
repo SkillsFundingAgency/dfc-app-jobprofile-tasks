@@ -1,11 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace DFC.App.JobProfileTasks.MessageFunctionApp.Models
+namespace DFC.App.JobProfileTasks.Data.ServiceBusModels
 {
     public class JobProfileTasksDataLocationServiceBusModel
     {
+        public Guid Id { get; set; }
+
         public string Title { get; set; }
 
         public string Description { get; set; }

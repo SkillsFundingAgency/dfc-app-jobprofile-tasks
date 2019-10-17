@@ -1,9 +1,8 @@
-﻿using DFC.App.JobProfileTasks.Data.Contracts;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace DFC.App.JobProfileTasks.MessageFunctionApp.Models
+namespace DFC.App.JobProfileTasks.Data.ServiceBusModels
 {
     public class JobProfileTasksServiceBusModel
     {
@@ -11,10 +10,6 @@ namespace DFC.App.JobProfileTasks.MessageFunctionApp.Models
 
         [Required]
         public string CanonicalName { get; set; }
-
-        public DateTime LastReviewed { get; set; }
-
-        public string PartitionKey => SocLevelTwo;
 
         [Required]
         public string SocLevelTwo { get; set; }

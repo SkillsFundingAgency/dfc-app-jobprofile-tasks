@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using DFC.App.JobProfileTasks.Data.Constants;
 using DFC.App.JobProfileTasks.Data.Models;
-using DFC.App.JobProfileTasks.MessageFunctionApp.Models;
+using DFC.App.JobProfileTasks.Data.ServiceBusModels;
 using Newtonsoft.Json;
 using System;
 using System.Net;
@@ -33,9 +33,9 @@ namespace DFC.App.JobProfileTasks.MessageFunctionApp.Services
                 case MessageAction.Delete:
                     return await Delete(jobProfileId).ConfigureAwait(false);
                 case MessageAction.Save:
-                    var jobProfileMessageModel = JsonConvert.DeserializeObject<JobProfileTasksServiceBusModel>(message);
-                    var jobProfileMessageData = mapper.Map<JobProfileTasksDataSegmentModel>(jobProfileMessageModel);
-                    return await Save(jobProfileMessageData).ConfigureAwait(false);
+                    var jobProfileTasksServiceBusModel = JsonConvert.DeserializeObject<JobProfileTasksServiceBusModel>(message);
+                    var jobProfileTasksSegmentModel = mapper.Map<JobProfileTasksSegmentModel>(jobProfileTasksServiceBusModel);
+                    return await Save(jobProfileTasksSegmentModel).ConfigureAwait(false);
             }
 
             throw new ArgumentOutOfRangeException(nameof(messageAction));
@@ -49,7 +49,7 @@ namespace DFC.App.JobProfileTasks.MessageFunctionApp.Services
             return response.StatusCode;
         }
 
-        private async Task<HttpStatusCode> Save(JobProfileTasksDataSegmentModel model)
+        private async Task<HttpStatusCode> Save(JobProfileTasksSegmentModel model)
         {
             var uri = string.Concat(httpClient.BaseAddress, "segment");
             var response = await httpClient.PostAsJsonAsync(uri, model).ConfigureAwait(false);

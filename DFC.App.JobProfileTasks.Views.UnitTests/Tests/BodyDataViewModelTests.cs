@@ -1,4 +1,3 @@
-using DFC.App.JobProfileTasks.Data.Models;
 using DFC.App.JobProfileTasks.ViewModels;
 using DFC.App.JobProfileTasks.Views.UnitTests.Services;
 using System;

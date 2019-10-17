@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace DFC.App.JobProfileTasks.Data.Constants
+﻿namespace DFC.App.JobProfileTasks.Data.Constants
 {
     public static class MessageAction
     {
