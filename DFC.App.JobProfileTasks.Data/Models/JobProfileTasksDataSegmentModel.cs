@@ -8,10 +8,10 @@ namespace DFC.App.JobProfileTasks.Data.Models
 
         public string Tasks { get; set; }
 
-        public IEnumerable<JobProfileTasksDataLocationSegmentModel> Location { get; set; }
+        public IEnumerable<JobProfileTasksDataLocationSegmentModel> Locations { get; set; }
 
-        public IEnumerable<JobProfileTasksDataEnvironmentSegmentModel> Environment { get; set; }
+        public IEnumerable<JobProfileTasksDataEnvironmentSegmentModel> Environments { get; set; }
 
-        public IEnumerable<JobProfileTasksDataUniformSegmentModel> Uniform { get; set; }
+        public IEnumerable<JobProfileTasksDataUniformSegmentModel> Uniforms { get; set; }
     }
 }

@@ -8,12 +8,18 @@ namespace DFC.App.JobProfileTasks.MessageFunctionApp.AutoMapperProfiles
     {
         public TasksProfile()
         {
-            CreateMap<JobProfileTasksServiceBusModel, JobProfileTasksSegmentModel>()
-                .ForMember(s => s.DocumentId, d => d.MapFrom(a => a.Id));
+            CreateMap<JobProfileTasksDataEnvironmentServiceBusModel, JobProfileTasksDataEnvironmentSegmentModel>();
+
+            CreateMap<JobProfileServiceBusModel, JobProfileTasksSegmentModel>()
+                .ForMember(d => d.Data, s => s.MapFrom(a => a.WhatYouWillDoData));
 
             CreateMap<JobProfileTasksDataEnvironmentServiceBusModel, JobProfileTasksDataEnvironmentSegmentModel>();
+
             CreateMap<JobProfileTasksDataLocationServiceBusModel, JobProfileTasksDataLocationSegmentModel>();
-            CreateMap<JobProfileTasksDataServiceBusModel, JobProfileTasksDataSegmentModel>();
+
+            CreateMap<JobProfileTasksDataServiceBusModel, JobProfileTasksDataSegmentModel>()
+                .ForMember(d => d.Tasks, s => s.MapFrom(a => a.DailyTasks));
+
             CreateMap<JobProfileTasksDataUniformServiceBusModel, JobProfileTasksDataUniformSegmentModel>();
         }
     }

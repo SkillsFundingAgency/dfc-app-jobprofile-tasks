@@ -104,9 +104,9 @@ namespace DFC.App.JobProfileTasks.Controllers
 
                 if (model.Data != null)
                 {
-                    viewModel.Data.Environment = formatContentService.GetParagraphText(EnvironmentsLeadingText, model.Data?.Environment?.Select(x => x.Description), EnvironmentsConjunction);
-                    viewModel.Data.Location = formatContentService.GetParagraphText(LocationLeadingText, model.Data?.Location?.Select(x => x.Description), LocationConjunction);
-                    viewModel.Data.Uniform = formatContentService.GetParagraphText(UniformLeadingText, model.Data?.Uniform?.Select(x => x.Description), UniformConjunction);
+                    viewModel.Data.Environment = formatContentService.GetParagraphText(EnvironmentsLeadingText, model.Data?.Environments?.Select(x => x.Description), EnvironmentsConjunction);
+                    viewModel.Data.Location = formatContentService.GetParagraphText(LocationLeadingText, model.Data?.Locations?.Select(x => x.Description), LocationConjunction);
+                    viewModel.Data.Uniform = formatContentService.GetParagraphText(UniformLeadingText, model.Data?.Uniforms?.Select(x => x.Description), UniformConjunction);
                 }
 
                 logger.LogInformation($"{BodyActionName} has succeeded for: {article}");

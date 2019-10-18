@@ -5,16 +5,16 @@ namespace DFC.App.JobProfileTasks.Data.ServiceBusModels
 {
     public class JobProfileTasksDataServiceBusModel
     {
-        public DateTime LastReviewed { get; set; }
+        public bool IsCadReady { get; set; }
+
+        public string DailyTasks { get; set; }
+
+        public IEnumerable<JobProfileTasksDataLocationServiceBusModel> Locations { get; set; }
+
+        public IEnumerable<JobProfileTasksDataUniformServiceBusModel> Uniforms { get; set; }
+
+        public IEnumerable<JobProfileTasksDataEnvironmentServiceBusModel> Environments { get; set; }
 
         public string Introduction { get; set; }
-
-        public string Tasks { get; set; }
-
-        public IEnumerable<JobProfileTasksDataLocationServiceBusModel> Location { get; set; }
-
-        public IEnumerable<JobProfileTasksDataEnvironmentServiceBusModel> Environment { get; set; }
-
-        public IEnumerable<JobProfileTasksDataUniformServiceBusModel> Uniform { get; set; }
     }
 }

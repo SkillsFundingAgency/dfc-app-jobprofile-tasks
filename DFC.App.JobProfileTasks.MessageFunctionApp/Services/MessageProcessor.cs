@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using DFC.App.JobProfileTasks.Data.Constants;
+using DFC.App.JobProfileTasks.Data.Enums;
 using DFC.App.JobProfileTasks.Data.Models;
 using DFC.App.JobProfileTasks.Data.ServiceBusModels;
 using Newtonsoft.Json;
@@ -21,27 +21,27 @@ namespace DFC.App.JobProfileTasks.MessageFunctionApp.Services
             this.mapper = mapper;
         }
 
-        public async Task<HttpStatusCode> ProcessAsync(
-            string message,
-            string messageAction,
-            string messageContentType,
-            string jobProfileId,
+        public async Task<HttpStatusCode> Save(
+            JobProfileServiceBusModel jobProfileServiceBusModel,
+            MessageContentType messageContentType,
+            Guid jobProfileId,
             long sequenceNumber)
         {
-            switch (messageAction)
+            var model = mapper.Map<JobProfileTasksSegmentModel>(jobProfileServiceBusModel);
+            model.DocumentId = jobProfileId;
+            model.SequenceNumber = sequenceNumber;
+
+            var response = await Update(model).ConfigureAwait(false);
+            if (response.StatusCode == HttpStatusCode.NotFound)
             {
-                case MessageAction.Delete:
-                    return await Delete(jobProfileId).ConfigureAwait(false);
-                case MessageAction.Save:
-                    var jobProfileTasksServiceBusModel = JsonConvert.DeserializeObject<JobProfileTasksServiceBusModel>(message);
-                    var jobProfileTasksSegmentModel = mapper.Map<JobProfileTasksSegmentModel>(jobProfileTasksServiceBusModel);
-                    return await Save(jobProfileTasksSegmentModel).ConfigureAwait(false);
+                response = await Create(model).ConfigureAwait(false);
+                response.EnsureSuccessStatusCode();
             }
 
-            throw new ArgumentOutOfRangeException(nameof(messageAction));
+            return response.StatusCode;
         }
 
-        private async Task<HttpStatusCode> Delete(string jobProfileId)
+        public async Task<HttpStatusCode> Delete(Guid jobProfileId)
         {
             var uri = string.Concat(httpClient.BaseAddress, "segment/", jobProfileId);
             var response = await httpClient.DeleteAsync(uri).ConfigureAwait(false);
@@ -49,12 +49,17 @@ namespace DFC.App.JobProfileTasks.MessageFunctionApp.Services
             return response.StatusCode;
         }
 
-        private async Task<HttpStatusCode> Save(JobProfileTasksSegmentModel model)
+        private async Task<HttpResponseMessage> Create(JobProfileTasksSegmentModel model)
         {
             var uri = string.Concat(httpClient.BaseAddress, "segment");
-            var response = await httpClient.PostAsJsonAsync(uri, model).ConfigureAwait(false);
-            response.EnsureSuccessStatusCode();
-            return response.StatusCode;
+            return await httpClient.PostAsJsonAsync(uri, model).ConfigureAwait(false);
         }
+
+        private async Task<HttpResponseMessage> Update(JobProfileTasksSegmentModel model)
+        {
+            var uri = string.Concat(httpClient.BaseAddress, "segment");
+            return await httpClient.PutAsJsonAsync(uri, model).ConfigureAwait(false);
+        }
+
     }
 }
