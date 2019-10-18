@@ -18,6 +18,8 @@ namespace DFC.App.JobProfileTasks.Data.Models
 
         public string PartitionKey => SocLevelTwo;
 
+        public long SequenceNumber { get; set; }
+
         [Required]
         public string SocLevelTwo { get; set; }
 

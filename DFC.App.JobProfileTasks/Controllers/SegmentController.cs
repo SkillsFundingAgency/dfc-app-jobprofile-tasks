@@ -24,6 +24,8 @@ namespace DFC.App.JobProfileTasks.Controllers
         private const string DocumentActionName = nameof(Document);
         private const string BodyActionName = nameof(Body);
         private const string SaveActionName = nameof(Save);
+        private const string PutActionName = nameof(Put);
+        private const string PostActionName = nameof(Post);
         private const string DeleteActionName = nameof(Delete);
         private const string PatchActionName = nameof(Patch);
 
@@ -119,8 +121,74 @@ namespace DFC.App.JobProfileTasks.Controllers
         }
 
         [HttpPut]
+        [Route("segment")]
+        public async Task<IActionResult> Put([FromBody]JobProfileTasksSegmentModel upsertJobProfileTasksSegmentModel)
+        {
+            logger.LogInformation($"{PutActionName} has been called");
+
+            if (upsertJobProfileTasksSegmentModel == null)
+            {
+                logger.LogInformation($"{PutActionName}. No document was passed");
+                return BadRequest();
+            }
+
+            if (!ModelState.IsValid)
+            {
+                logger.LogInformation($"{PutActionName}. Model state is invalid");
+                return BadRequest(ModelState);
+            }
+
+            var existingDocument = await jobProfileTasksSegmentService.GetByIdAsync(upsertJobProfileTasksSegmentModel.DocumentId).ConfigureAwait(false);
+            if (existingDocument == null)
+            {
+                logger.LogInformation($"{PutActionName}. Couldnt find document with Id {upsertJobProfileTasksSegmentModel.DocumentId}");
+                return new StatusCodeResult((int)HttpStatusCode.NotFound);
+            }
+
+            if (upsertJobProfileTasksSegmentModel.SequenceNumber <= existingDocument.SequenceNumber)
+            {
+                logger.LogInformation($"{PutActionName}. Nothing to update as SequenceNumber of passed document {upsertJobProfileTasksSegmentModel.SequenceNumber} is lower than SequenceNumber of persisted document {existingDocument.SequenceNumber}. ");
+                return new StatusCodeResult((int)HttpStatusCode.AlreadyReported);
+            }
+
+            upsertJobProfileTasksSegmentModel.Etag = existingDocument.Etag;
+            upsertJobProfileTasksSegmentModel.SocLevelTwo = existingDocument.SocLevelTwo;
+
+            var response = await jobProfileTasksSegmentService.UpsertAsync(upsertJobProfileTasksSegmentModel).ConfigureAwait(false);
+            logger.LogInformation($"{PutActionName} has updated content for: {upsertJobProfileTasksSegmentModel.CanonicalName}");
+
+            return new OkObjectResult(response.JobProfileTasksSegmentModel);
+        }
+
         [HttpPost]
         [Route("segment")]
+        public async Task<IActionResult> Post([FromBody]JobProfileTasksSegmentModel upsertJobProfileTasksSegmentModel)
+        {
+            logger.LogInformation($"{PostActionName} has been called");
+
+            if (upsertJobProfileTasksSegmentModel == null)
+            {
+                logger.LogInformation($"{PostActionName}. No document was passed");
+                return BadRequest();
+            }
+
+            if (!ModelState.IsValid)
+            {
+                logger.LogInformation($"{PostActionName}. Model state is invalid");
+                return BadRequest(ModelState);
+            }
+
+            var response = await jobProfileTasksSegmentService.UpsertAsync(upsertJobProfileTasksSegmentModel).ConfigureAwait(false);
+
+            logger.LogInformation($"{PostActionName} has created content for: {upsertJobProfileTasksSegmentModel.CanonicalName}");
+
+            return new CreatedAtActionResult(
+                PostActionName,
+                "Segment",
+                new { article = response.JobProfileTasksSegmentModel.CanonicalName },
+                response.JobProfileTasksSegmentModel);
+        }
+
         public async Task<IActionResult> Save([FromBody]JobProfileTasksSegmentModel upsertJobProfileTasksSegmentModel)
         {
             logger.LogInformation($"{SaveActionName} has been called");
