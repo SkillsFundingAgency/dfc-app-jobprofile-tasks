@@ -2,6 +2,7 @@
 using DFC.App.JobProfileTasks.Extensions;
 using DFC.App.JobProfileTasks.SegmentService;
 using DFC.App.JobProfileTasks.ViewModels;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -24,6 +25,7 @@ namespace DFC.App.JobProfileTasks.Controllers
         private const string BodyActionName = nameof(Body);
         private const string SaveActionName = nameof(Save);
         private const string DeleteActionName = nameof(Delete);
+        private const string PatchActionName = nameof(Patch);
 
         private readonly ILogger<SegmentController> logger;
         private readonly IJobProfileTasksSegmentService jobProfileTasksSegmentService;
@@ -170,6 +172,30 @@ namespace DFC.App.JobProfileTasks.Controllers
                 logger.LogWarning($"{DeleteActionName} has returned no content for: {documentId}");
                 return NotFound();
             }
+        }
+
+        [HttpPatch]
+        [Route("{controller}/{article}")]
+        public async Task<IActionResult> Patch([FromBody] JsonPatchDocument<JobProfileTasksSegmentModel> patchDocument, string article)
+        {
+            logger.LogInformation($"{PatchActionName} has been called");
+
+            if (patchDocument == null)
+            {
+                return BadRequest();
+            }
+
+            var model = await jobProfileTasksSegmentService.GetByNameAsync(article, Request.IsDraftRequest()).ConfigureAwait(false);
+            if (model == null)
+            {
+                logger.LogWarning($"{PatchActionName} has returned no content for: {article}");
+                return NotFound();
+            }
+
+            patchDocument.ApplyTo(model);
+
+            var viewModel = mapper.Map<BodyViewModel>(model);
+            return Ok(viewModel);
         }
     }
 }

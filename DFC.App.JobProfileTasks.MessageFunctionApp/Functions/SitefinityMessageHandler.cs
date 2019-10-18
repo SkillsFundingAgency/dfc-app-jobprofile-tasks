@@ -10,8 +10,6 @@ namespace DFC.App.JobProfileTasks.MessageFunctionApp.Functions
 {
     public class SitefinityMessageHandler
     {
-        private readonly string ThisClassPath = typeof(SitefinityMessageHandler).FullName;
-
         private readonly IMessageProcessor messageProcessor;
         private readonly ILogger<SitefinityMessageHandler> logger;
 
@@ -26,6 +24,8 @@ namespace DFC.App.JobProfileTasks.MessageFunctionApp.Functions
         [FunctionName("SitefinityMessageHandler")]
         public async Task Run([ServiceBusTrigger("%cms-messages-topic%", "%cms-messages-subscription%", Connection = "service-bus-connection-string")] Message sitefinityMessage)
         {
+            var thisClassPath = typeof(SitefinityMessageHandler).FullName;
+
             if (sitefinityMessage != null)
             {
                 sitefinityMessage.UserProperties.TryGetValue(MessageProperty.Action, out var messageAction);
@@ -33,7 +33,7 @@ namespace DFC.App.JobProfileTasks.MessageFunctionApp.Functions
                 sitefinityMessage.UserProperties.TryGetValue(MessageProperty.JobProfileId, out var jobProfileId);
 
                 // loggger should allow setting up correlation id and should be picked up from message
-                logger.LogInformation($"{ThisClassPath}: Received message action {messageAction} for type {messageContentType} with Id: {jobProfileId}: Correlation id {sitefinityMessage.CorrelationId}");
+                logger.LogInformation($"{thisClassPath}: Received message action {messageAction} for type {messageContentType} with Id: {jobProfileId}: Correlation id {sitefinityMessage.CorrelationId}");
 
                 var message = Encoding.UTF8.GetString(sitefinityMessage.Body);
 
