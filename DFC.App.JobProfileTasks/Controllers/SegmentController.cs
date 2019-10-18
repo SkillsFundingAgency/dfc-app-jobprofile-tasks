@@ -23,7 +23,6 @@ namespace DFC.App.JobProfileTasks.Controllers
         private const string IndexActionName = nameof(Index);
         private const string DocumentActionName = nameof(Document);
         private const string BodyActionName = nameof(Body);
-        private const string SaveActionName = nameof(Save);
         private const string PutActionName = nameof(Put);
         private const string PostActionName = nameof(Post);
         private const string DeleteActionName = nameof(Delete);
@@ -187,40 +186,6 @@ namespace DFC.App.JobProfileTasks.Controllers
                 "Segment",
                 new { article = response.JobProfileTasksSegmentModel.CanonicalName },
                 response.JobProfileTasksSegmentModel);
-        }
-
-        public async Task<IActionResult> Save([FromBody]JobProfileTasksSegmentModel upsertJobProfileTasksSegmentModel)
-        {
-            logger.LogInformation($"{SaveActionName} has been called");
-
-            if (upsertJobProfileTasksSegmentModel == null)
-            {
-                return BadRequest();
-            }
-
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            var response = await jobProfileTasksSegmentService.UpsertAsync(upsertJobProfileTasksSegmentModel).ConfigureAwait(false);
-
-            if (response.ResponseStatusCode == HttpStatusCode.Created)
-            {
-                logger.LogInformation($"{SaveActionName} has created content for: {upsertJobProfileTasksSegmentModel.CanonicalName}");
-
-                return new CreatedAtActionResult(
-                    SaveActionName,
-                    "Segment",
-                    new { article = response.JobProfileTasksSegmentModel.CanonicalName },
-                    response.JobProfileTasksSegmentModel);
-            }
-            else
-            {
-                logger.LogInformation($"{SaveActionName} has updated content for: {upsertJobProfileTasksSegmentModel.CanonicalName}");
-
-                return new OkObjectResult(response.JobProfileTasksSegmentModel);
-            }
         }
 
         [HttpDelete]

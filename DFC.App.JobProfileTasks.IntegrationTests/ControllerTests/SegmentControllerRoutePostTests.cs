@@ -75,7 +75,7 @@ namespace DFC.App.JobProfileTasks.IntegrationTests.ControllerTests
 
             // Assert
             response.EnsureSuccessStatusCode();
-            response.StatusCode.Should().Be(HttpStatusCode.OK);
+            response.StatusCode.Should().Be(HttpStatusCode.Created);
         }
     }
 }
