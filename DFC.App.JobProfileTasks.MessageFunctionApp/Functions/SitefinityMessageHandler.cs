@@ -63,15 +63,25 @@ namespace DFC.App.JobProfileTasks.MessageFunctionApp.Functions
                         await messageProcessor.Delete(jobProfileGuid).ConfigureAwait(false);
                         break;
                     case MessageActionType.Published:
-                        var message = Encoding.UTF8.GetString(sitefinityMessage.Body);
-                        var serviceBusModel = JsonConvert.DeserializeObject<JobProfileServiceBusModel>(message);
-
-                        if (serviceBusModel == null)
+                        switch (messageContentType)
                         {
-                            throw new InvalidOperationException($"Service bus model is null");
+                            case MessageContentType.JobProfile:
+                                var message = Encoding.UTF8.GetString(sitefinityMessage.Body);
+                                var serviceBusModel = JsonConvert.DeserializeObject<JobProfileServiceBusModel>(message);
+
+                                if (serviceBusModel == null)
+                                {
+                                    throw new InvalidOperationException($"Service bus model is null");
+                                }
+
+                                await messageProcessor.Save(serviceBusModel, messageContentType, jobProfileGuid, sitefinityMessage.SystemProperties.SequenceNumber).ConfigureAwait(false);
+                                break;
+                            case MessageContentType.Uniform:
+                                var uniformPatchServiceBusModel = JsonConvert.DeserializeObject<JobProfileTasksDataUniformServiceBusModel>(messageBody);
+                                await messageProcessor.PatchUniform(uniformPatchServiceBusModel, jobProfileGuid, messageActionType, sitefinityMessage.SystemProperties.SequenceNumber).ConfigureAwait(false);
+                                break;
                         }
 
-                        await messageProcessor.Save(serviceBusModel, messageContentType, jobProfileGuid, sitefinityMessage.SystemProperties.SequenceNumber).ConfigureAwait(false);
                         break;
                 }
 

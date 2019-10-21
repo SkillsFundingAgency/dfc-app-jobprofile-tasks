@@ -15,5 +15,7 @@ namespace DFC.App.JobProfileTasks.MessageFunctionApp.Services
             MessageContentType messageContentType,
             Guid jobProfileId,
             long sequenceNumber);
+
+        Task<HttpStatusCode> PatchUniform(JobProfileTasksDataUniformServiceBusModel message, Guid jobProfileId, MessageActionType messageActionType, long sequenceNumber);
     }
 }

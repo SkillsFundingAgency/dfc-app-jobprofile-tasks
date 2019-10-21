@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using DFC.App.JobProfileTasks.Data.Models;
+using DFC.App.JobProfileTasks.Data.Models.PatchModels;
 using DFC.App.JobProfileTasks.Data.ServiceBusModels;
 
 namespace DFC.App.JobProfileTasks.MessageFunctionApp.AutoMapperProfiles
@@ -21,6 +22,9 @@ namespace DFC.App.JobProfileTasks.MessageFunctionApp.AutoMapperProfiles
                 .ForMember(d => d.Tasks, s => s.MapFrom(a => a.DailyTasks));
 
             CreateMap<JobProfileTasksDataUniformServiceBusModel, JobProfileTasksDataUniformSegmentModel>();
+
+            CreateMap<PatchUniformModel, JobProfileTasksDataUniformSegmentModel>()
+                .ForMember(d => d.Id, s => s.MapFrom(a => a.UniformId));
         }
     }
 }

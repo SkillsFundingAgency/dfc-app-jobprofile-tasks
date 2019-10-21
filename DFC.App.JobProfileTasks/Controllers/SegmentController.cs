@@ -1,4 +1,5 @@
 ﻿using DFC.App.JobProfileTasks.Data.Models;
+using DFC.App.JobProfileTasks.Data.Models.PatchModels;
 using DFC.App.JobProfileTasks.Extensions;
 using DFC.App.JobProfileTasks.SegmentService;
 using DFC.App.JobProfileTasks.ViewModels;
@@ -26,7 +27,8 @@ namespace DFC.App.JobProfileTasks.Controllers
         private const string PutActionName = nameof(Put);
         private const string PostActionName = nameof(Post);
         private const string DeleteActionName = nameof(Delete);
-        private const string PatchActionName = nameof(Patch);
+        private const string PatchUniformActionName = nameof(PatchUniform);
+        private const string DeleteUniformActionName = nameof(DeleteUniform);
 
         private readonly ILogger<SegmentController> logger;
         private readonly IJobProfileTasksSegmentService jobProfileTasksSegmentService;
@@ -208,20 +210,44 @@ namespace DFC.App.JobProfileTasks.Controllers
         }
 
         [HttpPatch]
-        [Route("{controller}/{article}")]
-        public async Task<IActionResult> Patch([FromBody] JsonPatchDocument<JobProfileTasksSegmentModel> patchDocument, string article)
+        [Route("{controller}/uniform")]
+        public async Task<IActionResult> PatchUniform([FromBody] PatchUniformModel patchDocument)
         {
-            logger.LogInformation($"{PatchActionName} has been called");
+            logger.LogInformation($"{PatchUniformActionName} has been called");
 
             if (patchDocument == null)
             {
                 return BadRequest();
             }
 
-            var model = await jobProfileTasksSegmentService.GetByNameAsync(article, Request.IsDraftRequest()).ConfigureAwait(false);
+            var statusCode = await jobProfileTasksSegmentService.Update(patchDocument).ConfigureAwait(false);
+            return StatusCode((int)statusCode);
+        }
+
+        [HttpDelete]
+        [Route("{controller}/{jobProfileId}/uniform/{uniformId}")]
+        public async Task<IActionResult> DeleteUniform(Guid jobProfileId, Guid uniformId)
+        {
+            logger.LogInformation($"{DeleteUniformActionName} has been called with jobProfileId={jobProfileId} and uniformId={uniformId}");
+            var result = await jobProfileTasksSegmentService.Delete(jobProfileId, uniformId).ConfigureAwait(false);
+            return StatusCode((int)result);
+        }
+
+        [HttpPatch]
+        [Route("{controller}/{article}")]
+        public async Task<IActionResult> PatchUniform([FromBody] JsonPatchDocument<JobProfileTasksSegmentModel> patchDocument, Guid documentId)
+        {
+            logger.LogInformation($"{PatchUniformActionName} has been called");
+
+            if (patchDocument == null)
+            {
+                return BadRequest();
+            }
+
+            var model = await jobProfileTasksSegmentService.GetByIdAsync(documentId).ConfigureAwait(false);
             if (model == null)
             {
-                logger.LogWarning($"{PatchActionName} has returned no content for: {article}");
+                logger.LogWarning($"{PatchUniformActionName} has returned no content for: {documentId}");
                 return NotFound();
             }
 

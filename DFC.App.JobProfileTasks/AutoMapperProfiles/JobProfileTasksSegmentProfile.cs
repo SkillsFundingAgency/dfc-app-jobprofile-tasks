@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using DFC.App.JobProfileTasks.Data.Models;
+using DFC.App.JobProfileTasks.Data.Models.PatchModels;
 using DFC.App.JobProfileTasks.ViewModels;
 
 namespace DFC.App.JobProfileTasks.AutoMapperProfiles
@@ -15,6 +16,9 @@ namespace DFC.App.JobProfileTasks.AutoMapperProfiles
             CreateMap<JobProfileTasksSegmentModel, BodyViewModel>();
 
             CreateMap<JobProfileTasksDataSegmentModel, BodyDataViewModel>().ForAllOtherMembers(x => x.Ignore());
+
+            CreateMap<PatchUniformModel, JobProfileTasksDataUniformSegmentModel>()
+                .ForMember(d => d.Id, s => s.MapFrom(a => a.UniformId));
         }
     }
 }

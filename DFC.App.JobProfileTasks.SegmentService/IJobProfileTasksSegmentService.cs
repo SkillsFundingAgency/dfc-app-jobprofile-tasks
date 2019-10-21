@@ -1,6 +1,8 @@
 ﻿using DFC.App.JobProfileTasks.Data.Models;
+using DFC.App.JobProfileTasks.Data.Models.PatchModels;
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace DFC.App.JobProfileTasks.SegmentService
@@ -18,5 +20,9 @@ namespace DFC.App.JobProfileTasks.SegmentService
         Task<UpsertJobProfileTasksModelResponse> UpsertAsync(JobProfileTasksSegmentModel tasksSegmentModel);
 
         Task<bool> DeleteAsync(Guid documentId);
+
+        Task<HttpStatusCode> Update(PatchUniformModel patchUniform);
+
+        Task<HttpStatusCode> Delete(Guid jobProfileId, Guid uniformId);
     }
 }

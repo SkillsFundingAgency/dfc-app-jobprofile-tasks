@@ -1,4 +1,5 @@
-﻿using DFC.App.JobProfileTasks.Data.Models;
+﻿using AutoMapper;
+using DFC.App.JobProfileTasks.Data.Models;
 using DFC.App.JobProfileTasks.Repository.CosmosDb;
 using FakeItEasy;
 using System;
@@ -12,11 +13,13 @@ namespace DFC.App.JobProfileTasks.SegmentService.UnitTests.SegmentServiceTests
     {
         private readonly ICosmosRepository<JobProfileTasksSegmentModel> repository;
         private readonly IJobProfileTasksSegmentService jobProfileTasksSegmentService;
+        private readonly IMapper mapper;
 
         public SegmentServiceGetByNameTests()
         {
             repository = A.Fake<ICosmosRepository<JobProfileTasksSegmentModel>>();
-            jobProfileTasksSegmentService = new JobProfileTasksSegmentService(repository);
+            mapper = A.Fake<IMapper>();
+            jobProfileTasksSegmentService = new JobProfileTasksSegmentService(repository, mapper);
         }
 
         [Fact]
