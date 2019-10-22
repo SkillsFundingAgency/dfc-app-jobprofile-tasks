@@ -6,7 +6,7 @@ namespace DFC.App.JobProfileTasks.Data.Models.PatchModels
     public class BasePatchItemModel : BasePatchModel
     {
         [Required]
-        public Guid ItemId { get; set; }
+        public Guid Id { get; set; }
 
         [Required]
         public string Title { get; set; }
