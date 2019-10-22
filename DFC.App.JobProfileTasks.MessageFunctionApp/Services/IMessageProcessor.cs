@@ -1,4 +1,5 @@
 ﻿using DFC.App.JobProfileTasks.Data.Enums;
+using DFC.App.JobProfileTasks.Data.Models.PatchModels;
 using DFC.App.JobProfileTasks.Data.Models.ServiceBusModels;
 using System;
 using System.Net;
@@ -14,6 +15,6 @@ namespace DFC.App.JobProfileTasks.MessageFunctionApp.Services
 
         Task<HttpStatusCode> DeleteUniform(Guid jobProfileId, Guid uniformId, long sequenceNumber);
 
-        Task<HttpStatusCode> PatchUniform(JobProfileTasksDataUniformServiceBusModel message, Guid jobProfileId, long sequenceNumber);
+        Task<HttpStatusCode> PatchUniform(PatchUniformModel message, Guid jobProfileId, long sequenceNumber);
     }
 }

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace DFC.App.JobProfileTasks.Data.ServiceBusModels
+namespace DFC.App.JobProfileTasks.Data.Models.ServiceBusModels
 {
     public class JobProfileUniformPatchServiceBusModel
     {

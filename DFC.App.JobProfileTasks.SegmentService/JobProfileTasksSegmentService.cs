@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using DFC.App.JobProfileTasks.Data.Models.PatchModels;
 using DFC.App.JobProfileTasks.Data.Models.SegmentModels;
 using DFC.App.JobProfileTasks.Repository.CosmosDb;
 using System;

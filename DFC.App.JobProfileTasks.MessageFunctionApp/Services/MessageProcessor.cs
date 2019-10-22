@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using DFC.App.JobProfileTasks.Data.Enums;
+using DFC.App.JobProfileTasks.Data.Models.PatchModels;
 using DFC.App.JobProfileTasks.Data.Models.SegmentModels;
 using DFC.App.JobProfileTasks.Data.Models.ServiceBusModels;
 using Microsoft.AspNetCore.JsonPatch;
@@ -60,12 +61,11 @@ namespace DFC.App.JobProfileTasks.MessageFunctionApp.Services
             return response.StatusCode;
         }
 
-        public async Task<HttpStatusCode> PatchUniform(JobProfileTasksDataUniformServiceBusModel message, Guid jobProfileId, long sequenceNumber)
+        public async Task<HttpStatusCode> PatchUniform(PatchUniformModel message, Guid jobProfileId, long sequenceNumber)
         {
-            var patchDocument = new JsonPatchDocument<JobProfileTasksDataServiceBusModel>();
-            var serialized = JsonConvert.SerializeObject(patchDocument);
+            var serialized = JsonConvert.SerializeObject(message);
             var content = new StringContent(serialized, Encoding.UTF8, MediaTypeNames.Application.Json);
-            var uri = string.Concat(httpClient.BaseAddress, "segment/", jobProfileId);
+            var uri = string.Concat(httpClient.BaseAddress, "segment/uniform");
 
             var response = await httpClient.PatchAsync(uri, content).ConfigureAwait(false);
             if (response.StatusCode == HttpStatusCode.NotFound)

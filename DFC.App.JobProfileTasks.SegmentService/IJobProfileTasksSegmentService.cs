@@ -1,5 +1,4 @@
-﻿using DFC.App.JobProfileTasks.Data.Models.PatchModels;
-using DFC.App.JobProfileTasks.Data.Models.SegmentModels;
+﻿using DFC.App.JobProfileTasks.Data.Models.SegmentModels;
 using System;
 using System.Collections.Generic;
 using System.Net;

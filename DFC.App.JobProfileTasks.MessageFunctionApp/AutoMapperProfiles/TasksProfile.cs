@@ -25,6 +25,9 @@ namespace DFC.App.JobProfileTasks.MessageFunctionApp.AutoMapperProfiles
 
             CreateMap<PatchUniformModel, JobProfileTasksDataUniformSegmentModel>()
                 .ForMember(d => d.Id, s => s.MapFrom(a => a.UniformId));
+
+            CreateMap<JobProfileUniformPatchServiceBusModel, PatchUniformModel>()
+                .ForMember(d => d.UniformId, s => s.MapFrom(a => a.Id));
         }
     }
 }

@@ -1,5 +1,7 @@
-﻿using DFC.App.JobProfileTasks.Data.Constants;
+﻿using AutoMapper;
+using DFC.App.JobProfileTasks.Data.Constants;
 using DFC.App.JobProfileTasks.Data.Enums;
+using DFC.App.JobProfileTasks.Data.Models.PatchModels;
 using DFC.App.JobProfileTasks.Data.Models.ServiceBusModels;
 using Microsoft.Azure.ServiceBus;
 using Microsoft.Extensions.Logging;
@@ -14,11 +16,13 @@ namespace DFC.App.JobProfileTasks.MessageFunctionApp.Services
     {
         private readonly IMessageProcessor messageProcessor;
         private readonly ILogger<MessagePreProcessor> logger;
+        private readonly IMapper mapper;
 
-        public MessagePreProcessor(IMessageProcessor messageProcessor, ILogger<MessagePreProcessor> logger)
+        public MessagePreProcessor(IMessageProcessor messageProcessor, ILogger<MessagePreProcessor> logger, IMapper mapper)
         {
             this.messageProcessor = messageProcessor;
             this.logger = logger;
+            this.mapper = mapper;
         }
 
         public async Task Process(Message sitefinityMessage)
@@ -83,8 +87,10 @@ namespace DFC.App.JobProfileTasks.MessageFunctionApp.Services
                             await messageProcessor.Save(jobProfileServiceBusModel, messageContentType, jobProfileGuid, sequenceNumber).ConfigureAwait(false);
                             break;
                         case MessageContentType.Uniform:
-                            var uniformPatchServiceBusModel = JsonConvert.DeserializeObject<JobProfileTasksDataUniformServiceBusModel>(messageBody);
-                            await messageProcessor.PatchUniform(uniformPatchServiceBusModel, jobProfileGuid, sequenceNumber).ConfigureAwait(false);
+                            var uniformPatchServiceBusModel = JsonConvert.DeserializeObject<JobProfileUniformPatchServiceBusModel>(messageBody);
+                            var patchUniformModel = mapper.Map<PatchUniformModel>(uniformPatchServiceBusModel);
+                            patchUniformModel.JobProfileId = jobProfileGuid;
+                            await messageProcessor.PatchUniform(patchUniformModel, jobProfileGuid, sequenceNumber).ConfigureAwait(false);
                             break;
                     }
 
