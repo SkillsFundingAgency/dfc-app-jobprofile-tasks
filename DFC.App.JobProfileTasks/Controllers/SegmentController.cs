@@ -217,11 +217,13 @@ namespace DFC.App.JobProfileTasks.Controllers
 
             if (patchDocument == null)
             {
+                logger.LogInformation($"{PatchUniformActionName}. No document was passed");
                 return BadRequest();
             }
 
             if (!ModelState.IsValid)
             {
+                logger.LogInformation($"{PatchUniformActionName}. Model state is invalid");
                 return BadRequest(ModelState);
             }
 
@@ -236,18 +238,22 @@ namespace DFC.App.JobProfileTasks.Controllers
         [Route("{controller}/{jobProfileId}/uniform/{uniformId}")]
         public async Task<IActionResult> DeleteUniform(DeleteUniformModel deleteUniformModel)
         {
+            logger.LogInformation($"{DeleteUniformActionName} has been called");
+
             if (deleteUniformModel == null)
             {
+                logger.LogInformation($"{DeleteUniformActionName}. No document was passed");
                 return BadRequest();
             }
 
             if (!ModelState.IsValid)
             {
+                logger.LogInformation($"{DeleteUniformActionName}. Model state is invalid");
                 return BadRequest(ModelState);
             }
 
-            logger.LogInformation($"{DeleteUniformActionName} has been called");
             var result = await jobProfileTasksSegmentService.DeleteUniform(deleteUniformModel.JobProfileId, deleteUniformModel.UniformId).ConfigureAwait(false);
+
             return StatusCode((int)result);
         }
 
