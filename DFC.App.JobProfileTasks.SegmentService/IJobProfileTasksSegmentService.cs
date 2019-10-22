@@ -20,8 +20,16 @@ namespace DFC.App.JobProfileTasks.SegmentService
 
         Task<bool> DeleteAsync(Guid documentId);
 
-        Task<HttpStatusCode> UpdateUniform(Guid documentId, JobProfileTasksDataUniformSegmentModel uniformSegmentModel);
+        Task<HttpStatusCode> UpdateUniform(Guid documentId, JobProfileTasksDataUniformSegmentModel model);
+
+        Task<HttpStatusCode> UpdateLocation(Guid documentId, JobProfileTasksDataLocationSegmentModel model);
+
+        Task<HttpStatusCode> UpdateEnvironment(Guid documentId, JobProfileTasksDataEnvironmentSegmentModel model);
 
         Task<HttpStatusCode> DeleteUniform(Guid jobProfileId, Guid uniformId);
+
+        Task<HttpStatusCode> DeleteLocation(Guid jobProfileId, Guid locationId);
+
+        Task<HttpStatusCode> DeleteEnvironment(Guid jobProfileId, Guid environmentId);
     }
 }

@@ -28,7 +28,11 @@ namespace DFC.App.JobProfileTasks.Controllers
         private const string PostActionName = nameof(Post);
         private const string DeleteActionName = nameof(Delete);
         private const string PatchUniformActionName = nameof(PatchUniform);
+        private const string PatchLocationActionName = nameof(PatchLocation);
+        private const string PatchEnvironmentActionName = nameof(PatchUniform);
         private const string DeleteUniformActionName = nameof(DeleteUniform);
+        private const string DeleteLocationActionName = nameof(DeleteUniform);
+        private const string DeleteEnvironmentActionName = nameof(DeleteUniform);
 
         private readonly ILogger<SegmentController> logger;
         private readonly IJobProfileTasksSegmentService jobProfileTasksSegmentService;
@@ -234,6 +238,56 @@ namespace DFC.App.JobProfileTasks.Controllers
             return StatusCode((int)statusCode);
         }
 
+        [HttpPatch]
+        [Route("{controller}/location")]
+        public async Task<IActionResult> PatchLocation([FromBody] PatchLocationModel patchDocument)
+        {
+            logger.LogInformation($"{PatchLocationActionName} has been called");
+
+            if (patchDocument == null)
+            {
+                logger.LogInformation($"{PatchLocationActionName}. No document was passed");
+                return BadRequest();
+            }
+
+            if (!ModelState.IsValid)
+            {
+                logger.LogInformation($"{PatchLocationActionName}. Model state is invalid");
+                return BadRequest(ModelState);
+            }
+
+            var jobProfileTasksDataLocationSegmentModel = mapper.Map<JobProfileTasksDataLocationSegmentModel>(patchDocument);
+
+            var statusCode = await jobProfileTasksSegmentService.UpdateLocation(patchDocument.JobProfileId, jobProfileTasksDataLocationSegmentModel).ConfigureAwait(false);
+
+            return StatusCode((int)statusCode);
+        }
+
+        [HttpPatch]
+        [Route("{controller}/environment")]
+        public async Task<IActionResult> PatchEnvironment([FromBody] PatchEnvironmentsModel patchDocument)
+        {
+            logger.LogInformation($"{PatchEnvironmentActionName} has been called");
+
+            if (patchDocument == null)
+            {
+                logger.LogInformation($"{PatchEnvironmentActionName}. No document was passed");
+                return BadRequest();
+            }
+
+            if (!ModelState.IsValid)
+            {
+                logger.LogInformation($"{PatchEnvironmentActionName}. Model state is invalid");
+                return BadRequest(ModelState);
+            }
+
+            var jobProfileTasksDataEnvironmentSegmentModel = mapper.Map<JobProfileTasksDataEnvironmentSegmentModel>(patchDocument);
+
+            var statusCode = await jobProfileTasksSegmentService.UpdateEnvironment(patchDocument.JobProfileId, jobProfileTasksDataEnvironmentSegmentModel).ConfigureAwait(false);
+
+            return StatusCode((int)statusCode);
+        }
+
         [HttpDelete]
         [Route("{controller}/{jobProfileId}/uniform/{uniformId}")]
         public async Task<IActionResult> DeleteUniform(DeleteUniformModel deleteUniformModel)
@@ -257,28 +311,50 @@ namespace DFC.App.JobProfileTasks.Controllers
             return StatusCode((int)result);
         }
 
-        [HttpPatch]
-        [Route("{controller}/{article}")]
-        public async Task<IActionResult> PatchUniform([FromBody] JsonPatchDocument<JobProfileTasksSegmentModel> patchDocument, Guid documentId)
+        [HttpDelete]
+        [Route("{controller}/{jobProfileId}/location/{itemId}")]
+        public async Task<IActionResult> DeleteLocation(DeleteLocationModel deleteLocationModel)
         {
-            logger.LogInformation($"{PatchUniformActionName} has been called");
+            logger.LogInformation($"{DeleteLocationActionName} has been called");
 
-            if (patchDocument == null)
+            if (deleteLocationModel == null)
             {
+                logger.LogInformation($"{DeleteLocationActionName}. No document was passed");
                 return BadRequest();
             }
 
-            var model = await jobProfileTasksSegmentService.GetByIdAsync(documentId).ConfigureAwait(false);
-            if (model == null)
+            if (!ModelState.IsValid)
             {
-                logger.LogWarning($"{PatchUniformActionName} has returned no content for: {documentId}");
-                return NotFound();
+                logger.LogInformation($"{DeleteLocationActionName}. Model state is invalid");
+                return BadRequest(ModelState);
             }
 
-            patchDocument.ApplyTo(model);
+            var result = await jobProfileTasksSegmentService.DeleteLocation(deleteLocationModel.JobProfileId, deleteLocationModel.ItemId).ConfigureAwait(false);
 
-            var viewModel = mapper.Map<BodyViewModel>(model);
-            return Ok(viewModel);
+            return StatusCode((int)result);
+        }
+
+        [HttpDelete]
+        [Route("{controller}/{jobProfileId}/environment/{itemId}")]
+        public async Task<IActionResult> DeleteEnvironment(DeleteEnvironmentModel deleteEnvironmentModel)
+        {
+            logger.LogInformation($"{DeleteEnvironmentActionName} has been called");
+
+            if (deleteEnvironmentModel == null)
+            {
+                logger.LogInformation($"{DeleteEnvironmentActionName}. No document was passed");
+                return BadRequest();
+            }
+
+            if (!ModelState.IsValid)
+            {
+                logger.LogInformation($"{DeleteEnvironmentActionName}. Model state is invalid");
+                return BadRequest(ModelState);
+            }
+
+            var result = await jobProfileTasksSegmentService.DeleteEnvironment(deleteEnvironmentModel.JobProfileId, deleteEnvironmentModel.ItemId).ConfigureAwait(false);
+
+            return StatusCode((int)result);
         }
     }
 }
