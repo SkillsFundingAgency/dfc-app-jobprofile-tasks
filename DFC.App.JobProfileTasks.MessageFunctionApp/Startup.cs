@@ -28,6 +28,7 @@ namespace DFC.App.JobProfileTasks.MessageFunctionApp
 
             builder?.Services.AddSingleton(jobProfileClientOptions);
             builder?.Services.AddAutoMapper(typeof(Startup).Assembly);
+            builder?.Services.AddTransient<IMessagePreProcessor, MessagePreProcessor>();
             builder?.Services.AddTransient<IMessageProcessor, MessageProcessor>();
 
             builder?.Services.AddHttpClient(nameof(MessageProcessor), httpClient =>
