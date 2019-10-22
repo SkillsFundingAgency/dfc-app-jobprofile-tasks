@@ -220,6 +220,11 @@ namespace DFC.App.JobProfileTasks.Controllers
                 return BadRequest();
             }
 
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             var jobProfileTasksDataUniformSegmentModel = mapper.Map<JobProfileTasksDataUniformSegmentModel>(patchDocument);
 
             var statusCode = await jobProfileTasksSegmentService.UpdateUniform(patchDocument.JobProfileId, jobProfileTasksDataUniformSegmentModel).ConfigureAwait(false);
@@ -231,6 +236,16 @@ namespace DFC.App.JobProfileTasks.Controllers
         [Route("{controller}/{jobProfileId}/uniform/{uniformId}")]
         public async Task<IActionResult> DeleteUniform(DeleteUniformModel deleteUniformModel)
         {
+            if (deleteUniformModel == null)
+            {
+                return BadRequest();
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             logger.LogInformation($"{DeleteUniformActionName} has been called");
             var result = await jobProfileTasksSegmentService.DeleteUniform(deleteUniformModel.JobProfileId, deleteUniformModel.UniformId).ConfigureAwait(false);
             return StatusCode((int)result);

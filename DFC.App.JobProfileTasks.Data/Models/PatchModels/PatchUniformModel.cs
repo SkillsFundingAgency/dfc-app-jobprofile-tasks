@@ -5,6 +5,7 @@ namespace DFC.App.JobProfileTasks.Data.Models.PatchModels
 {
     public class PatchUniformModel : BasePatchModel
     {
+        [Required]
         public Guid UniformId { get; set; }
 
         [Required]
