@@ -3,7 +3,6 @@ using DFC.App.JobProfileTasks.Data.Models.SegmentModels;
 using DFC.App.JobProfileTasks.Extensions;
 using DFC.App.JobProfileTasks.SegmentService;
 using DFC.App.JobProfileTasks.ViewModels;
-using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -289,7 +288,7 @@ namespace DFC.App.JobProfileTasks.Controllers
         }
 
         [HttpDelete]
-        [Route("{controller}/{jobProfileId}/uniform/{uniformId}")]
+        [Route("{controller}/{jobProfileId}/uniform/{itemId}")]
         public async Task<IActionResult> DeleteUniform(DeleteUniformModel deleteUniformModel)
         {
             logger.LogInformation($"{DeleteUniformActionName} has been called");
@@ -306,7 +305,7 @@ namespace DFC.App.JobProfileTasks.Controllers
                 return BadRequest(ModelState);
             }
 
-            var result = await jobProfileTasksSegmentService.DeleteUniform(deleteUniformModel.JobProfileId, deleteUniformModel.UniformId).ConfigureAwait(false);
+            var result = await jobProfileTasksSegmentService.DeleteUniform(deleteUniformModel.JobProfileId, deleteUniformModel.ItemId).ConfigureAwait(false);
 
             return StatusCode((int)result);
         }

@@ -3,7 +3,6 @@ using DFC.App.JobProfileTasks.Data.Enums;
 using DFC.App.JobProfileTasks.Data.Models.PatchModels;
 using DFC.App.JobProfileTasks.Data.Models.SegmentModels;
 using DFC.App.JobProfileTasks.Data.Models.ServiceBusModels;
-using Microsoft.AspNetCore.JsonPatch;
 using Newtonsoft.Json;
 using System;
 using System.Net;

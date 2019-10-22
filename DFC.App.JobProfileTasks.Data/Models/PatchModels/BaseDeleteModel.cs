@@ -1,5 +1,4 @@
-﻿using DFC.App.JobProfileTasks.Data.Enums;
-using System;
+﻿using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace DFC.App.JobProfileTasks.Data.Models.PatchModels

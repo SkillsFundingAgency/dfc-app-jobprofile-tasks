@@ -1,14 +1,6 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
-
-namespace DFC.App.JobProfileTasks.Data.Models.PatchModels
+﻿namespace DFC.App.JobProfileTasks.Data.Models.PatchModels
 {
-    public class DeleteUniformModel
+    public class DeleteUniformModel : BaseDeleteModel
     {
-        [Required]
-        public Guid JobProfileId { get; set; }
-
-        [Required]
-        public Guid UniformId { get; set; }
     }
 }

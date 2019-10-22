@@ -1,14 +1,4 @@
-﻿using DFC.App.JobProfileTasks.Data.Models.SegmentModels;
-using DFC.App.JobProfileTasks.ViewModels;
-using FakeItEasy;
-using Microsoft.AspNetCore.JsonPatch;
-using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Net;
-using System.Net.Mime;
-using Xunit;
-
-namespace DFC.App.JobProfileTasks.UnitTests.ControllerTests.SegmentControllerTests
+﻿namespace DFC.App.JobProfileTasks.UnitTests.ControllerTests.SegmentControllerTests
 {
     public class SegmentControllerPatchTests : BaseSegmentController
     {
