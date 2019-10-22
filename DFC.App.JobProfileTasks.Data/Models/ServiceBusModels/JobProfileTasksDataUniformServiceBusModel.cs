@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace DFC.App.JobProfileTasks.Data.Models
+namespace DFC.App.JobProfileTasks.Data.Models.ServiceBusModels
 {
-    public class JobProfileTasksDataUniformSegmentModel
+    public class JobProfileTasksDataUniformServiceBusModel
     {
         public Guid Id { get; set; }
 

@@ -1,4 +1,4 @@
-﻿using DFC.App.JobProfileTasks.Data.Models;
+﻿using DFC.App.JobProfileTasks.Data.Models.SegmentModels;
 using FakeItEasy;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;

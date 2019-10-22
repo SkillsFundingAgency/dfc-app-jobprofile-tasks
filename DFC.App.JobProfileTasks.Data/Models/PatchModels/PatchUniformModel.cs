@@ -14,6 +14,9 @@ namespace DFC.App.JobProfileTasks.Data.Models.PatchModels
         public string Description { get; set; }
 
         [Required]
+        public string Url { get; set; }
+
+        [Required]
         public bool IsNegative { get; set; }
     }
 }

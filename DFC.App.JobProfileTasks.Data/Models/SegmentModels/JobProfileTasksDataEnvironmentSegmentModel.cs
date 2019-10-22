@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace DFC.App.JobProfileTasks.Data.Models
+namespace DFC.App.JobProfileTasks.Data.Models.SegmentModels
 {
-    public class JobProfileTasksDataLocationSegmentModel
+    public class JobProfileTasksDataEnvironmentSegmentModel
     {
         public Guid Id { get; set; }
 

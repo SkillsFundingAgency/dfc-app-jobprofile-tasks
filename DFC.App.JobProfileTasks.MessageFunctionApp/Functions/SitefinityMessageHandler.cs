@@ -1,6 +1,6 @@
 using DFC.App.JobProfileTasks.Data.Constants;
 using DFC.App.JobProfileTasks.Data.Enums;
-using DFC.App.JobProfileTasks.Data.ServiceBusModels;
+using DFC.App.JobProfileTasks.Data.Models.ServiceBusModels;
 using DFC.App.JobProfileTasks.MessageFunctionApp.Services;
 using Microsoft.Azure.ServiceBus;
 using Microsoft.Azure.WebJobs;
@@ -49,6 +49,8 @@ namespace DFC.App.JobProfileTasks.MessageFunctionApp.Functions
                     throw new InvalidCastException($"Invalid guid received {jobProfileId}");
                 }
 
+                var sequenceNumber = sitefinityMessage.SystemProperties.SequenceNumber;
+
                 var messageBody = Encoding.UTF8.GetString(sitefinityMessage?.Body);
                 if (string.IsNullOrWhiteSpace(messageBody))
                 {
@@ -57,34 +59,41 @@ namespace DFC.App.JobProfileTasks.MessageFunctionApp.Functions
 
                 logger.LogInformation($"{nameof(SitefinityMessageHandler)}: Received message action {messagePropertyActionType} for type {messagePropertyContentType} with Id: {jobProfileId}: Correlation id {sitefinityMessage.CorrelationId}");
 
+                var message = Encoding.UTF8.GetString(sitefinityMessage.Body);
+
                 switch (messageActionType)
                 {
                     case MessageActionType.Deleted:
-                        await messageProcessor.Delete(jobProfileGuid).ConfigureAwait(false);
+                        switch (messageContentType)
+                        {
+                            case MessageContentType.Uniform:
+                                var jobProfileServiceUniformDeleteServiceBusModel = JsonConvert.DeserializeObject<JobProfileUniformDeleteServiceBusModel>(message);
+                                await messageProcessor.DeleteUniform(jobProfileGuid, jobProfileServiceUniformDeleteServiceBusModel.UniformId, sequenceNumber).ConfigureAwait(false);
+                                break;
+                        }
+
                         break;
                     case MessageActionType.Published:
                         switch (messageContentType)
                         {
                             case MessageContentType.JobProfile:
-                                var message = Encoding.UTF8.GetString(sitefinityMessage.Body);
-                                var serviceBusModel = JsonConvert.DeserializeObject<JobProfileServiceBusModel>(message);
+                                var jobProfileServiceBusModel = JsonConvert.DeserializeObject<JobProfileServiceBusModel>(message);
 
-                                if (serviceBusModel == null)
+                                if (jobProfileServiceBusModel == null)
                                 {
                                     throw new InvalidOperationException($"Service bus model is null");
                                 }
 
-                                await messageProcessor.Save(serviceBusModel, messageContentType, jobProfileGuid, sitefinityMessage.SystemProperties.SequenceNumber).ConfigureAwait(false);
+                                await messageProcessor.Save(jobProfileServiceBusModel, messageContentType, jobProfileGuid, sequenceNumber).ConfigureAwait(false);
                                 break;
                             case MessageContentType.Uniform:
                                 var uniformPatchServiceBusModel = JsonConvert.DeserializeObject<JobProfileTasksDataUniformServiceBusModel>(messageBody);
-                                await messageProcessor.PatchUniform(uniformPatchServiceBusModel, jobProfileGuid, messageActionType, sitefinityMessage.SystemProperties.SequenceNumber).ConfigureAwait(false);
+                                await messageProcessor.PatchUniform(uniformPatchServiceBusModel, jobProfileGuid, sequenceNumber).ConfigureAwait(false);
                                 break;
                         }
 
                         break;
                 }
-
             }
         }
     }

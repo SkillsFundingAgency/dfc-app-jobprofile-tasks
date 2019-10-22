@@ -2,7 +2,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace DFC.App.JobProfileTasks.Data.ServiceBusModels
+namespace DFC.App.JobProfileTasks.Data.Models.ServiceBusModels
 {
     public class JobProfileTasksServiceBusModel
     {

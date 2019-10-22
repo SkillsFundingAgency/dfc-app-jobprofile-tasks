@@ -1,7 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
-namespace DFC.App.JobProfileTasks.Data.ServiceBusModels
+namespace DFC.App.JobProfileTasks.Data.Models.ServiceBusModels
 {
     public class JobProfileTasksDataServiceBusModel
     {

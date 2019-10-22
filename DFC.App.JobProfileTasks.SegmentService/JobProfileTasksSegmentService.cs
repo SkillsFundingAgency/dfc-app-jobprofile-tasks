@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using DFC.App.JobProfileTasks.Data.Models;
 using DFC.App.JobProfileTasks.Data.Models.PatchModels;
+using DFC.App.JobProfileTasks.Data.Models.SegmentModels;
 using DFC.App.JobProfileTasks.Repository.CosmosDb;
 using System;
 using System.Collections.Generic;
@@ -46,31 +46,31 @@ namespace DFC.App.JobProfileTasks.SegmentService
             return await repository.GetAsync(d => d.CanonicalName.ToLower() == canonicalName.ToLowerInvariant()).ConfigureAwait(false);
         }
 
-        public async Task<HttpStatusCode> Update(PatchUniformModel patchUniform)
+        public async Task<HttpStatusCode> UpdateUniform(Guid documentId, JobProfileTasksDataUniformSegmentModel uniformSegmentModel)
         {
-            if (patchUniform == null)
+            if (uniformSegmentModel == null)
             {
-                throw new ArgumentNullException(nameof(patchUniform));
+                throw new ArgumentNullException(nameof(uniformSegmentModel));
             }
 
-            var existingJobProfileEntity = await GetByIdAsync(patchUniform.JobProfileId).ConfigureAwait(false);
+            var existingJobProfileEntity = await GetByIdAsync(documentId).ConfigureAwait(false);
             if (existingJobProfileEntity == null)
             {
                 return HttpStatusCode.NotFound;
             }
 
-            var matchingUniform = existingJobProfileEntity.Data.Uniforms.FirstOrDefault(x => x.Id == patchUniform.UniformId);
+            var matchingUniform = existingJobProfileEntity.Data.Uniforms.FirstOrDefault(x => x.Id == uniformSegmentModel.Id);
             if (matchingUniform == null)
             {
                 return HttpStatusCode.NotFound;
             }
 
             var existingUniformItems = existingJobProfileEntity.Data.Uniforms.ToList();
-            var existingItemIndex = existingUniformItems.FindIndex(x => x.Id == patchUniform.UniformId);
+            var existingItemIndex = existingUniformItems.FindIndex(x => x.Id == uniformSegmentModel.Id);
 
             existingUniformItems.RemoveAt(existingItemIndex);
 
-            matchingUniform = mapper.Map<JobProfileTasksDataUniformSegmentModel>(patchUniform);
+            matchingUniform = mapper.Map<JobProfileTasksDataUniformSegmentModel>(uniformSegmentModel);
             existingUniformItems.Insert(existingItemIndex, matchingUniform);
 
             existingJobProfileEntity.Data.Uniforms = existingUniformItems;
@@ -80,7 +80,7 @@ namespace DFC.App.JobProfileTasks.SegmentService
             return result.ResponseStatusCode;
         }
 
-        public async Task<HttpStatusCode> Delete(Guid jobProfileId, Guid uniformId)
+        public async Task<HttpStatusCode> DeleteUniform(Guid jobProfileId, Guid uniformId)
         {
             var existingJobProfileEntity = await GetByIdAsync(jobProfileId).ConfigureAwait(false);
             if (existingJobProfileEntity == null)

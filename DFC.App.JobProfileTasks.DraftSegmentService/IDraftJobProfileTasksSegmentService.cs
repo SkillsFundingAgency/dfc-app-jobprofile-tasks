@@ -1,4 +1,4 @@
-﻿using DFC.App.JobProfileTasks.Data.Models;
+﻿using DFC.App.JobProfileTasks.Data.Models.SegmentModels;
 using System.Threading.Tasks;
 
 namespace DFC.App.JobProfileTasks.DraftSegmentService

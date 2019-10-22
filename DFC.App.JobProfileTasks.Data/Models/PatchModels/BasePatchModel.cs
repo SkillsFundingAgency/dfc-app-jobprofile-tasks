@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace DFC.App.JobProfileTasks.Data.Models.PatchModels
 {
-    public  class BasePatchModel
+    public class BasePatchModel
     {
         [Required]
         public Guid JobProfileId { get; set; }

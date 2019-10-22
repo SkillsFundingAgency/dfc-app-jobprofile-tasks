@@ -1,5 +1,5 @@
-﻿using DFC.App.JobProfileTasks.Data.Models;
-using DFC.App.JobProfileTasks.Data.Models.PatchModels;
+﻿using DFC.App.JobProfileTasks.Data.Models.PatchModels;
+using DFC.App.JobProfileTasks.Data.Models.SegmentModels;
 using System;
 using System.Collections.Generic;
 using System.Net;
@@ -21,8 +21,8 @@ namespace DFC.App.JobProfileTasks.SegmentService
 
         Task<bool> DeleteAsync(Guid documentId);
 
-        Task<HttpStatusCode> Update(PatchUniformModel patchUniform);
+        Task<HttpStatusCode> UpdateUniform(Guid documentId, JobProfileTasksDataUniformSegmentModel uniformSegmentModel);
 
-        Task<HttpStatusCode> Delete(Guid jobProfileId, Guid uniformId);
+        Task<HttpStatusCode> DeleteUniform(Guid jobProfileId, Guid uniformId);
     }
 }

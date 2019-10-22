@@ -1,5 +1,5 @@
-﻿using DFC.App.JobProfileTasks.Data.Models;
-using DFC.App.JobProfileTasks.Data.Models.PatchModels;
+﻿using DFC.App.JobProfileTasks.Data.Models.PatchModels;
+using DFC.App.JobProfileTasks.Data.Models.SegmentModels;
 using DFC.App.JobProfileTasks.Extensions;
 using DFC.App.JobProfileTasks.SegmentService;
 using DFC.App.JobProfileTasks.ViewModels;
@@ -220,16 +220,19 @@ namespace DFC.App.JobProfileTasks.Controllers
                 return BadRequest();
             }
 
-            var statusCode = await jobProfileTasksSegmentService.Update(patchDocument).ConfigureAwait(false);
+            var jobProfileTasksDataUniformSegmentModel = mapper.Map<JobProfileTasksDataUniformSegmentModel>(patchDocument);
+
+            var statusCode = await jobProfileTasksSegmentService.UpdateUniform(patchDocument.JobProfileId, jobProfileTasksDataUniformSegmentModel).ConfigureAwait(false);
+
             return StatusCode((int)statusCode);
         }
 
         [HttpDelete]
         [Route("{controller}/{jobProfileId}/uniform/{uniformId}")]
-        public async Task<IActionResult> DeleteUniform(Guid jobProfileId, Guid uniformId)
+        public async Task<IActionResult> DeleteUniform(DeleteUniformModel deleteUniformModel)
         {
-            logger.LogInformation($"{DeleteUniformActionName} has been called with jobProfileId={jobProfileId} and uniformId={uniformId}");
-            var result = await jobProfileTasksSegmentService.Delete(jobProfileId, uniformId).ConfigureAwait(false);
+            logger.LogInformation($"{DeleteUniformActionName} has been called");
+            var result = await jobProfileTasksSegmentService.DeleteUniform(deleteUniformModel.JobProfileId, deleteUniformModel.UniformId).ConfigureAwait(false);
             return StatusCode((int)result);
         }
 

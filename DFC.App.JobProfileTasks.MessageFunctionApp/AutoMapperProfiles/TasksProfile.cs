@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
-using DFC.App.JobProfileTasks.Data.Models;
 using DFC.App.JobProfileTasks.Data.Models.PatchModels;
-using DFC.App.JobProfileTasks.Data.ServiceBusModels;
+using DFC.App.JobProfileTasks.Data.Models.SegmentModels;
+using DFC.App.JobProfileTasks.Data.Models.ServiceBusModels;
 
 namespace DFC.App.JobProfileTasks.MessageFunctionApp.AutoMapperProfiles
 {

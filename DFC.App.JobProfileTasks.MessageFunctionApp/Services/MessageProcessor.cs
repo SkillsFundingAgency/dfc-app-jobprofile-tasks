@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using DFC.App.JobProfileTasks.Data.Enums;
-using DFC.App.JobProfileTasks.Data.Models;
-using DFC.App.JobProfileTasks.Data.ServiceBusModels;
+using DFC.App.JobProfileTasks.Data.Models.SegmentModels;
+using DFC.App.JobProfileTasks.Data.Models.ServiceBusModels;
 using Microsoft.AspNetCore.JsonPatch;
 using Newtonsoft.Json;
 using System;
@@ -52,20 +52,26 @@ namespace DFC.App.JobProfileTasks.MessageFunctionApp.Services
             return response.StatusCode;
         }
 
-        public async Task<HttpStatusCode> PatchUniform(JobProfileTasksDataUniformServiceBusModel message, Guid jobProfileId, MessageActionType messageActionType, long sequenceNumber)
+        public async Task<HttpStatusCode> DeleteUniform(Guid jobProfileId, Guid uniformId, long sequenceNumber)
+        {
+            var uri = string.Concat(httpClient.BaseAddress, "segment/", jobProfileId, "/", uniformId);
+            var response = await httpClient.DeleteAsync(uri).ConfigureAwait(false);
+            response.EnsureSuccessStatusCode();
+            return response.StatusCode;
+        }
+
+        public async Task<HttpStatusCode> PatchUniform(JobProfileTasksDataUniformServiceBusModel message, Guid jobProfileId, long sequenceNumber)
         {
             var patchDocument = new JsonPatchDocument<JobProfileTasksDataServiceBusModel>();
-
-            if (messageActionType == MessageActionType.Deleted)
-            {
-
-            }
-
             var serialized = JsonConvert.SerializeObject(patchDocument);
             var content = new StringContent(serialized, Encoding.UTF8, MediaTypeNames.Application.Json);
             var uri = string.Concat(httpClient.BaseAddress, "segment/", jobProfileId);
+
             var response = await httpClient.PatchAsync(uri, content).ConfigureAwait(false);
-            response.EnsureSuccessStatusCode();
+            if (response.StatusCode == HttpStatusCode.NotFound)
+            {
+                await httpClient.PostAsync(uri, content).ConfigureAwait(false);
+            }
 
             return response.StatusCode;
         }

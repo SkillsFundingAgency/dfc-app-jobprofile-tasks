@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using DFC.App.JobProfileTasks.Data.Models;
 using DFC.App.JobProfileTasks.Data.Models.PatchModels;
+using DFC.App.JobProfileTasks.Data.Models.SegmentModels;
 using DFC.App.JobProfileTasks.ViewModels;
 
 namespace DFC.App.JobProfileTasks.AutoMapperProfiles
