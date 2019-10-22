@@ -26,6 +26,10 @@ namespace DFC.App.JobProfileTasks.MessageFunctionApp.AutoMapperProfiles
             CreateMap<PatchUniformModel, JobProfileTasksDataUniformSegmentModel>();
 
             CreateMap<JobProfileUniformPatchServiceBusModel, PatchUniformModel>();
+
+            CreateMap<JobProfileLocationPatchServiceBusModel, PatchLocationModel>();
+
+            CreateMap<JobProfileEnvironmentPatchServiceBusModel, PatchEnvironmentsModel>();
         }
     }
 }

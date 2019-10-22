@@ -62,9 +62,27 @@ namespace DFC.App.JobProfileTasks.MessageFunctionApp.Services
 
         public async Task<HttpStatusCode> PatchUniform(PatchUniformModel message, Guid jobProfileId, long sequenceNumber)
         {
+            var url = "segment/uniform";
+            return await Patch(message, url).ConfigureAwait(false);
+        }
+
+        public async Task<HttpStatusCode> PatchLocation(PatchLocationModel message, Guid jobProfileId, long sequenceNumber)
+        {
+            var url = "segment/location";
+            return await Patch(message, url).ConfigureAwait(false);
+        }
+
+        public async Task<HttpStatusCode> PatchEnvironment(PatchEnvironmentsModel message, Guid jobProfileId, long sequenceNumber)
+        {
+            var url = "segment/environment";
+            return await Patch(message, url).ConfigureAwait(false);
+        }
+
+        private async Task<HttpStatusCode> Patch(object message, string url)
+        {
             var serialized = JsonConvert.SerializeObject(message);
             var content = new StringContent(serialized, Encoding.UTF8, MediaTypeNames.Application.Json);
-            var uri = string.Concat(httpClient.BaseAddress, "segment/uniform");
+            var uri = string.Concat(httpClient.BaseAddress, url);
 
             var response = await httpClient.PatchAsync(uri, content).ConfigureAwait(false);
             if (response.StatusCode == HttpStatusCode.NotFound)

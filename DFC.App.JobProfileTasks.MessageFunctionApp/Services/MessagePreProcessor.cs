@@ -92,6 +92,18 @@ namespace DFC.App.JobProfileTasks.MessageFunctionApp.Services
                             patchUniformModel.JobProfileId = jobProfileGuid;
                             await messageProcessor.PatchUniform(patchUniformModel, jobProfileGuid, sequenceNumber).ConfigureAwait(false);
                             break;
+                        case MessageContentType.Location:
+                            var locationPatchServiceBusModel = JsonConvert.DeserializeObject<JobProfileLocationPatchServiceBusModel>(messageBody);
+                            var patchLocationModel = mapper.Map<PatchLocationModel>(locationPatchServiceBusModel);
+                            patchLocationModel.JobProfileId = jobProfileGuid;
+                            await messageProcessor.PatchLocation(patchLocationModel, jobProfileGuid, sequenceNumber).ConfigureAwait(false);
+                            break;
+                        case MessageContentType.Environment:
+                            var jobProfileEnvironmentPatchServiceBusModel = JsonConvert.DeserializeObject<JobProfileEnvironmentPatchServiceBusModel>(messageBody);
+                            var patchEnvironmentsModel = mapper.Map<PatchEnvironmentsModel>(jobProfileEnvironmentPatchServiceBusModel);
+                            patchEnvironmentsModel.JobProfileId = jobProfileGuid;
+                            await messageProcessor.PatchEnvironment(patchEnvironmentsModel, jobProfileGuid, sequenceNumber).ConfigureAwait(false);
+                            break;
                     }
 
                     break;

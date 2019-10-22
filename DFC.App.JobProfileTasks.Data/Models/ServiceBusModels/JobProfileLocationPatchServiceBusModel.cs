@@ -2,7 +2,7 @@
 
 namespace DFC.App.JobProfileTasks.Data.Models.ServiceBusModels
 {
-    public class JobProfileLocationPatchServiceBusModel
+    public class JobProfileUniformPatchServiceBusModel
     {
         public Guid Id { get; set; }
 
