@@ -37,6 +37,11 @@ namespace DFC.App.JobProfileTasks.MessageFunctionApp.Services
                 throw new ArgumentOutOfRangeException(nameof(messagePropertyContentType), $"Invalid message content type '{messagePropertyContentType}' received, should be one of '{string.Join(",", Enum.GetNames(typeof(MessageContentType)))}'");
             }
 
+            if (jobProfileId == null)
+            {
+                throw new ArgumentOutOfRangeException($"No job profile Id specified");
+            }
+
             if (!Guid.TryParse(jobProfileId.ToString(), out var jobProfileGuid))
             {
                 throw new InvalidCastException($"Invalid guid received {jobProfileId}");

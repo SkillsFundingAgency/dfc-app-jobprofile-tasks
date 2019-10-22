@@ -54,7 +54,7 @@ namespace DFC.App.JobProfileTasks.MessageFunctionApp.Services
 
         public async Task<HttpStatusCode> DeleteUniform(Guid jobProfileId, Guid uniformId, long sequenceNumber)
         {
-            var uri = string.Concat(httpClient.BaseAddress, "segment/", jobProfileId, "/", uniformId);
+            var uri = string.Concat(httpClient.BaseAddress, "segment/", jobProfileId, "/uniform/", uniformId);
             var response = await httpClient.DeleteAsync(uri).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
             return response.StatusCode;
