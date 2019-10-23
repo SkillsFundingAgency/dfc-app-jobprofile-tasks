@@ -28,10 +28,10 @@ namespace DFC.App.JobProfileTasks.Controllers
         private const string DeleteActionName = nameof(Delete);
         private const string PatchUniformActionName = nameof(PatchUniform);
         private const string PatchLocationActionName = nameof(PatchLocation);
-        private const string PatchEnvironmentActionName = nameof(PatchUniform);
+        private const string PatchEnvironmentActionName = nameof(PatchEnvironment);
         private const string DeleteUniformActionName = nameof(DeleteUniform);
-        private const string DeleteLocationActionName = nameof(DeleteUniform);
-        private const string DeleteEnvironmentActionName = nameof(DeleteUniform);
+        private const string DeleteLocationActionName = nameof(DeleteLocation);
+        private const string DeleteEnvironmentActionName = nameof(DeleteEnvironment);
 
         private readonly ILogger<SegmentController> logger;
         private readonly IJobProfileTasksSegmentService jobProfileTasksSegmentService;
