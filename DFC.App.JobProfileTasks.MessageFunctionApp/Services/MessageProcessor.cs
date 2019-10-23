@@ -52,37 +52,37 @@ namespace DFC.App.JobProfileTasks.MessageFunctionApp.Services
             return response.StatusCode;
         }
 
-        public async Task<HttpStatusCode> DeleteUniform(Guid jobProfileId, Guid uniformId, long sequenceNumber)
+        public async Task<HttpStatusCode> DeleteUniform(Guid jobProfileId, Guid uniformId)
         {
             var uri = $"segment/{jobProfileId}/uniform/{uniformId}";
             return await Patch(uri).ConfigureAwait(false);
         }
 
-        public async Task<HttpStatusCode> DeleteEnvironment(Guid jobProfileId, Guid environmentId, long sequenceNumber)
+        public async Task<HttpStatusCode> DeleteEnvironment(Guid jobProfileId, Guid environmentId)
         {
             var uri = $"segment/{jobProfileId}/environment/{environmentId}";
             return await Patch(uri).ConfigureAwait(false);
         }
 
-        public async Task<HttpStatusCode> DeleteLocation(Guid jobProfileId, Guid locationId, long sequenceNumber)
+        public async Task<HttpStatusCode> DeleteLocation(Guid jobProfileId, Guid locationId)
         {
             var uri = $"segment/{jobProfileId}/location/{locationId}";
             return await Patch(uri).ConfigureAwait(false);
         }
 
-        public async Task<HttpStatusCode> PatchUniform(PatchUniformModel message, Guid jobProfileId, long sequenceNumber)
+        public async Task<HttpStatusCode> PatchUniform(PatchUniformModel message, Guid jobProfileId)
         {
             var url = "segment/uniform";
             return await Patch(message, url).ConfigureAwait(false);
         }
 
-        public async Task<HttpStatusCode> PatchLocation(PatchLocationModel message, Guid jobProfileId, long sequenceNumber)
+        public async Task<HttpStatusCode> PatchLocation(PatchLocationModel message, Guid jobProfileId)
         {
             var url = "segment/location";
             return await Patch(message, url).ConfigureAwait(false);
         }
 
-        public async Task<HttpStatusCode> PatchEnvironment(PatchEnvironmentsModel message, Guid jobProfileId, long sequenceNumber)
+        public async Task<HttpStatusCode> PatchEnvironment(PatchEnvironmentsModel message, Guid jobProfileId)
         {
             var url = "segment/environment";
             return await Patch(message, url).ConfigureAwait(false);

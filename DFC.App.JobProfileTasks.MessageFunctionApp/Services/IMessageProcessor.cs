@@ -13,16 +13,16 @@ namespace DFC.App.JobProfileTasks.MessageFunctionApp.Services
 
         Task<HttpStatusCode> Save(JobProfileServiceBusModel message, MessageContentType messageContentType, Guid jobProfileId, long sequenceNumber);
 
-        Task<HttpStatusCode> DeleteUniform(Guid jobProfileId, Guid uniformId, long sequenceNumber);
+        Task<HttpStatusCode> DeleteUniform(Guid jobProfileId, Guid uniformId);
 
-        Task<HttpStatusCode> DeleteLocation(Guid jobProfileId, Guid locationId, long sequenceNumber);
+        Task<HttpStatusCode> DeleteLocation(Guid jobProfileId, Guid locationId);
 
-        Task<HttpStatusCode> DeleteEnvironment(Guid jobProfileId, Guid environmentId, long sequenceNumber);
+        Task<HttpStatusCode> DeleteEnvironment(Guid jobProfileId, Guid environmentId);
 
-        Task<HttpStatusCode> PatchUniform(PatchUniformModel message, Guid jobProfileId, long sequenceNumber);
+        Task<HttpStatusCode> PatchUniform(PatchUniformModel message, Guid jobProfileId);
 
-        Task<HttpStatusCode> PatchLocation(PatchLocationModel message, Guid jobProfileId, long sequenceNumber);
+        Task<HttpStatusCode> PatchLocation(PatchLocationModel message, Guid jobProfileId);
 
-        Task<HttpStatusCode> PatchEnvironment(PatchEnvironmentsModel message, Guid jobProfileId, long sequenceNumber);
+        Task<HttpStatusCode> PatchEnvironment(PatchEnvironmentsModel message, Guid jobProfileId);
     }
 }

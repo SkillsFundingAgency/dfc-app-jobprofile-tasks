@@ -68,15 +68,15 @@ namespace DFC.App.JobProfileTasks.MessageFunctionApp.Services
                     {
                         case MessageContentType.Uniform:
                             var jobProfileServiceUniformDeleteServiceBusModel = JsonConvert.DeserializeObject<JobProfileUniformDeleteServiceBusModel>(message);
-                            await messageProcessor.DeleteUniform(jobProfileGuid, jobProfileServiceUniformDeleteServiceBusModel.Id, sequenceNumber).ConfigureAwait(false);
+                            await messageProcessor.DeleteUniform(jobProfileGuid, jobProfileServiceUniformDeleteServiceBusModel.Id).ConfigureAwait(false);
                             break;
                         case MessageContentType.Location:
                             var jobProfileLocationDeleteServiceBusModel = JsonConvert.DeserializeObject<JobProfileLocationDeleteServiceBusModel>(message);
-                            await messageProcessor.DeleteLocation(jobProfileGuid, jobProfileLocationDeleteServiceBusModel.Id, sequenceNumber).ConfigureAwait(false);
+                            await messageProcessor.DeleteLocation(jobProfileGuid, jobProfileLocationDeleteServiceBusModel.Id).ConfigureAwait(false);
                             break;
                         case MessageContentType.Environment:
                             var jobProfileEnvironmentDeleteServiceBusModel = JsonConvert.DeserializeObject<JobProfileEnvironmentDeleteServiceBusModel>(message);
-                            await messageProcessor.DeleteEnvironment(jobProfileGuid, jobProfileEnvironmentDeleteServiceBusModel.Id, sequenceNumber).ConfigureAwait(false);
+                            await messageProcessor.DeleteEnvironment(jobProfileGuid, jobProfileEnvironmentDeleteServiceBusModel.Id).ConfigureAwait(false);
                             break;
                     }
 
@@ -98,19 +98,19 @@ namespace DFC.App.JobProfileTasks.MessageFunctionApp.Services
                             var uniformPatchServiceBusModel = JsonConvert.DeserializeObject<JobProfileUniformPatchServiceBusModel>(messageBody);
                             var patchUniformModel = mapper.Map<PatchUniformModel>(uniformPatchServiceBusModel);
                             patchUniformModel.JobProfileId = jobProfileGuid;
-                            await messageProcessor.PatchUniform(patchUniformModel, jobProfileGuid, sequenceNumber).ConfigureAwait(false);
+                            await messageProcessor.PatchUniform(patchUniformModel, jobProfileGuid).ConfigureAwait(false);
                             break;
                         case MessageContentType.Location:
                             var locationPatchServiceBusModel = JsonConvert.DeserializeObject<JobProfileLocationPatchServiceBusModel>(messageBody);
                             var patchLocationModel = mapper.Map<PatchLocationModel>(locationPatchServiceBusModel);
                             patchLocationModel.JobProfileId = jobProfileGuid;
-                            await messageProcessor.PatchLocation(patchLocationModel, jobProfileGuid, sequenceNumber).ConfigureAwait(false);
+                            await messageProcessor.PatchLocation(patchLocationModel, jobProfileGuid).ConfigureAwait(false);
                             break;
                         case MessageContentType.Environment:
                             var jobProfileEnvironmentPatchServiceBusModel = JsonConvert.DeserializeObject<JobProfileEnvironmentPatchServiceBusModel>(messageBody);
                             var patchEnvironmentsModel = mapper.Map<PatchEnvironmentsModel>(jobProfileEnvironmentPatchServiceBusModel);
                             patchEnvironmentsModel.JobProfileId = jobProfileGuid;
-                            await messageProcessor.PatchEnvironment(patchEnvironmentsModel, jobProfileGuid, sequenceNumber).ConfigureAwait(false);
+                            await messageProcessor.PatchEnvironment(patchEnvironmentsModel, jobProfileGuid).ConfigureAwait(false);
                             break;
                     }
 
