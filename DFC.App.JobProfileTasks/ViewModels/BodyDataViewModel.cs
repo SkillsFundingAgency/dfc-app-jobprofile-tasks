@@ -4,8 +4,6 @@ namespace DFC.App.JobProfileTasks.ViewModels
 {
     public class BodyDataViewModel
     {
-        public DateTime LastReviewed { get; set; }
-
         public string Introduction { get; set; }
 
         public string Tasks { get; set; }
