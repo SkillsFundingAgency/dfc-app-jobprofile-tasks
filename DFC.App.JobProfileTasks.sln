@@ -55,7 +55,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DFC.App.JobProfileTasks.Vie
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Functions", "Functions", "{C2509DDB-D175-435F-BC89-B2BF8C2F659B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DFC.App.JobProfileTasks.MessageFunctionApp", "DFC.App.JobProfileTasks.MessageFunctionApp\DFC.App.JobProfileTasks.MessageFunctionApp.csproj", "{738B009D-9896-4625-9EC9-0B04B6707E66}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DFC.App.JobProfileTasks.MessageFunctionApp", "DFC.App.JobProfileTasks.MessageFunctionApp\DFC.App.JobProfileTasks.MessageFunctionApp.csproj", "{738B009D-9896-4625-9EC9-0B04B6707E66}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

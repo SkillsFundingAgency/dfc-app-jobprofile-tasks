@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace DFC.App.JobProfileTasks.Data.Models
+namespace DFC.App.JobProfileTasks.Data.Models.SegmentModels
 {
     public class JobProfileTasksSegmentModel : IDataModel
     {
@@ -16,12 +16,14 @@ namespace DFC.App.JobProfileTasks.Data.Models
         [Required]
         public string CanonicalName { get; set; }
 
-        public DateTime LastReviewed { get; set; }
-
         public string PartitionKey => SocLevelTwo;
+
+        public long SequenceNumber { get; set; }
 
         [Required]
         public string SocLevelTwo { get; set; }
+
+        public DateTime LastModified { get; set; }
 
         public JobProfileTasksDataSegmentModel Data { get; set; }
     }

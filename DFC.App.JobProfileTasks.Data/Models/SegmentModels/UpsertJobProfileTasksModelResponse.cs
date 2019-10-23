@@ -1,6 +1,6 @@
 ﻿using System.Net;
 
-namespace DFC.App.JobProfileTasks.Data.Models
+namespace DFC.App.JobProfileTasks.Data.Models.SegmentModels
 {
     public class UpsertJobProfileTasksModelResponse
     {
