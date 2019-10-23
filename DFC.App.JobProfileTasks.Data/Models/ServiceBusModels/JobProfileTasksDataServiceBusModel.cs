@@ -6,6 +6,8 @@ namespace DFC.App.JobProfileTasks.Data.Models.ServiceBusModels
     {
         public bool IsCadReady { get; set; }
 
+        public string Introduction { get; set; }
+
         public string DailyTasks { get; set; }
 
         public IEnumerable<JobProfileTasksDataLocationServiceBusModel> Locations { get; set; }
@@ -13,7 +15,5 @@ namespace DFC.App.JobProfileTasks.Data.Models.ServiceBusModels
         public IEnumerable<JobProfileTasksDataUniformServiceBusModel> Uniforms { get; set; }
 
         public IEnumerable<JobProfileTasksDataEnvironmentServiceBusModel> Environments { get; set; }
-
-        public string Introduction { get; set; }
     }
 }
