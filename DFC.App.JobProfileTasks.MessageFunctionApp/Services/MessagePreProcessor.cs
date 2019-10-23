@@ -29,7 +29,6 @@ namespace DFC.App.JobProfileTasks.MessageFunctionApp.Services
         {
             sitefinityMessage.UserProperties.TryGetValue(MessageProperty.Action, out var messagePropertyActionType);
             sitefinityMessage.UserProperties.TryGetValue(MessageProperty.ContentType, out var messagePropertyContentType);
-            sitefinityMessage.UserProperties.TryGetValue(MessageProperty.JobProfileId, out var jobProfileId);
 
             if (!Enum.TryParse<MessageActionType>(messagePropertyActionType?.ToString(), out var messageActionType))
             {
@@ -39,16 +38,6 @@ namespace DFC.App.JobProfileTasks.MessageFunctionApp.Services
             if (!Enum.TryParse<MessageContentType>(messagePropertyContentType?.ToString(), out var messageContentType))
             {
                 throw new ArgumentOutOfRangeException(nameof(messagePropertyContentType), $"Invalid message content type '{messagePropertyContentType}' received, should be one of '{string.Join(",", Enum.GetNames(typeof(MessageContentType)))}'");
-            }
-
-            if (jobProfileId == null)
-            {
-                throw new ArgumentOutOfRangeException($"No job profile Id specified");
-            }
-
-            if (!Guid.TryParse(jobProfileId.ToString(), out var jobProfileGuid))
-            {
-                throw new InvalidCastException($"Invalid guid received {jobProfileId}");
             }
 
             var sequenceNumber = sitefinityMessage.SystemProperties.SequenceNumber;
@@ -68,15 +57,15 @@ namespace DFC.App.JobProfileTasks.MessageFunctionApp.Services
                     {
                         case MessageContentType.Uniform:
                             var jobProfileServiceUniformDeleteServiceBusModel = JsonConvert.DeserializeObject<JobProfileUniformDeleteServiceBusModel>(message);
-                            await messageProcessor.DeleteUniform(jobProfileGuid, jobProfileServiceUniformDeleteServiceBusModel.Id).ConfigureAwait(false);
+                            await messageProcessor.DeleteUniform(jobProfileServiceUniformDeleteServiceBusModel.JobProfileId, jobProfileServiceUniformDeleteServiceBusModel.Id).ConfigureAwait(false);
                             break;
                         case MessageContentType.Location:
                             var jobProfileLocationDeleteServiceBusModel = JsonConvert.DeserializeObject<JobProfileLocationDeleteServiceBusModel>(message);
-                            await messageProcessor.DeleteLocation(jobProfileGuid, jobProfileLocationDeleteServiceBusModel.Id).ConfigureAwait(false);
+                            await messageProcessor.DeleteLocation(jobProfileLocationDeleteServiceBusModel.JobProfileId, jobProfileLocationDeleteServiceBusModel.Id).ConfigureAwait(false);
                             break;
                         case MessageContentType.Environment:
                             var jobProfileEnvironmentDeleteServiceBusModel = JsonConvert.DeserializeObject<JobProfileEnvironmentDeleteServiceBusModel>(message);
-                            await messageProcessor.DeleteEnvironment(jobProfileGuid, jobProfileEnvironmentDeleteServiceBusModel.Id).ConfigureAwait(false);
+                            await messageProcessor.DeleteEnvironment(jobProfileEnvironmentDeleteServiceBusModel.JobProfileId, jobProfileEnvironmentDeleteServiceBusModel.Id).ConfigureAwait(false);
                             break;
                     }
 
@@ -92,25 +81,22 @@ namespace DFC.App.JobProfileTasks.MessageFunctionApp.Services
                                 throw new InvalidOperationException($"Service bus model is null");
                             }
 
-                            await messageProcessor.Save(jobProfileServiceBusModel, messageContentType, jobProfileGuid, sequenceNumber).ConfigureAwait(false);
+                            await messageProcessor.Save(jobProfileServiceBusModel, messageContentType, sequenceNumber).ConfigureAwait(false);
                             break;
                         case MessageContentType.Uniform:
                             var uniformPatchServiceBusModel = JsonConvert.DeserializeObject<JobProfileUniformPatchServiceBusModel>(messageBody);
                             var patchUniformModel = mapper.Map<PatchUniformModel>(uniformPatchServiceBusModel);
-                            patchUniformModel.JobProfileId = jobProfileGuid;
-                            await messageProcessor.PatchUniform(patchUniformModel, jobProfileGuid).ConfigureAwait(false);
+                            await messageProcessor.PatchUniform(patchUniformModel).ConfigureAwait(false);
                             break;
                         case MessageContentType.Location:
                             var locationPatchServiceBusModel = JsonConvert.DeserializeObject<JobProfileLocationPatchServiceBusModel>(messageBody);
                             var patchLocationModel = mapper.Map<PatchLocationModel>(locationPatchServiceBusModel);
-                            patchLocationModel.JobProfileId = jobProfileGuid;
-                            await messageProcessor.PatchLocation(patchLocationModel, jobProfileGuid).ConfigureAwait(false);
+                            await messageProcessor.PatchLocation(patchLocationModel).ConfigureAwait(false);
                             break;
                         case MessageContentType.Environment:
                             var jobProfileEnvironmentPatchServiceBusModel = JsonConvert.DeserializeObject<JobProfileEnvironmentPatchServiceBusModel>(messageBody);
                             var patchEnvironmentsModel = mapper.Map<PatchEnvironmentsModel>(jobProfileEnvironmentPatchServiceBusModel);
-                            patchEnvironmentsModel.JobProfileId = jobProfileGuid;
-                            await messageProcessor.PatchEnvironment(patchEnvironmentsModel, jobProfileGuid).ConfigureAwait(false);
+                            await messageProcessor.PatchEnvironment(patchEnvironmentsModel).ConfigureAwait(false);
                             break;
                     }
 

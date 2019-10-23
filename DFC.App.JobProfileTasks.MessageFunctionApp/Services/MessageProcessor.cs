@@ -27,11 +27,9 @@ namespace DFC.App.JobProfileTasks.MessageFunctionApp.Services
         public async Task<HttpStatusCode> Save(
             JobProfileServiceBusModel jobProfileServiceBusModel,
             MessageContentType messageContentType,
-            Guid jobProfileId,
             long sequenceNumber)
         {
             var model = mapper.Map<JobProfileTasksSegmentModel>(jobProfileServiceBusModel);
-            model.DocumentId = jobProfileId;
             model.SequenceNumber = sequenceNumber;
 
             var response = await Update(model).ConfigureAwait(false);
@@ -70,19 +68,19 @@ namespace DFC.App.JobProfileTasks.MessageFunctionApp.Services
             return await Patch(uri).ConfigureAwait(false);
         }
 
-        public async Task<HttpStatusCode> PatchUniform(PatchUniformModel message, Guid jobProfileId)
+        public async Task<HttpStatusCode> PatchUniform(PatchUniformModel message)
         {
             var url = "segment/uniform";
             return await Patch(message, url).ConfigureAwait(false);
         }
 
-        public async Task<HttpStatusCode> PatchLocation(PatchLocationModel message, Guid jobProfileId)
+        public async Task<HttpStatusCode> PatchLocation(PatchLocationModel message)
         {
             var url = "segment/location";
             return await Patch(message, url).ConfigureAwait(false);
         }
 
-        public async Task<HttpStatusCode> PatchEnvironment(PatchEnvironmentsModel message, Guid jobProfileId)
+        public async Task<HttpStatusCode> PatchEnvironment(PatchEnvironmentsModel message)
         {
             var url = "segment/environment";
             return await Patch(message, url).ConfigureAwait(false);

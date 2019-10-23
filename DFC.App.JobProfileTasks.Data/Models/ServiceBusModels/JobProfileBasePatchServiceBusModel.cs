@@ -4,6 +4,8 @@ namespace DFC.App.JobProfileTasks.Data.Models.ServiceBusModels
 {
     public class JobProfileBasePatchServiceBusModel
     {
+        public Guid JobProfileId { get; set; }
+
         public Guid Id { get; set; }
 
         public string Title { get; set; }
