@@ -287,8 +287,8 @@ namespace DFC.App.JobProfileTasks.Controllers
             return StatusCode((int)statusCode);
         }
 
-        [HttpDelete]
-        [Route("{controller}/{jobProfileId}/uniform/{itemId}")]
+        [HttpPatch]
+        [Route("{controller}/{jobProfileId}/uniform/{id}")]
         public async Task<IActionResult> DeleteUniform(DeleteUniformModel deleteUniformModel)
         {
             logger.LogInformation($"{DeleteUniformActionName} has been called");
@@ -305,13 +305,13 @@ namespace DFC.App.JobProfileTasks.Controllers
                 return BadRequest(ModelState);
             }
 
-            var result = await jobProfileTasksSegmentService.DeleteUniform(deleteUniformModel.JobProfileId, deleteUniformModel.ItemId).ConfigureAwait(false);
+            var result = await jobProfileTasksSegmentService.DeleteUniform(deleteUniformModel.JobProfileId, deleteUniformModel.Id).ConfigureAwait(false);
 
             return StatusCode((int)result);
         }
 
-        [HttpDelete]
-        [Route("{controller}/{jobProfileId}/location/{itemId}")]
+        [HttpPatch]
+        [Route("{controller}/{jobProfileId}/location/{id}")]
         public async Task<IActionResult> DeleteLocation(DeleteLocationModel deleteLocationModel)
         {
             logger.LogInformation($"{DeleteLocationActionName} has been called");
@@ -328,13 +328,13 @@ namespace DFC.App.JobProfileTasks.Controllers
                 return BadRequest(ModelState);
             }
 
-            var result = await jobProfileTasksSegmentService.DeleteLocation(deleteLocationModel.JobProfileId, deleteLocationModel.ItemId).ConfigureAwait(false);
+            var result = await jobProfileTasksSegmentService.DeleteLocation(deleteLocationModel.JobProfileId, deleteLocationModel.Id).ConfigureAwait(false);
 
             return StatusCode((int)result);
         }
 
-        [HttpDelete]
-        [Route("{controller}/{jobProfileId}/environment/{itemId}")]
+        [HttpPatch]
+        [Route("{controller}/{jobProfileId}/environment/{id}")]
         public async Task<IActionResult> DeleteEnvironment(DeleteEnvironmentModel deleteEnvironmentModel)
         {
             logger.LogInformation($"{DeleteEnvironmentActionName} has been called");
@@ -351,7 +351,7 @@ namespace DFC.App.JobProfileTasks.Controllers
                 return BadRequest(ModelState);
             }
 
-            var result = await jobProfileTasksSegmentService.DeleteEnvironment(deleteEnvironmentModel.JobProfileId, deleteEnvironmentModel.ItemId).ConfigureAwait(false);
+            var result = await jobProfileTasksSegmentService.DeleteEnvironment(deleteEnvironmentModel.JobProfileId, deleteEnvironmentModel.Id).ConfigureAwait(false);
 
             return StatusCode((int)result);
         }

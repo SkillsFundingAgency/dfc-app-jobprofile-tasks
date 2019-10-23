@@ -68,7 +68,15 @@ namespace DFC.App.JobProfileTasks.MessageFunctionApp.Services
                     {
                         case MessageContentType.Uniform:
                             var jobProfileServiceUniformDeleteServiceBusModel = JsonConvert.DeserializeObject<JobProfileUniformDeleteServiceBusModel>(message);
-                            await messageProcessor.DeleteUniform(jobProfileGuid, jobProfileServiceUniformDeleteServiceBusModel.UniformId, sequenceNumber).ConfigureAwait(false);
+                            await messageProcessor.DeleteUniform(jobProfileGuid, jobProfileServiceUniformDeleteServiceBusModel.Id, sequenceNumber).ConfigureAwait(false);
+                            break;
+                        case MessageContentType.Location:
+                            var jobProfileLocationDeleteServiceBusModel = JsonConvert.DeserializeObject<JobProfileLocationDeleteServiceBusModel>(message);
+                            await messageProcessor.DeleteLocation(jobProfileGuid, jobProfileLocationDeleteServiceBusModel.Id, sequenceNumber).ConfigureAwait(false);
+                            break;
+                        case MessageContentType.Environment:
+                            var jobProfileEnvironmentDeleteServiceBusModel = JsonConvert.DeserializeObject<JobProfileEnvironmentDeleteServiceBusModel>(message);
+                            await messageProcessor.DeleteEnvironment(jobProfileGuid, jobProfileEnvironmentDeleteServiceBusModel.Id, sequenceNumber).ConfigureAwait(false);
                             break;
                     }
 

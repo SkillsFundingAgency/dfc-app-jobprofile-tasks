@@ -54,10 +54,20 @@ namespace DFC.App.JobProfileTasks.MessageFunctionApp.Services
 
         public async Task<HttpStatusCode> DeleteUniform(Guid jobProfileId, Guid uniformId, long sequenceNumber)
         {
-            var uri = string.Concat(httpClient.BaseAddress, "segment/", jobProfileId, "/uniform/", uniformId);
-            var response = await httpClient.DeleteAsync(uri).ConfigureAwait(false);
-            response.EnsureSuccessStatusCode();
-            return response.StatusCode;
+            var uri = $"segment/{jobProfileId}/uniform/{uniformId}";
+            return await Patch(uri).ConfigureAwait(false);
+        }
+
+        public async Task<HttpStatusCode> DeleteEnvironment(Guid jobProfileId, Guid environmentId, long sequenceNumber)
+        {
+            var uri = $"segment/{jobProfileId}/environment/{environmentId}";
+            return await Patch(uri).ConfigureAwait(false);
+        }
+
+        public async Task<HttpStatusCode> DeleteLocation(Guid jobProfileId, Guid locationId, long sequenceNumber)
+        {
+            var uri = $"segment/{jobProfileId}/location/{locationId}";
+            return await Patch(uri).ConfigureAwait(false);
         }
 
         public async Task<HttpStatusCode> PatchUniform(PatchUniformModel message, Guid jobProfileId, long sequenceNumber)
@@ -89,6 +99,16 @@ namespace DFC.App.JobProfileTasks.MessageFunctionApp.Services
             {
                 await httpClient.PostAsync(uri, content).ConfigureAwait(false);
             }
+
+            return response.StatusCode;
+        }
+
+        private async Task<HttpStatusCode> Patch(string url)
+        {
+            var content = new StringContent(string.Empty, Encoding.UTF8, MediaTypeNames.Application.Json);
+            var uri = string.Concat(httpClient.BaseAddress, url);
+
+            var response = await httpClient.PatchAsync(uri, content).ConfigureAwait(false);
 
             return response.StatusCode;
         }
