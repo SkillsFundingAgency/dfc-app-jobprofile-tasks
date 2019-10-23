@@ -23,6 +23,8 @@ namespace DFC.App.JobProfileTasks.Data.Models.SegmentModels
         [Required]
         public string SocLevelTwo { get; set; }
 
+        public DateTime LastModified { get; set; }
+
         public JobProfileTasksDataSegmentModel Data { get; set; }
     }
 }
