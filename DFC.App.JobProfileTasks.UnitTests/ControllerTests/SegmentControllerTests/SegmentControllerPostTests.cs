@@ -1,7 +1,9 @@
 ﻿using DFC.App.JobProfileTasks.Data.Models.SegmentModels;
 using FakeItEasy;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Net;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace DFC.App.JobProfileTasks.UnitTests.ControllerTests.SegmentControllerTests
@@ -10,13 +12,14 @@ namespace DFC.App.JobProfileTasks.UnitTests.ControllerTests.SegmentControllerTes
     {
         [Theory]
         [MemberData(nameof(JsonMediaTypes))]
-        public async void ReturnsSuccess(string mediaTypeName)
+        public async Task ReturnsSuccess(string mediaTypeName)
         {
             // Arrange
             var tasksSegmentModel = A.Fake<JobProfileTasksSegmentModel>();
             var controller = BuildSegmentController(mediaTypeName);
-            var expectedUpsertResponse = BuildExpectedUpsertResponse(A.Fake<JobProfileTasksSegmentModel>());
+            var expectedUpsertResponse = BuildExpectedUpsertResponse(A.Fake<JobProfileTasksSegmentModel>(), HttpStatusCode.AlreadyReported);
 
+            A.CallTo(() => FakeJobProfileSegmentService.GetByIdAsync(A<Guid>.Ignored)).Returns<JobProfileTasksSegmentModel>(null);
             A.CallTo(() => FakeJobProfileSegmentService.UpsertAsync(A<JobProfileTasksSegmentModel>.Ignored)).Returns(expectedUpsertResponse);
 
             // Act
@@ -24,16 +27,40 @@ namespace DFC.App.JobProfileTasks.UnitTests.ControllerTests.SegmentControllerTes
 
             // Assert
             A.CallTo(() => FakeJobProfileSegmentService.UpsertAsync(A<JobProfileTasksSegmentModel>.Ignored)).MustHaveHappenedOnceExactly();
-            var okResult = Assert.IsType<CreatedAtActionResult>(result);
+            var statusCodeResult = Assert.IsType<StatusCodeResult>(result);
 
-            Assert.Equal((int)HttpStatusCode.Created, okResult.StatusCode);
+            Assert.Equal((int)HttpStatusCode.AlreadyReported, statusCodeResult.StatusCode);
 
             controller.Dispose();
         }
 
         [Theory]
         [MemberData(nameof(JsonMediaTypes))]
-        public async void ReturnsBadResultWhenModelIsNull(string mediaTypeName)
+        public async Task ReturnsAlreadyReportedIfEntityExists(string mediaTypeName)
+        {
+            // Arrange
+            var tasksSegmentModel = A.Fake<JobProfileTasksSegmentModel>();
+            var controller = BuildSegmentController(mediaTypeName);
+            var expectedUpsertResponse = BuildExpectedUpsertResponse(A.Fake<JobProfileTasksSegmentModel>());
+
+            A.CallTo(() => FakeJobProfileSegmentService.GetByIdAsync(A<Guid>.Ignored)).Returns(tasksSegmentModel);
+            A.CallTo(() => FakeJobProfileSegmentService.UpsertAsync(A<JobProfileTasksSegmentModel>.Ignored)).Returns(expectedUpsertResponse);
+
+            // Act
+            var result = await controller.Post(tasksSegmentModel).ConfigureAwait(false);
+
+            // Assert
+            A.CallTo(() => FakeJobProfileSegmentService.UpsertAsync(A<JobProfileTasksSegmentModel>.Ignored)).MustNotHaveHappened();
+            var statusCodeResult = Assert.IsType<StatusCodeResult>(result);
+
+            Assert.Equal((int)HttpStatusCode.AlreadyReported, statusCodeResult.StatusCode);
+
+            controller.Dispose();
+        }
+
+        [Theory]
+        [MemberData(nameof(JsonMediaTypes))]
+        public async Task ReturnsBadResultWhenModelIsNull(string mediaTypeName)
         {
             // Arrange
             var controller = BuildSegmentController(mediaTypeName);
@@ -50,7 +77,7 @@ namespace DFC.App.JobProfileTasks.UnitTests.ControllerTests.SegmentControllerTes
 
         [Theory]
         [MemberData(nameof(JsonMediaTypes))]
-        public async void ReturnsBadResultWhenModelIsInvalid(string mediaTypeName)
+        public async Task ReturnsBadResultWhenModelIsInvalid(string mediaTypeName)
         {
             // Arrange
             var jobProfileTasksSegmentModel = new JobProfileTasksSegmentModel();
@@ -68,11 +95,12 @@ namespace DFC.App.JobProfileTasks.UnitTests.ControllerTests.SegmentControllerTes
             controller.Dispose();
         }
 
-        private UpsertJobProfileTasksModelResponse BuildExpectedUpsertResponse(JobProfileTasksSegmentModel model)
+        private UpsertJobProfileTasksModelResponse BuildExpectedUpsertResponse(JobProfileTasksSegmentModel model, HttpStatusCode statusCode = HttpStatusCode.Created)
         {
             return new UpsertJobProfileTasksModelResponse
             {
                 JobProfileTasksSegmentModel = model,
+                ResponseStatusCode = statusCode,
             };
         }
     }

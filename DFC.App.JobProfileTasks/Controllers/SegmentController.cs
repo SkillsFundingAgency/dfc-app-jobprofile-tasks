@@ -182,15 +182,17 @@ namespace DFC.App.JobProfileTasks.Controllers
                 return BadRequest(ModelState);
             }
 
+            var existingDocument = await jobProfileTasksSegmentService.GetByIdAsync(upsertJobProfileTasksSegmentModel.DocumentId).ConfigureAwait(false);
+            if (existingDocument != null)
+            {
+                return new StatusCodeResult((int)HttpStatusCode.AlreadyReported);
+            }
+
             var response = await jobProfileTasksSegmentService.UpsertAsync(upsertJobProfileTasksSegmentModel).ConfigureAwait(false);
 
             logger.LogInformation($"{PostActionName} has created content for: {upsertJobProfileTasksSegmentModel.CanonicalName}");
 
-            return new CreatedAtActionResult(
-                PostActionName,
-                "Segment",
-                new { article = response.JobProfileTasksSegmentModel.CanonicalName },
-                response.JobProfileTasksSegmentModel);
+            return new StatusCodeResult((int)response.ResponseStatusCode);
         }
 
         [HttpDelete]
