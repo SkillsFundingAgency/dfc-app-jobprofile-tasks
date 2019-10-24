@@ -55,7 +55,7 @@ namespace DFC.App.JobProfileTasks.IntegrationTests.ControllerTests
         }
 
         [Fact]
-        public async Task WhenUpdateExistingArticleReturnsALreadyReported()
+        public async Task WhenUpdateExistingArticleReturnsAlreadyReported()
         {
             // Arrange
             const string url = "/segment";
