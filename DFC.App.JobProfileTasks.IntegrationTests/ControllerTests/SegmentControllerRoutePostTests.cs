@@ -55,7 +55,7 @@ namespace DFC.App.JobProfileTasks.IntegrationTests.ControllerTests
         }
 
         [Fact]
-        public async Task WhenUpdateExistingArticleReturnsOK()
+        public async Task WhenUpdateExistingArticleReturnsALreadyReported()
         {
             // Arrange
             const string url = "/segment";
@@ -74,8 +74,7 @@ namespace DFC.App.JobProfileTasks.IntegrationTests.ControllerTests
             var response = await client.PostAsync(url, tasksSegmentModel, new JsonMediaTypeFormatter()).ConfigureAwait(false);
 
             // Assert
-            response.EnsureSuccessStatusCode();
-            response.StatusCode.Should().Be(HttpStatusCode.Created);
+            response.StatusCode.Should().Be(HttpStatusCode.AlreadyReported);
         }
     }
 }

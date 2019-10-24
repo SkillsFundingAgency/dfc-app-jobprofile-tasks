@@ -1,6 +1,7 @@
 ﻿using DFC.App.JobProfileTasks.Data.Models.SegmentModels;
 using FakeItEasy;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Net;
 using Xunit;
 
@@ -15,8 +16,9 @@ namespace DFC.App.JobProfileTasks.UnitTests.ControllerTests.SegmentControllerTes
             // Arrange
             var tasksSegmentModel = A.Fake<JobProfileTasksSegmentModel>();
             var controller = BuildSegmentController(mediaTypeName);
-            var expectedUpsertResponse = BuildExpectedUpsertResponse(A.Fake<JobProfileTasksSegmentModel>());
+            var expectedUpsertResponse = BuildExpectedUpsertResponse(A.Fake<JobProfileTasksSegmentModel>(), HttpStatusCode.AlreadyReported);
 
+            A.CallTo(() => FakeJobProfileSegmentService.GetByIdAsync(A<Guid>.Ignored)).Returns<JobProfileTasksSegmentModel>(null);
             A.CallTo(() => FakeJobProfileSegmentService.UpsertAsync(A<JobProfileTasksSegmentModel>.Ignored)).Returns(expectedUpsertResponse);
 
             // Act
@@ -24,9 +26,33 @@ namespace DFC.App.JobProfileTasks.UnitTests.ControllerTests.SegmentControllerTes
 
             // Assert
             A.CallTo(() => FakeJobProfileSegmentService.UpsertAsync(A<JobProfileTasksSegmentModel>.Ignored)).MustHaveHappenedOnceExactly();
-            var okResult = Assert.IsType<CreatedAtActionResult>(result);
+            var statusCodeResult = Assert.IsType<StatusCodeResult>(result);
 
-            Assert.Equal((int)HttpStatusCode.Created, okResult.StatusCode);
+            Assert.Equal((int)HttpStatusCode.AlreadyReported, statusCodeResult.StatusCode);
+
+            controller.Dispose();
+        }
+
+        [Theory]
+        [MemberData(nameof(JsonMediaTypes))]
+        public async void ReturnsAlreadyReportedIfEntityExists(string mediaTypeName)
+        {
+            // Arrange
+            var tasksSegmentModel = A.Fake<JobProfileTasksSegmentModel>();
+            var controller = BuildSegmentController(mediaTypeName);
+            var expectedUpsertResponse = BuildExpectedUpsertResponse(A.Fake<JobProfileTasksSegmentModel>());
+
+            A.CallTo(() => FakeJobProfileSegmentService.GetByIdAsync(A<Guid>.Ignored)).Returns(tasksSegmentModel);
+            A.CallTo(() => FakeJobProfileSegmentService.UpsertAsync(A<JobProfileTasksSegmentModel>.Ignored)).Returns(expectedUpsertResponse);
+
+            // Act
+            var result = await controller.Post(tasksSegmentModel).ConfigureAwait(false);
+
+            // Assert
+            A.CallTo(() => FakeJobProfileSegmentService.UpsertAsync(A<JobProfileTasksSegmentModel>.Ignored)).MustNotHaveHappened();
+            var statusCodeResult = Assert.IsType<StatusCodeResult>(result);
+
+            Assert.Equal((int)HttpStatusCode.AlreadyReported, statusCodeResult.StatusCode);
 
             controller.Dispose();
         }
@@ -68,11 +94,12 @@ namespace DFC.App.JobProfileTasks.UnitTests.ControllerTests.SegmentControllerTes
             controller.Dispose();
         }
 
-        private UpsertJobProfileTasksModelResponse BuildExpectedUpsertResponse(JobProfileTasksSegmentModel model)
+        private UpsertJobProfileTasksModelResponse BuildExpectedUpsertResponse(JobProfileTasksSegmentModel model, HttpStatusCode statusCode = HttpStatusCode.Created)
         {
             return new UpsertJobProfileTasksModelResponse
             {
                 JobProfileTasksSegmentModel = model,
+                ResponseStatusCode = statusCode,
             };
         }
     }
