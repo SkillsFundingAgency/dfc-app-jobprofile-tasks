@@ -3,6 +3,7 @@ using DFC.App.JobProfileTasks.ViewModels;
 using FakeItEasy;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace DFC.App.JobProfileTasks.UnitTests.ControllerTests.SegmentControllerTests
@@ -11,7 +12,7 @@ namespace DFC.App.JobProfileTasks.UnitTests.ControllerTests.SegmentControllerTes
     {
         [Theory]
         [MemberData(nameof(HtmlMediaTypes))]
-        public async void ReturnsSuccessForHtmlMediaType(string mediaTypeName)
+        public async Task ReturnsSuccessForHtmlMediaType(string mediaTypeName)
         {
             // Arrange
             const string article = "an-article-name";
@@ -36,7 +37,7 @@ namespace DFC.App.JobProfileTasks.UnitTests.ControllerTests.SegmentControllerTes
 
         [Theory]
         [MemberData(nameof(HtmlMediaTypes))]
-        public async void ReturnsNoContentWhenNoData(string mediaTypeName)
+        public async Task ReturnsNoContentWhenNoData(string mediaTypeName)
         {
             // Arrange
             const string article = "an-article-name";

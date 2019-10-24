@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Net;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace DFC.App.JobProfileTasks.UnitTests.ControllerTests.SegmentControllerTests
@@ -10,7 +11,7 @@ namespace DFC.App.JobProfileTasks.UnitTests.ControllerTests.SegmentControllerTes
     {
         [Theory]
         [MemberData(nameof(JsonMediaTypes))]
-        public async void ReturnsSuccessWhenDocumentIdExists(string mediaTypeName)
+        public async Task ReturnsSuccessWhenDocumentIdExists(string mediaTypeName)
         {
             // Arrange
             const bool documentExists = true;
@@ -32,7 +33,7 @@ namespace DFC.App.JobProfileTasks.UnitTests.ControllerTests.SegmentControllerTes
 
         [Theory]
         [MemberData(nameof(JsonMediaTypes))]
-        public async void ReturnsNotFoundWhenDocumentIdDoesNotExist(string mediaTypeName)
+        public async Task ReturnsNotFoundWhenDocumentIdDoesNotExist(string mediaTypeName)
         {
             // Arrange
             const bool documentExists = false;

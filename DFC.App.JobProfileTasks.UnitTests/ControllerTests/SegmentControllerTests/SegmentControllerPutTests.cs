@@ -2,6 +2,7 @@
 using FakeItEasy;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace DFC.App.JobProfileTasks.UnitTests.ControllerTests.SegmentControllerTests
@@ -10,7 +11,7 @@ namespace DFC.App.JobProfileTasks.UnitTests.ControllerTests.SegmentControllerTes
     {
         [Theory]
         [MemberData(nameof(JsonMediaTypes))]
-        public async void ReturnsSuccess(string mediaTypeName)
+        public async Task ReturnsSuccess(string mediaTypeName)
         {
             // Arrange
             var tasksSegmentModel = A.Fake<JobProfileTasksSegmentModel>();
@@ -34,7 +35,7 @@ namespace DFC.App.JobProfileTasks.UnitTests.ControllerTests.SegmentControllerTes
 
         [Theory]
         [MemberData(nameof(JsonMediaTypes))]
-        public async void ReturnsBadResultWhenModelIsNull(string mediaTypeName)
+        public async Task ReturnsBadResultWhenModelIsNull(string mediaTypeName)
         {
             // Arrange
             var controller = BuildSegmentController(mediaTypeName);
@@ -51,7 +52,7 @@ namespace DFC.App.JobProfileTasks.UnitTests.ControllerTests.SegmentControllerTes
 
         [Theory]
         [MemberData(nameof(JsonMediaTypes))]
-        public async void ReturnsBadResultWhenModelIsInvalid(string mediaTypeName)
+        public async Task ReturnsBadResultWhenModelIsInvalid(string mediaTypeName)
         {
             // Arrange
             var jobProfileTasksSegmentModel = new JobProfileTasksSegmentModel();
