@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace DFC.App.JobProfileTasks.Data.Models.SegmentModels
 {
@@ -6,9 +7,11 @@ namespace DFC.App.JobProfileTasks.Data.Models.SegmentModels
     {
         public bool IsCadReady { get; set; }
 
+        public DateTime LastReviewed { get; set; }
+
         public string Introduction { get; set; }
 
-        public string DailyTasks { get; set; }
+        public string Tasks { get; set; }
 
         public IEnumerable<JobProfileTasksDataLocationSegmentModel> Locations { get; set; }
 

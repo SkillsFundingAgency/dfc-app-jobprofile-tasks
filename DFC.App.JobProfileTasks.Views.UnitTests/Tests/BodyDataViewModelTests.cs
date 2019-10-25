@@ -16,7 +16,7 @@ namespace DFC.App.JobProfileTasks.Views.UnitTests.Tests
             {
                 Environment = "Environment1",
                 Location = "Locations1",
-                DailyTasks = "Tasks1",
+                Tasks = "Tasks1",
                 Uniform = "Uniform1",
             };
 
@@ -29,7 +29,7 @@ namespace DFC.App.JobProfileTasks.Views.UnitTests.Tests
             //Assert
             Assert.Contains(model.Environment, viewRenderResponse, StringComparison.OrdinalIgnoreCase);
             Assert.Contains(model.Location, viewRenderResponse, StringComparison.OrdinalIgnoreCase);
-            Assert.Contains(model.DailyTasks, viewRenderResponse, StringComparison.OrdinalIgnoreCase);
+            Assert.Contains(model.Tasks, viewRenderResponse, StringComparison.OrdinalIgnoreCase);
             Assert.Contains(model.Uniform, viewRenderResponse, StringComparison.OrdinalIgnoreCase);
         }
     }
