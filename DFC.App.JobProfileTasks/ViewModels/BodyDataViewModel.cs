@@ -6,7 +6,7 @@ namespace DFC.App.JobProfileTasks.ViewModels
     {
         public string Introduction { get; set; }
 
-        public string DailyTasks { get; set; }
+        public string Tasks { get; set; }
 
         public string Location { get; set; }
 

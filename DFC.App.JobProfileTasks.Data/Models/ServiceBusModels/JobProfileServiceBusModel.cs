@@ -13,8 +13,6 @@ namespace DFC.App.JobProfileTasks.Data.Models.ServiceBusModels
         [Required]
         public string SOCLevelTwo { get; set; }
 
-        public DateTime LastModified { get; set; }
-
         public JobProfileTasksDataServiceBusModel WhatYouWillDoData { get; set; }
     }
 }

@@ -19,7 +19,8 @@ namespace DFC.App.JobProfileTasks.MessageFunctionApp.AutoMapperProfiles
 
             CreateMap<JobProfileTasksDataLocationServiceBusModel, JobProfileTasksDataLocationSegmentModel>();
 
-            CreateMap<JobProfileTasksDataServiceBusModel, JobProfileTasksDataSegmentModel>();
+            CreateMap<JobProfileTasksDataServiceBusModel, JobProfileTasksDataSegmentModel>()
+                .ForMember(d => d.Tasks, s => s.MapFrom(a => a.DailyTasks));
 
             CreateMap<JobProfileTasksDataUniformServiceBusModel, JobProfileTasksDataUniformSegmentModel>();
 
