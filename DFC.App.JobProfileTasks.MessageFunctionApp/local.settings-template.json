@@ -11,6 +11,6 @@
   },
   "JobProfileTasksSegmentClientOptions": {
     "Timeout": "00:00:10",
-    "BaseAddress": "https://localhost"
+    "BaseAddress": "https://localhost:44352/"
   }
 }

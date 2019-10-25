@@ -68,6 +68,10 @@ namespace DFC.App.JobProfileTasks.MessageFunctionApp.Services
         {
             switch (messageContentType)
             {
+                case MessageContentType.JobProfile:
+                    var jobProfileDeleteServiceBusModel = ConvertOrThrow<JobProfileDeleteServiceBusModel>(messageBody);
+                    await messageProcessor.Delete(jobProfileDeleteServiceBusModel.JobProfileId).ConfigureAwait(false);
+                    break;
                 case MessageContentType.Uniform:
                     var jobProfileServiceUniformDeleteServiceBusModel = ConvertOrThrow<JobProfileUniformDeleteServiceBusModel>(messageBody);
                     await messageProcessor.DeleteUniform(jobProfileServiceUniformDeleteServiceBusModel.JobProfileId, jobProfileServiceUniformDeleteServiceBusModel.Id).ConfigureAwait(false);
