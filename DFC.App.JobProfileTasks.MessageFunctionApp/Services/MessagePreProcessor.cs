@@ -63,7 +63,6 @@ namespace DFC.App.JobProfileTasks.MessageFunctionApp.Services
             }
         }
 
-
         private async Task ProcessDeleted(MessageContentType messageContentType, string messageBody)
         {
             switch (messageContentType)

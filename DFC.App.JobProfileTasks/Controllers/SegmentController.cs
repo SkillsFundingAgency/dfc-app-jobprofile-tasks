@@ -96,12 +96,12 @@ namespace DFC.App.JobProfileTasks.Controllers
         }
 
         [HttpGet]
-        [Route("{controller}/{article}/contents")]
-        public async Task<IActionResult> Body(string article)
+        [Route("{controller}/{documentId}/contents")]
+        public async Task<IActionResult> Body(Guid documentId)
         {
-            logger.LogInformation($"{BodyActionName} has been called with: {article}");
+            logger.LogInformation($"{BodyActionName} has been called with: {documentId}");
 
-            var model = await jobProfileTasksSegmentService.GetByNameAsync(article, Request.IsDraftRequest()).ConfigureAwait(false);
+            var model = await jobProfileTasksSegmentService.GetByIdAsync(documentId).ConfigureAwait(false);
 
             if (model != null)
             {
@@ -114,12 +114,12 @@ namespace DFC.App.JobProfileTasks.Controllers
                     viewModel.Data.Uniform = formatContentService.GetParagraphText(UniformLeadingText, model.Data?.Uniforms?.Select(x => x.Description), UniformConjunction);
                 }
 
-                logger.LogInformation($"{BodyActionName} has succeeded for: {article}");
+                logger.LogInformation($"{BodyActionName} has succeeded for: {documentId}");
 
                 return this.NegotiateContentResult(viewModel, model.Data);
             }
 
-            logger.LogWarning($"{BodyActionName} has returned no content for: {article}");
+            logger.LogWarning($"{BodyActionName} has returned no content for: {documentId}");
 
             return NoContent();
         }
