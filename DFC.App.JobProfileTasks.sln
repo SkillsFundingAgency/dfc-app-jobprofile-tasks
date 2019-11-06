@@ -1,0 +1,42 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29215.179
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DFC.App.JobProfileTasks", "DFC.App.JobProfileTasks\DFC.App.JobProfileTasks.csproj", "{9F37DF4A-266C-449F-868B-20E0B5BF1418}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{A3F23ED3-A6B1-4300-923C-40ACBC307F2E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UnitTests", "UnitTests", "{3AE31B85-B71A-4124-9EC4-9E7EEE8C6C90}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Web", "Web", "{BF9F2EAB-4770-40CD-A7A2-CFADCE830872}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DFC.App.JobProfileTasks.UnitTests", "DFC.App.JobProfileTasks.UnitTests\DFC.App.JobProfileTasks.UnitTests.csproj", "{02025CDE-ECA7-438B-858A-479F404DDE9C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9F37DF4A-266C-449F-868B-20E0B5BF1418}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9F37DF4A-266C-449F-868B-20E0B5BF1418}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9F37DF4A-266C-449F-868B-20E0B5BF1418}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9F37DF4A-266C-449F-868B-20E0B5BF1418}.Release|Any CPU.Build.0 = Release|Any CPU
+		{02025CDE-ECA7-438B-858A-479F404DDE9C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{02025CDE-ECA7-438B-858A-479F404DDE9C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{02025CDE-ECA7-438B-858A-479F404DDE9C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{02025CDE-ECA7-438B-858A-479F404DDE9C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{3AE31B85-B71A-4124-9EC4-9E7EEE8C6C90} = {A3F23ED3-A6B1-4300-923C-40ACBC307F2E}
+		{BF9F2EAB-4770-40CD-A7A2-CFADCE830872} = {3AE31B85-B71A-4124-9EC4-9E7EEE8C6C90}
+		{02025CDE-ECA7-438B-858A-479F404DDE9C} = {BF9F2EAB-4770-40CD-A7A2-CFADCE830872}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F46A82FA-0A56-4C92-8FBD-69383C30A26F}
+	EndGlobalSection
+EndGlobal
