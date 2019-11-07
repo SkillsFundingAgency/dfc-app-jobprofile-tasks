@@ -200,6 +200,10 @@
                             {
                                 "name": "ServiceBusOptions__topicName",
                                 "value": "[variables('refreshTopicName')]"
+                            },
+                            {
+                                "name": "Logging__ApplicationInsights__LogLevel__Default",
+                                "value": "Information"
                             }
                         ]
                     }
@@ -308,6 +312,10 @@
                             {
                                 "name": "JobProfileTasksSegmentClientOptions__DeleteEndpoint",
                                 "value": "segment/{0}"
+                            },
+                            {
+                                "name": "Logging__ApplicationInsights__LogLevel__Default",
+                                "value": "Information"
                             }
                         ]
                     }
