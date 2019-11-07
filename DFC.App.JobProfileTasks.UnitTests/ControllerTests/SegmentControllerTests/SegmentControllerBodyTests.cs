@@ -1,4 +1,5 @@
-﻿using DFC.App.JobProfileTasks.Data.Models.SegmentModels;
+﻿using DFC.App.JobProfileTasks.ApiModels;
+using DFC.App.JobProfileTasks.Data.Models.SegmentModels;
 using DFC.App.JobProfileTasks.ViewModels;
 using FakeItEasy;
 using Microsoft.AspNetCore.Mvc;
@@ -50,17 +51,17 @@ namespace DFC.App.JobProfileTasks.UnitTests.ControllerTests.SegmentControllerTes
             expectedResult.CanonicalName = article.ToString();
 
             A.CallTo(() => FakeJobProfileSegmentService.GetByIdAsync(article)).Returns(expectedResult);
-            A.CallTo(() => Mapper.Map<BodyViewModel>(A<JobProfileTasksSegmentModel>.Ignored)).Returns(A.Fake<BodyViewModel>());
+            A.CallTo(() => Mapper.Map<WhatYouWillDoApiModel>(A<JobProfileTasksDataSegmentModel>.Ignored)).Returns(A.Fake<WhatYouWillDoApiModel>());
 
             // Act
             var result = await controller.Body(article).ConfigureAwait(false);
 
             // Assert
             A.CallTo(() => FakeJobProfileSegmentService.GetByIdAsync(article)).MustHaveHappenedOnceExactly();
-            A.CallTo(() => Mapper.Map<BodyViewModel>(A<JobProfileTasksSegmentModel>.Ignored)).MustHaveHappenedOnceExactly();
+            A.CallTo(() => Mapper.Map<WhatYouWillDoApiModel>(A<JobProfileTasksDataSegmentModel>.Ignored)).MustHaveHappenedOnceExactly();
 
             var jsonResult = Assert.IsType<OkObjectResult>(result);
-            var model = Assert.IsAssignableFrom<BodyViewModel>(jsonResult.Value);
+            var model = Assert.IsAssignableFrom<WhatYouWillDoApiModel>(jsonResult.Value);
 
             controller.Dispose();
         }

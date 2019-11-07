@@ -35,4 +35,10 @@
     <ProjectReference Include="..\DFC.App.JobProfileTasks\DFC.App.JobProfileTasks.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

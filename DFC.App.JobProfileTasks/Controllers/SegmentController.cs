@@ -1,4 +1,5 @@
-﻿using DFC.App.JobProfileTasks.Data.Models.PatchModels;
+﻿using DFC.App.JobProfileTasks.ApiModels;
+using DFC.App.JobProfileTasks.Data.Models.PatchModels;
 using DFC.App.JobProfileTasks.Data.Models.SegmentModels;
 using DFC.App.JobProfileTasks.Extensions;
 using DFC.App.JobProfileTasks.SegmentService;
@@ -116,7 +117,11 @@ namespace DFC.App.JobProfileTasks.Controllers
 
                 logger.LogInformation($"{BodyActionName} has succeeded for: {documentId}");
 
-                return this.NegotiateContentResult(viewModel, model.Data);
+                var apiModel = mapper.Map<WhatYouWillDoApiModel>(model.Data);
+
+                apiModel.WorkingEnvironment = mapper.Map<WorkingEnvironmentApiModel>(viewModel.Data);
+
+                return this.NegotiateContentResult(viewModel, apiModel);
             }
 
             logger.LogWarning($"{BodyActionName} has returned no content for: {documentId}");
