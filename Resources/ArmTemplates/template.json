@@ -200,6 +200,10 @@
                             {
                                 "name": "ServiceBusOptions__topicName",
                                 "value": "[variables('refreshTopicName')]"
+                            },
+                            {
+                                "name": "Logging__ApplicationInsights__LogLevel__Default",
+                                "value": "Information"
                             }
                         ]
                     }
