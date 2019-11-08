@@ -41,7 +41,6 @@ namespace DFC.App.JobProfileTasks
             services.AddApplicationInsightsTelemetry();
             services.AddSingleton(cosmosDbConnection);
             services.AddSingleton<IDocumentClient>(documentClient);
-            services.AddTransient<IFormatContentService, FormatContentService>();
             services.AddSingleton<ICosmosRepository<JobProfileTasksSegmentModel>, CosmosRepository<JobProfileTasksSegmentModel>>();
             services.AddSingleton<IJobProfileTasksSegmentService, JobProfileTasksSegmentService>();
             services.AddSingleton<IDraftJobProfileTasksSegmentService, DraftJobProfileTasksSegmentService>();

@@ -7,7 +7,6 @@ using DFC.App.JobProfileTasks.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -32,14 +31,12 @@ namespace DFC.App.JobProfileTasks.Controllers
         private readonly ILogger<SegmentController> logger;
         private readonly IJobProfileTasksSegmentService jobProfileTasksSegmentService;
         private readonly AutoMapper.IMapper mapper;
-        private readonly IFormatContentService formatContentService;
 
-        public SegmentController(ILogger<SegmentController> logger, IJobProfileTasksSegmentService jobProfileTasksSegmentService, AutoMapper.IMapper mapper, IFormatContentService formatContentService)
+        public SegmentController(ILogger<SegmentController> logger, IJobProfileTasksSegmentService jobProfileTasksSegmentService, AutoMapper.IMapper mapper)
         {
             this.logger = logger;
             this.jobProfileTasksSegmentService = jobProfileTasksSegmentService;
             this.mapper = mapper;
-            this.formatContentService = formatContentService;
         }
 
         [HttpGet]
