@@ -7,6 +7,7 @@ using DFC.App.JobProfileTasks.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -15,12 +16,6 @@ namespace DFC.App.JobProfileTasks.Controllers
 {
     public class SegmentController : Controller
     {
-        private const string EnvironmentsLeadingText = "Your working environment may be";
-        private const string LocationLeadingText = "You could work";
-        private const string UniformLeadingText = "You may need to wear";
-        private const string EnvironmentsConjunction = "and";
-        private const string LocationConjunction = "or";
-        private const string UniformConjunction = "and";
         private const string IndexActionName = nameof(Index);
         private const string DocumentActionName = nameof(Document);
         private const string BodyActionName = nameof(Body);
@@ -108,18 +103,9 @@ namespace DFC.App.JobProfileTasks.Controllers
             {
                 var viewModel = mapper.Map<BodyViewModel>(model);
 
-                if (model.Data != null)
-                {
-                    viewModel.Data.Environment = formatContentService.GetParagraphText(EnvironmentsLeadingText, model.Data?.Environments?.Select(x => x.Description), EnvironmentsConjunction);
-                    viewModel.Data.Location = formatContentService.GetParagraphText(LocationLeadingText, model.Data?.Locations?.Select(x => x.Description), LocationConjunction);
-                    viewModel.Data.Uniform = formatContentService.GetParagraphText(UniformLeadingText, model.Data?.Uniforms?.Select(x => x.Description), UniformConjunction);
-                }
-
-                logger.LogInformation($"{BodyActionName} has succeeded for: {documentId}");
-
                 var apiModel = mapper.Map<WhatYouWillDoApiModel>(model.Data);
 
-                apiModel.WorkingEnvironment = mapper.Map<WorkingEnvironmentApiModel>(viewModel.Data);
+                logger.LogInformation($"{BodyActionName} has succeeded for: {documentId}");
 
                 return this.NegotiateContentResult(viewModel, apiModel);
             }

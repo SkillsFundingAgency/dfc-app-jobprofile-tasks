@@ -4,6 +4,7 @@ using DFC.App.JobProfileTasks.ViewModels;
 using FakeItEasy;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Xunit;
@@ -45,7 +46,7 @@ namespace DFC.App.JobProfileTasks.UnitTests.ControllerTests.SegmentControllerTes
         {
             // Arrange
             var article = Guid.NewGuid();
-            var expectedResult = A.Fake<JobProfileTasksSegmentModel>();
+            var expectedResult = new JobProfileTasksSegmentModel();
             var controller = BuildSegmentController(mediaTypeName);
 
             expectedResult.CanonicalName = article.ToString();
