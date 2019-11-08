@@ -11,6 +11,10 @@
   },
   "JobProfileTasksSegmentClientOptions": {
     "Timeout": "00:00:10",
-    "BaseAddress": "https://localhost:44352/"
+    "BaseAddress": "https://localhost/"
+  },
+  "ServiceBusOptions": {
+    "ServiceBusConnectionString": "[service bus connection string]",
+    "topicName": "job-profile-refresh"
   }
 }
