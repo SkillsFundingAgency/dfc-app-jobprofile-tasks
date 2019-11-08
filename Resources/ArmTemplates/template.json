@@ -54,11 +54,25 @@
         "cosmosDbCollectionName": {
             "type": "string"
         },
+        "cmsTopicName": {
+            "type": "string",
+            "defaultValue": "cms-messages",
+            "metadata": {
+                "description": "Name of CMS messages topic"
+            }
+        },
         "cmsSubscriptionSqlFilter": {
             "type": "string",
             "defaultValue": "",
             "metadata": {
                 "description": "Filter to apply to subscription (no filter applied if left blank)"
+            }
+        },
+        "refreshTopicName": {
+            "type": "string",
+            "defaultValue": "job-profile-refresh",
+            "metadata": {
+                "description": "Name of job profile refresh topic"
             }
         }
     },
@@ -75,9 +89,7 @@
         "webAppInsightsName": "[concat(variables('webAppName'), '-ai')]",
         "functionAppName": "[concat(variables('ResourcePrefix'), '-fa')]",
         "functionAppInsightsName": "[concat(variables('functionAppName'), '-ai')]",
-        "cmsTopicName": "cms-messages",
-        "cmsSubscriptionName": "job-profile-tasks",
-        "refreshTopicName": "job-profile-refresh"
+        "cmsSubscriptionName": "job-profile-tasks"
     },
     "resources": [
         {
@@ -199,7 +211,7 @@
                             },
                             {
                                 "name": "ServiceBusOptions__topicName",
-                                "value": "[variables('refreshTopicName')]"
+                                "value": "[parameters('refreshTopicName')]"
                             },
                             {
                                 "name": "Logging__ApplicationInsights__LogLevel__Default",
@@ -283,7 +295,7 @@
                             },
                             {
                                 "name": "cms-messages-topic",
-                                "value": "[variables('cmsTopicName')]"
+                                "value": "[parameters('cmsTopicName')]"
                             },
                             {
                                 "name": "cms-messages-subscription",
@@ -371,7 +383,7 @@
                         "value": "[parameters('appSharedServiceBusName')]"
                     },
                     "serviceBusTopicName": {
-                        "value": "[variables('cmsTopicName')]"
+                        "value": "[parameters('cmsTopicName')]"
                     },
                     "serviceBusTopicSubscriptionName": {
                         "value": "[variables('cmsSubscriptionName')]"
