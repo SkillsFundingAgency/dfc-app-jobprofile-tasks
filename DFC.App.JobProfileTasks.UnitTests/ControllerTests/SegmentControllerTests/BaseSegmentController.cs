@@ -17,7 +17,6 @@ namespace DFC.App.JobProfileTasks.UnitTests.ControllerTests.SegmentControllerTes
             FakeLogger = A.Fake<ILogger<SegmentController>>();
             FakeJobProfileSegmentService = A.Fake<IJobProfileTasksSegmentService>();
             Mapper = A.Fake<AutoMapper.IMapper>();
-            FormatContentService = A.Fake<IFormatContentService>();
         }
 
         public static IEnumerable<object[]> HtmlMediaTypes => new List<object[]>
@@ -42,15 +41,13 @@ namespace DFC.App.JobProfileTasks.UnitTests.ControllerTests.SegmentControllerTes
 
         protected AutoMapper.IMapper Mapper { get; }
 
-        protected IFormatContentService FormatContentService { get; }
-
         protected SegmentController BuildSegmentController(string mediaTypeName)
         {
             var httpContext = new DefaultHttpContext();
 
             httpContext.Request.Headers[HeaderNames.Accept] = mediaTypeName;
 
-            var controller = new SegmentController(FakeLogger, FakeJobProfileSegmentService, Mapper, FormatContentService)
+            var controller = new SegmentController(FakeLogger, FakeJobProfileSegmentService, Mapper)
             {
                 ControllerContext = new ControllerContext()
                 {
