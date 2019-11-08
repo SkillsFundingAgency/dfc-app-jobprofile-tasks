@@ -38,6 +38,7 @@ namespace DFC.App.JobProfileTasks
             var cosmosDbConnection = configuration.GetSection(CosmosDbConfigAppSettings).Get<CosmosDbConnection>();
             var documentClient = new DocumentClient(new Uri(cosmosDbConnection.EndpointUrl), cosmosDbConnection.AccessKey);
 
+            services.AddApplicationInsightsTelemetry();
             services.AddSingleton(cosmosDbConnection);
             services.AddSingleton<IDocumentClient>(documentClient);
             services.AddTransient<IFormatContentService, FormatContentService>();
