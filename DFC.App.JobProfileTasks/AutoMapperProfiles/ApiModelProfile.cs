@@ -2,25 +2,19 @@
 using DFC.App.JobProfileTasks.ApiModels;
 using DFC.App.JobProfileTasks.AutoMapperProfiles.ValueConverters;
 using DFC.App.JobProfileTasks.Data.Models.SegmentModels;
-using System.Collections.Generic;
+using DFC.HtmlToDataTranslator.ValueConverters;
 using System.Linq;
 
 namespace DFC.App.JobProfileTasks.AutoMapperProfiles
 {
-    public class HtmlStringFormatter : IValueConverter<string, List<string>>
-    {
-        public List<string> Convert(string sourceMember, ResolutionContext context)
-        {
-            return new List<string> { sourceMember };
-        }
-    }
-
     public class ApiModelProfile : Profile
     {
         public ApiModelProfile()
         {
+            var htmlToStringValueConverter = new HtmlToStringValueConverter();
+
             CreateMap<JobProfileTasksDataSegmentModel, WhatYouWillDoApiModel>()
-                .ForMember(d => d.WYDDayToDayTasks, opt => opt.ConvertUsing(new HtmlStringFormatter(), s => $"{s.Introduction} {s.Tasks}"))
+                .ForMember(d => d.WYDDayToDayTasks, opt => opt.ConvertUsing(htmlToStringValueConverter, s => $"{s.Introduction} {s.Tasks}"))
                 .ForMember(d => d.WorkingEnvironment, s => s.MapFrom(a => a))
                 ;
 
