@@ -7,7 +7,7 @@ namespace DFC.App.JobProfileTasks.Data.Models.SegmentModels
 {
     public class JobProfileTasksSegmentModel : IDataModel
     {
-        public const string SegmentName = "Tasks";
+        public const string SegmentName = "WhatYouWillDo";
 
         [JsonProperty(PropertyName = "id")]
         public Guid DocumentId { get; set; }
