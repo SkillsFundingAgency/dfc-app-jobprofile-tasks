@@ -5,8 +5,6 @@ namespace DFC.App.JobProfileTasks.Data.Models.SegmentModels
 {
     public class JobProfileTasksDataSegmentModel
     {
-        public bool IsCadReady { get; set; }
-
         public DateTime LastReviewed { get; set; }
 
         public string Introduction { get; set; }
