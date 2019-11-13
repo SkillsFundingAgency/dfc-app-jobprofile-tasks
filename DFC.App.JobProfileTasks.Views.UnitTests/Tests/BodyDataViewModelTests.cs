@@ -18,6 +18,7 @@ namespace DFC.App.JobProfileTasks.Views.UnitTests.Tests
                 Location = "Locations1",
                 Tasks = "Tasks1",
                 Uniform = "Uniform1",
+                Introduction = "Introduction1",
             };
 
             var viewBag = new Dictionary<string, object>();
@@ -31,6 +32,7 @@ namespace DFC.App.JobProfileTasks.Views.UnitTests.Tests
             Assert.Contains(model.Location, viewRenderResponse, StringComparison.OrdinalIgnoreCase);
             Assert.Contains(model.Tasks, viewRenderResponse, StringComparison.OrdinalIgnoreCase);
             Assert.Contains(model.Uniform, viewRenderResponse, StringComparison.OrdinalIgnoreCase);
+            Assert.Contains(model.Introduction, viewRenderResponse, StringComparison.OrdinalIgnoreCase);
         }
     }
 }
