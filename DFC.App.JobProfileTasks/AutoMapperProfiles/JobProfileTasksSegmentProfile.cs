@@ -2,6 +2,7 @@
 using DFC.App.JobProfileTasks.AutoMapperProfiles.ValueConverters;
 using DFC.App.JobProfileTasks.Data.Models.PatchModels;
 using DFC.App.JobProfileTasks.Data.Models.SegmentModels;
+using DFC.App.JobProfileTasks.Data.Models.ServiceBusModels;
 using DFC.App.JobProfileTasks.ViewModels;
 using System.Linq;
 
@@ -22,6 +23,10 @@ namespace DFC.App.JobProfileTasks.AutoMapperProfiles
                 .ForMember(d => d.Location, opt => opt.ConvertUsing(new LocationFormatter(), s => s.Locations != null ? s.Locations.Select(x => x.Description) : null))
                 .ForMember(d => d.Uniform, opt => opt.ConvertUsing(new UniformFormatter(), s => s.Uniforms != null ? s.Uniforms.Select(x => x.Description) : null))
                 ;
+
+            CreateMap<JobProfileTasksSegmentModel, RefreshJobProfileSegmentServiceBusModel>()
+                .ForMember(d => d.JobProfileId, s => s.MapFrom(a => a.DocumentId))
+                .ForMember(d => d.Segment, s => s.MapFrom(a => JobProfileTasksSegmentModel.SegmentName));
 
             CreateMap<PatchUniformModel, JobProfileTasksDataUniformSegmentModel>();
 

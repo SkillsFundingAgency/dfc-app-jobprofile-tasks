@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using DFC.App.JobProfileTasks.Data.Models.SegmentModels;
+using DFC.App.JobProfileTasks.Data.Models.ServiceBusModels;
 using DFC.App.JobProfileTasks.Repository.CosmosDb;
 using System;
 using System.Collections.Generic;
@@ -13,11 +14,16 @@ namespace DFC.App.JobProfileTasks.SegmentService
     {
         private readonly ICosmosRepository<JobProfileTasksSegmentModel> repository;
         private readonly IMapper mapper;
+        private readonly IJobProfileSegmentRefreshService<RefreshJobProfileSegmentServiceBusModel> jobProfileSegmentRefreshService;
 
-        public JobProfileTasksSegmentService(ICosmosRepository<JobProfileTasksSegmentModel> repository, IMapper mapper)
+        public JobProfileTasksSegmentService(
+            ICosmosRepository<JobProfileTasksSegmentModel> repository,
+            IMapper mapper,
+            IJobProfileSegmentRefreshService<RefreshJobProfileSegmentServiceBusModel> jobProfileSegmentRefreshService)
         {
             this.repository = repository;
             this.mapper = mapper;
+            this.jobProfileSegmentRefreshService = jobProfileSegmentRefreshService;
         }
 
         public async Task<bool> PingAsync()
@@ -217,7 +223,7 @@ namespace DFC.App.JobProfileTasks.SegmentService
                 tasksSegmentModel.Data = new JobProfileTasksDataSegmentModel();
             }
 
-            var result = await repository.UpsertAsync(tasksSegmentModel).ConfigureAwait(false);
+            var result = await UpsertAndRefreshSegmentModel(tasksSegmentModel).ConfigureAwait(false);
 
             return new UpsertJobProfileTasksModelResponse
             {
@@ -230,6 +236,20 @@ namespace DFC.App.JobProfileTasks.SegmentService
         {
             var result = await repository.DeleteAsync(documentId).ConfigureAwait(false);
             return result == HttpStatusCode.NoContent;
+        }
+
+        private async Task<HttpStatusCode> UpsertAndRefreshSegmentModel(JobProfileTasksSegmentModel existingSegmentModel)
+        {
+            var result = await repository.UpsertAsync(existingSegmentModel).ConfigureAwait(false);
+
+            if (result == HttpStatusCode.OK || result == HttpStatusCode.Created)
+            {
+                var refreshJobProfileSegmentServiceBusModel = mapper.Map<RefreshJobProfileSegmentServiceBusModel>(existingSegmentModel);
+
+                await jobProfileSegmentRefreshService.SendMessageAsync(refreshJobProfileSegmentServiceBusModel).ConfigureAwait(false);
+            }
+
+            return result;
         }
     }
 }
