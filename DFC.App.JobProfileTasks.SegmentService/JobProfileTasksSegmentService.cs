@@ -223,9 +223,7 @@ namespace DFC.App.JobProfileTasks.SegmentService
                 tasksSegmentModel.Data = new JobProfileTasksDataSegmentModel();
             }
 
-            var result = await repository.UpsertAsync(tasksSegmentModel).ConfigureAwait(false);
-
-            await UpsertAndRefreshSegmentModel(tasksSegmentModel).ConfigureAwait(false);
+            var result = await UpsertAndRefreshSegmentModel(tasksSegmentModel).ConfigureAwait(false);
 
             return new UpsertJobProfileTasksModelResponse
             {
