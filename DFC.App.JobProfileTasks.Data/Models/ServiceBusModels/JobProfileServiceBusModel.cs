@@ -10,6 +10,8 @@ namespace DFC.App.JobProfileTasks.Data.Models.ServiceBusModels
 
         public string CanonicalName { get; set; }
 
+        public DateTime LastModified { get; set; }
+
         [Required]
         public string SOCLevelTwo { get; set; }
 
