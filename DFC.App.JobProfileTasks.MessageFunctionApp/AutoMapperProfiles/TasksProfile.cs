@@ -12,6 +12,7 @@ namespace DFC.App.JobProfileTasks.MessageFunctionApp.AutoMapperProfiles
             CreateMap<JobProfileTasksDataEnvironmentServiceBusModel, JobProfileTasksDataEnvironmentSegmentModel>();
 
             CreateMap<JobProfileServiceBusModel, JobProfileTasksSegmentModel>()
+                .ForPath(d => d.Data.LastReviewed, s => s.MapFrom(a => a.LastModified))
                 .ForMember(d => d.DocumentId, s => s.MapFrom(a => a.JobProfileId))
                 .ForMember(d => d.Data, s => s.MapFrom(a => a.WhatYouWillDoData));
 
