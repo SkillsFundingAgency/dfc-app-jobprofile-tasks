@@ -12,7 +12,7 @@ namespace DFC.App.JobProfileTasks.Views.UnitTests.Tests
         public TestBase()
         {
             var config = new ConfigurationBuilder();
-            config.AddJsonFile("appsettings.json");
+            config.AddJsonFile("appsettings.json", true);
             configuration = config.Build();
 
             viewRootPath = configuration["ViewRootPath"];
