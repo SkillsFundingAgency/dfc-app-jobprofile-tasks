@@ -2,7 +2,9 @@
 using DFC.App.JobProfileTasks.ApiModels;
 using DFC.App.JobProfileTasks.AutoMapperProfiles.ValueConverters;
 using DFC.App.JobProfileTasks.Data.Models.SegmentModels;
+using DFC.HtmlToDataTranslator.Services;
 using DFC.HtmlToDataTranslator.ValueConverters;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace DFC.App.JobProfileTasks.AutoMapperProfiles
@@ -11,10 +13,33 @@ namespace DFC.App.JobProfileTasks.AutoMapperProfiles
     {
         public ApiModelProfile()
         {
-            var htmlToStringValueConverter = new HtmlToStringValueConverter();
+            var htmlDataTranslator = new HtmlAgilityPackDataTranslator();
+            var htmlToStringValueConverter = new HtmlToStringValueConverter(htmlDataTranslator);
 
             CreateMap<JobProfileTasksDataSegmentModel, WhatYouWillDoApiModel>()
-                .ForMember(d => d.WYDDayToDayTasks, opt => opt.ConvertUsing(htmlToStringValueConverter, s => $"{s.Introduction} {s.Tasks}"))
+                .ForMember(d => d.WYDDayToDayTasks, opt => opt.MapFrom((x, y, z) =>
+                {
+                    var result = new List<string>();
+                    var introTranslated = htmlDataTranslator.Translate(x.Introduction);
+                    var tasksTranslated = htmlDataTranslator.Translate(x.Tasks);
+
+                    if (introTranslated.Any())
+                    {
+                        result.AddRange(introTranslated);
+                    }
+
+                    if (introTranslated.Any() && tasksTranslated.Any())
+                    {
+                        result.Add(" ");
+                    }
+
+                    if (tasksTranslated.Any())
+                    {
+                        result.AddRange(tasksTranslated);
+                    }
+
+                    return result;
+                }))
                 .ForMember(d => d.WorkingEnvironment, s => s.MapFrom(a => a))
                 ;
 
