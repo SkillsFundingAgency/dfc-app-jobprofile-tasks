@@ -23,20 +23,14 @@ namespace DFC.App.JobProfileTasks.AutoMapperProfiles
                     var introTranslated = htmlDataTranslator.Translate(x.Introduction);
                     var tasksTranslated = htmlDataTranslator.Translate(x.Tasks);
 
-                    if (introTranslated.Any())
-                    {
-                        result.AddRange(introTranslated);
-                    }
+                    result.AddRange(introTranslated);
 
                     if (introTranslated.Any() && tasksTranslated.Any())
                     {
                         result.Add(" ");
                     }
 
-                    if (tasksTranslated.Any())
-                    {
-                        result.AddRange(tasksTranslated);
-                    }
+                    result.AddRange(tasksTranslated);
 
                     return result;
                 }))
