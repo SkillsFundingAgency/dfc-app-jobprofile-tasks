@@ -17,11 +17,11 @@ namespace DFC.App.JobProfileTasks.AutoMapperProfiles
             var htmlToStringValueConverter = new HtmlToStringValueConverter(htmlDataTranslator);
 
             CreateMap<JobProfileTasksDataSegmentModel, WhatYouWillDoApiModel>()
-                .ForMember(d => d.WYDDayToDayTasks, opt => opt.MapFrom((x, y, z) =>
+                .ForMember(d => d.WYDDayToDayTasks, opt => opt.MapFrom((source, destination, member) =>
                 {
                     var result = new List<string>();
-                    var introTranslated = htmlDataTranslator.Translate(x.Introduction);
-                    var tasksTranslated = htmlDataTranslator.Translate(x.Tasks);
+                    var introTranslated = htmlDataTranslator.Translate(source.Introduction);
+                    var tasksTranslated = htmlDataTranslator.Translate(source.Tasks);
 
                     result.AddRange(introTranslated);
 
