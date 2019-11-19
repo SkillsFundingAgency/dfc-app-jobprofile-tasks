@@ -20,8 +20,18 @@ namespace DFC.App.JobProfileTasks.AutoMapperProfiles
                 .ForMember(d => d.WYDDayToDayTasks, opt => opt.MapFrom((source, destination, member) =>
                 {
                     var result = new List<string>();
-                    var introTranslated = htmlDataTranslator.Translate(source.Introduction);
-                    var tasksTranslated = htmlDataTranslator.Translate(source.Tasks);
+                    var introTranslated = new List<string>();
+                    var tasksTranslated = new List<string>();
+
+                    if (!string.IsNullOrWhiteSpace(source.Introduction))
+                    {
+                        introTranslated = htmlDataTranslator.Translate(source.Introduction);
+                    }
+
+                    if (!string.IsNullOrWhiteSpace(source.Tasks))
+                    {
+                        tasksTranslated = htmlDataTranslator.Translate(source.Tasks);
+                    }
 
                     result.AddRange(introTranslated);
 
