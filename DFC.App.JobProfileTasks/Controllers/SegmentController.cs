@@ -72,7 +72,7 @@ namespace DFC.App.JobProfileTasks.Controllers
         {
             logger.LogInformation($"{DocumentActionName} has been called with: {article}");
 
-            var careerPathSegmentModel = await jobProfileTasksSegmentService.GetByNameAsync(article, Request.IsDraftRequest()).ConfigureAwait(false);
+            var careerPathSegmentModel = await jobProfileTasksSegmentService.GetByNameAsync(article).ConfigureAwait(false);
 
             if (careerPathSegmentModel != null)
             {

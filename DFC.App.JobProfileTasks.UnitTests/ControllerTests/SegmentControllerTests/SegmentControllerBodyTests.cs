@@ -4,7 +4,6 @@ using DFC.App.JobProfileTasks.ViewModels;
 using FakeItEasy;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Xunit;
