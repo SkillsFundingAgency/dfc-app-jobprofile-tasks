@@ -4,7 +4,6 @@ using DFC.App.JobProfileTasks.AutoMapperProfiles.ValueConverters;
 using DFC.App.JobProfileTasks.Data.Models.SegmentModels;
 using DFC.HtmlToDataTranslator.Services;
 using DFC.HtmlToDataTranslator.ValueConverters;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace DFC.App.JobProfileTasks.AutoMapperProfiles
