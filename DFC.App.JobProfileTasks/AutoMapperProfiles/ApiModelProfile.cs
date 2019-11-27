@@ -17,33 +17,7 @@ namespace DFC.App.JobProfileTasks.AutoMapperProfiles
             var htmlToStringValueConverter = new HtmlToStringValueConverter(htmlDataTranslator);
 
             CreateMap<JobProfileTasksDataSegmentModel, WhatYouWillDoApiModel>()
-                .ForMember(d => d.WYDDayToDayTasks, opt => opt.MapFrom((source, destination, member) =>
-                {
-                    var result = new List<string>();
-                    var introTranslated = new List<string>();
-                    var tasksTranslated = new List<string>();
-
-                    if (!string.IsNullOrWhiteSpace(source.Introduction))
-                    {
-                        introTranslated = htmlDataTranslator.Translate(source.Introduction);
-                    }
-
-                    if (!string.IsNullOrWhiteSpace(source.Tasks))
-                    {
-                        tasksTranslated = htmlDataTranslator.Translate(source.Tasks);
-                    }
-
-                    result.AddRange(introTranslated);
-
-                    if (introTranslated.Any() && tasksTranslated.Any())
-                    {
-                        result.Add(" ");
-                    }
-
-                    result.AddRange(tasksTranslated);
-
-                    return result;
-                }))
+                .ForMember(d => d.WYDDayToDayTasks, opt => opt.ConvertUsing(htmlToStringValueConverter, s => s.Tasks))
                 .ForMember(d => d.WorkingEnvironment, s => s.MapFrom(a => a))
                 ;
 
