@@ -2,12 +2,6 @@
     <h2 class="job-profile-heading">What you'll do</h2>
     <section class="job-profile-subsection">
         <h3>Day-to-day tasks</h3>
-
-        @if (!string.IsNullOrWhiteSpace(Model.Introduction))
-        {
-            <p>@Html.Raw(Model.Introduction)</p>
-        }
-
         <div class="job-profile-subsection-content">
             @Html.Raw(Model.Tasks)
         </div>

@@ -32,7 +32,6 @@ namespace DFC.App.JobProfileTasks.Views.UnitTests.Tests
             Assert.Contains(model.Location, viewRenderResponse, StringComparison.OrdinalIgnoreCase);
             Assert.Contains(model.Tasks, viewRenderResponse, StringComparison.OrdinalIgnoreCase);
             Assert.Contains(model.Uniform, viewRenderResponse, StringComparison.OrdinalIgnoreCase);
-            Assert.Contains(model.Introduction, viewRenderResponse, StringComparison.OrdinalIgnoreCase);
         }
     }
 }
