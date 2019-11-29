@@ -64,7 +64,7 @@ namespace DFC.App.JobProfileTasks.SegmentService
                 return HttpStatusCode.NotFound;
             }
 
-            var matchingUniform = existingJobProfileEntity.Data.Uniforms.FirstOrDefault(x => x.Id == uniformSegmentModel.Id);
+            var matchingUniform = existingJobProfileEntity.Data?.Uniforms?.FirstOrDefault(x => x.Id == uniformSegmentModel.Id);
             if (matchingUniform == null)
             {
                 return HttpStatusCode.NotFound;
@@ -98,7 +98,7 @@ namespace DFC.App.JobProfileTasks.SegmentService
                 return HttpStatusCode.NotFound;
             }
 
-            var matchingLocation = existingJobProfileEntity.Data.Locations.FirstOrDefault(x => x.Id == locationSegmentModel.Id);
+            var matchingLocation = existingJobProfileEntity.Data?.Locations?.FirstOrDefault(x => x.Id == locationSegmentModel.Id);
             if (matchingLocation == null)
             {
                 return HttpStatusCode.NotFound;
@@ -128,7 +128,7 @@ namespace DFC.App.JobProfileTasks.SegmentService
                 return HttpStatusCode.NotFound;
             }
 
-            var matchingEnvironment = existingJobProfileEntity.Data.Environments.FirstOrDefault(x => x.Id == environmentSegmentModel.Id);
+            var matchingEnvironment = existingJobProfileEntity.Data?.Environments?.FirstOrDefault(x => x.Id == environmentSegmentModel.Id);
             if (matchingEnvironment == null)
             {
                 return HttpStatusCode.NotFound;
@@ -153,7 +153,7 @@ namespace DFC.App.JobProfileTasks.SegmentService
                 return HttpStatusCode.NotFound;
             }
 
-            var uniformToDelete = existingJobProfileEntity.Data.Uniforms.FirstOrDefault(x => x.Id == uniformId);
+            var uniformToDelete = existingJobProfileEntity.Data?.Uniforms?.FirstOrDefault(x => x.Id == uniformId);
             if (uniformToDelete == null)
             {
                 return HttpStatusCode.NotFound;
@@ -175,7 +175,7 @@ namespace DFC.App.JobProfileTasks.SegmentService
                 return HttpStatusCode.NotFound;
             }
 
-            var itemToDelete = existingJobProfileEntity.Data.Locations.FirstOrDefault(x => x.Id == locationId);
+            var itemToDelete = existingJobProfileEntity.Data?.Locations?.FirstOrDefault(x => x.Id == locationId);
             if (itemToDelete == null)
             {
                 return HttpStatusCode.NotFound;
@@ -197,7 +197,7 @@ namespace DFC.App.JobProfileTasks.SegmentService
                 return HttpStatusCode.NotFound;
             }
 
-            var itemToDelete = existingJobProfileEntity.Data.Environments.FirstOrDefault(x => x.Id == environmentId);
+            var itemToDelete = existingJobProfileEntity.Data?.Environments?.FirstOrDefault(x => x.Id == environmentId);
             if (itemToDelete == null)
             {
                 return HttpStatusCode.NotFound;
