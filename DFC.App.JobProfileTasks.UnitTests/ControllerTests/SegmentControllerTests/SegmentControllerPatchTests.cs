@@ -1,11 +1,8 @@
-﻿using DFC.App.JobProfileTasks.Controllers;
-using DFC.App.JobProfileTasks.Data.Enums;
+﻿using DFC.App.JobProfileTasks.Data.Enums;
 using DFC.App.JobProfileTasks.Data.Models.PatchModels;
 using DFC.App.JobProfileTasks.Data.Models.SegmentModels;
 using FakeItEasy;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Net.Http.Headers;
 using System;
 using System.Threading.Tasks;
 using Xunit;
@@ -141,23 +138,6 @@ namespace DFC.App.JobProfileTasks.UnitTests.ControllerTests.SegmentControllerTes
             //Assert
             A.CallTo(() => FakeJobProfileSegmentService.DeleteUniform(patchModel.JobProfileId, patchModel.Id)).MustHaveHappenedOnceExactly();
             Assert.IsType<StatusCodeResult>(result);
-        }
-
-        protected SegmentController BuildSegmentController(string mediaTypeName)
-        {
-            var httpContext = new DefaultHttpContext();
-
-            httpContext.Request.Headers[HeaderNames.Accept] = mediaTypeName;
-
-            var controller = new SegmentController(FakeLogger, FakeJobProfileSegmentService, Mapper)
-            {
-                ControllerContext = new ControllerContext()
-                {
-                    HttpContext = httpContext,
-                },
-            };
-
-            return controller;
         }
     }
 }
