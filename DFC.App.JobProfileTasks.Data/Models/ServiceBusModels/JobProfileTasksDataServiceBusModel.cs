@@ -11,10 +11,10 @@ namespace DFC.App.JobProfileTasks.Data.Models.ServiceBusModels
 
         public string DailyTasks { get; set; }
 
-        public IEnumerable<JobProfileTasksDataLocationServiceBusModel> Locations { get; set; }
+        public IEnumerable<Location> Locations { get; set; }
 
-        public IEnumerable<JobProfileTasksDataUniformServiceBusModel> Uniforms { get; set; }
+        public IEnumerable<Uniform> Uniforms { get; set; }
 
-        public IEnumerable<JobProfileTasksDataEnvironmentServiceBusModel> Environments { get; set; }
+        public IEnumerable<Environment> Environments { get; set; }
     }
 }

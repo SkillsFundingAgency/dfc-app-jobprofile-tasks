@@ -1,9 +1,9 @@
-﻿using DFC.App.JobProfileTasks.Controllers;
+﻿using DFC.App.JobProfileTasks.Common.Contracts;
+using DFC.App.JobProfileTasks.Controllers;
 using DFC.App.JobProfileTasks.SegmentService;
 using FakeItEasy;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using Microsoft.Net.Http.Headers;
 using System.Collections.Generic;
 using System.Net.Mime;
@@ -14,9 +14,9 @@ namespace DFC.App.JobProfileTasks.UnitTests.ControllerTests.SegmentControllerTes
     {
         public BaseSegmentController()
         {
-            FakeLogger = A.Fake<ILogger<SegmentController>>();
             FakeJobProfileSegmentService = A.Fake<IJobProfileTasksSegmentService>();
-            Mapper = A.Fake<AutoMapper.IMapper>();
+            FakeMapper = A.Fake<AutoMapper.IMapper>();
+            FakeLogger = A.Fake<ILogService>();
         }
 
         public static IEnumerable<object[]> HtmlMediaTypes => new List<object[]>
@@ -35,11 +35,11 @@ namespace DFC.App.JobProfileTasks.UnitTests.ControllerTests.SegmentControllerTes
             new string[] { MediaTypeNames.Application.Json },
         };
 
-        protected ILogger<SegmentController> FakeLogger { get; }
+        protected ILogService FakeLogger { get; }
 
         protected IJobProfileTasksSegmentService FakeJobProfileSegmentService { get; }
 
-        protected AutoMapper.IMapper Mapper { get; }
+        protected AutoMapper.IMapper FakeMapper { get; }
 
         protected SegmentController BuildSegmentController(string mediaTypeName)
         {
@@ -47,7 +47,7 @@ namespace DFC.App.JobProfileTasks.UnitTests.ControllerTests.SegmentControllerTes
 
             httpContext.Request.Headers[HeaderNames.Accept] = mediaTypeName;
 
-            var controller = new SegmentController(FakeLogger, FakeJobProfileSegmentService, Mapper)
+            var controller = new SegmentController(FakeJobProfileSegmentService, FakeMapper, FakeLogger)
             {
                 ControllerContext = new ControllerContext()
                 {

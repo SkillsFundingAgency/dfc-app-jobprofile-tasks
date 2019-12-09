@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using DFC.App.JobProfileTasks.Common.Contracts;
+using DFC.App.JobProfileTasks.Common.Services;
 using DFC.App.JobProfileTasks.Data.Models;
 using DFC.App.JobProfileTasks.Data.Models.SegmentModels;
 using DFC.App.JobProfileTasks.Data.Models.ServiceBusModels;
@@ -10,6 +12,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Documents;
 using Microsoft.Azure.Documents.Client;
+using Microsoft.Azure.ServiceBus;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -39,19 +42,20 @@ namespace DFC.App.JobProfileTasks
             });
 
             var serviceBusOptions = configuration.GetSection(ServiceBusOptionsAppSettings).Get<ServiceBusOptions>();
-            services.AddSingleton(serviceBusOptions ?? new ServiceBusOptions());
-
             var cosmosDbConnection = configuration.GetSection(CosmosDbConfigAppSettings).Get<CosmosDbConnection>();
             var documentClient = new DocumentClient(new Uri(cosmosDbConnection.EndpointUrl), cosmosDbConnection.AccessKey);
+            var topicClient = new TopicClient(serviceBusOptions.ServiceBusConnectionString, serviceBusOptions.TopicName);
 
-            services.AddApplicationInsightsTelemetry();
             services.AddSingleton(cosmosDbConnection);
+            services.AddApplicationInsightsTelemetry();
             services.AddSingleton<IDocumentClient>(documentClient);
+            services.AddSingleton<ITopicClient>(topicClient);
             services.AddSingleton<ICosmosRepository<JobProfileTasksSegmentModel>, CosmosRepository<JobProfileTasksSegmentModel>>();
             services.AddSingleton<IJobProfileTasksSegmentService, JobProfileTasksSegmentService>();
             services.AddAutoMapper(typeof(Startup).Assembly);
             services.AddSingleton<IJobProfileSegmentRefreshService<RefreshJobProfileSegmentServiceBusModel>, JobProfileSegmentRefreshService<RefreshJobProfileSegmentServiceBusModel>>();
-
+            services.AddScoped<ICorrelationIdProvider, RequestHeaderCorrelationIdProvider>();
+            services.AddScoped<ILogService, LogService>();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 

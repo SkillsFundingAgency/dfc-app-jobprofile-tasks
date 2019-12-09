@@ -1,4 +1,4 @@
-﻿using DFC.App.JobProfileTasks.Data.Contracts;
+﻿using DFC.App.JobProfileTasks.Data.Models;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Azure.Documents;
 using Microsoft.Azure.Documents.Client;

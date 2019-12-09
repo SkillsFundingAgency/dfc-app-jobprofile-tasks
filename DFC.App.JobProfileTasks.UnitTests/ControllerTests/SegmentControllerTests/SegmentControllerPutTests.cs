@@ -17,7 +17,7 @@ namespace DFC.App.JobProfileTasks.UnitTests.ControllerTests.SegmentControllerTes
             var tasksSegmentModel = A.Fake<JobProfileTasksSegmentModel>();
             tasksSegmentModel.SequenceNumber = int.MaxValue;
             var controller = BuildSegmentController(mediaTypeName);
-            var expectedUpsertResponse = BuildExpectedUpsertResponse(A.Fake<JobProfileTasksSegmentModel>());
+            var expectedUpsertResponse = HttpStatusCode.OK;
 
             A.CallTo(() => FakeJobProfileSegmentService.UpsertAsync(A<JobProfileTasksSegmentModel>.Ignored)).Returns(expectedUpsertResponse);
 
@@ -68,14 +68,6 @@ namespace DFC.App.JobProfileTasks.UnitTests.ControllerTests.SegmentControllerTes
             Assert.Equal((int)HttpStatusCode.BadRequest, statusResult.StatusCode);
 
             controller.Dispose();
-        }
-
-        private UpsertJobProfileTasksModelResponse BuildExpectedUpsertResponse(JobProfileTasksSegmentModel model)
-        {
-            return new UpsertJobProfileTasksModelResponse
-            {
-                JobProfileTasksSegmentModel = model,
-            };
         }
     }
 }

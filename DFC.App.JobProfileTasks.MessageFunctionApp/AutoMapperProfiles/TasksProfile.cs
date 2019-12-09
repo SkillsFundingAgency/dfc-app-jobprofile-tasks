@@ -2,6 +2,10 @@
 using DFC.App.JobProfileTasks.Data.Models.PatchModels;
 using DFC.App.JobProfileTasks.Data.Models.SegmentModels;
 using DFC.App.JobProfileTasks.Data.Models.ServiceBusModels;
+using DFC.App.JobProfileTasks.Data.Models.ServiceBusModels.PatchModels;
+using Environment = DFC.App.JobProfileTasks.Data.Models.SegmentModels.Environment;
+using Location = DFC.App.JobProfileTasks.Data.Models.SegmentModels.Location;
+using Uniform = DFC.App.JobProfileTasks.Data.Models.SegmentModels.Uniform;
 
 namespace DFC.App.JobProfileTasks.MessageFunctionApp.AutoMapperProfiles
 {
@@ -9,29 +13,29 @@ namespace DFC.App.JobProfileTasks.MessageFunctionApp.AutoMapperProfiles
     {
         public TasksProfile()
         {
-            CreateMap<JobProfileTasksDataEnvironmentServiceBusModel, JobProfileTasksDataEnvironmentSegmentModel>();
+            CreateMap<Data.Models.ServiceBusModels.Environment, Environment>();
 
-            CreateMap<JobProfileServiceBusModel, JobProfileTasksSegmentModel>()
+            CreateMap<JobProfileMessage, JobProfileTasksSegmentModel>()
                 .ForPath(d => d.Data.LastReviewed, s => s.MapFrom(a => a.LastModified))
                 .ForMember(d => d.DocumentId, s => s.MapFrom(a => a.JobProfileId))
                 .ForMember(d => d.Data, s => s.MapFrom(a => a.WhatYouWillDoData));
 
-            CreateMap<JobProfileTasksDataEnvironmentServiceBusModel, JobProfileTasksDataEnvironmentSegmentModel>();
+            CreateMap<Data.Models.ServiceBusModels.Environment, Environment>();
 
-            CreateMap<JobProfileTasksDataLocationServiceBusModel, JobProfileTasksDataLocationSegmentModel>();
+            CreateMap<Data.Models.ServiceBusModels.Location, Location>();
 
             CreateMap<JobProfileTasksDataServiceBusModel, JobProfileTasksDataSegmentModel>()
                 .ForMember(d => d.Tasks, s => s.MapFrom(a => a.DailyTasks));
 
-            CreateMap<JobProfileTasksDataUniformServiceBusModel, JobProfileTasksDataUniformSegmentModel>();
+            CreateMap<Data.Models.ServiceBusModels.Uniform, Uniform>();
 
-            CreateMap<PatchUniformModel, JobProfileTasksDataUniformSegmentModel>();
+            CreateMap<PatchUniformModel, Uniform>();
 
-            CreateMap<JobProfileUniformPatchServiceBusModel, PatchUniformModel>();
+            CreateMap<PatchUniformServiceBusModel, PatchUniformModel>();
 
-            CreateMap<JobProfileLocationPatchServiceBusModel, PatchLocationModel>();
+            CreateMap<PatchLocationServiceBusModel, PatchLocationModel>();
 
-            CreateMap<JobProfileEnvironmentPatchServiceBusModel, PatchEnvironmentsModel>();
+            CreateMap<PatchEnvironmentServiceBusModel, PatchEnvironmentsModel>();
         }
     }
 }
