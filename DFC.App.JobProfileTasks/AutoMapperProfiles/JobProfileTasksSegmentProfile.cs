@@ -4,10 +4,12 @@ using DFC.App.JobProfileTasks.Data.Models.PatchModels;
 using DFC.App.JobProfileTasks.Data.Models.SegmentModels;
 using DFC.App.JobProfileTasks.Data.Models.ServiceBusModels;
 using DFC.App.JobProfileTasks.ViewModels;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace DFC.App.JobProfileTasks.AutoMapperProfiles
 {
+    [ExcludeFromCodeCoverage]
     public class JobProfileTasksSegmentProfile : Profile
     {
         public JobProfileTasksSegmentProfile()
