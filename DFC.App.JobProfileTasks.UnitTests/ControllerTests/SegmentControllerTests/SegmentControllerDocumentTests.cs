@@ -20,17 +20,17 @@ namespace DFC.App.JobProfileTasks.UnitTests.ControllerTests.SegmentControllerTes
             var controller = BuildSegmentController(mediaTypeName);
 
             A.CallTo(() => FakeJobProfileSegmentService.GetByNameAsync(A<string>.Ignored)).Returns(expectedResult);
-            A.CallTo(() => Mapper.Map<DocumentViewModel>(A<JobProfileTasksSegmentModel>.Ignored)).Returns(A.Fake<DocumentViewModel>());
+            A.CallTo(() => Mapper.Map<BodyViewModel>(A<JobProfileTasksSegmentModel>.Ignored)).Returns(A.Fake<BodyViewModel>());
 
             // Act
             var result = await controller.Document(article).ConfigureAwait(false);
 
             // Assert
             A.CallTo(() => FakeJobProfileSegmentService.GetByNameAsync(A<string>.Ignored)).MustHaveHappenedOnceExactly();
-            A.CallTo(() => Mapper.Map<DocumentViewModel>(A<JobProfileTasksSegmentModel>.Ignored)).MustHaveHappenedOnceExactly();
+            A.CallTo(() => Mapper.Map<BodyViewModel>(A<JobProfileTasksSegmentModel>.Ignored)).MustHaveHappenedOnceExactly();
 
             var viewResult = Assert.IsType<ViewResult>(result);
-            var model = Assert.IsAssignableFrom<DocumentViewModel>(viewResult.ViewData.Model);
+            var model = Assert.IsAssignableFrom<BodyViewModel>(viewResult.ViewData.Model);
 
             controller.Dispose();
         }

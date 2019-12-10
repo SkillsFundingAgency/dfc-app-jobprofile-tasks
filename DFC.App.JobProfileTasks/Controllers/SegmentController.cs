@@ -76,11 +76,11 @@ namespace DFC.App.JobProfileTasks.Controllers
 
             if (careerPathSegmentModel != null)
             {
-                var viewModel = mapper.Map<DocumentViewModel>(careerPathSegmentModel);
+                var viewModel = mapper.Map<BodyViewModel>(careerPathSegmentModel);
 
                 logger.LogInformation($"{DocumentActionName} has succeeded for: {article}");
 
-                return View(viewModel);
+                return View(nameof(Body), viewModel);
             }
 
             logger.LogWarning($"{DocumentActionName} has returned no content for: {article}");
