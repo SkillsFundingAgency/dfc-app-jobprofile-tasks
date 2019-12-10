@@ -13,7 +13,7 @@ namespace DFC.App.JobProfileTasks.SegmentService.UnitTests.FormatContentServiceT
             var seperator = ",";
             var items = new List<string>() { "Item1" };
 
-            var result = service.GetParagraphText(openingText, items, seperator);
+            var result = service.GetParagraphText(openingText, items, seperator, null);
 
             Assert.Equal("openingText1 Item1.", result);
         }
@@ -26,7 +26,7 @@ namespace DFC.App.JobProfileTasks.SegmentService.UnitTests.FormatContentServiceT
             var seperator = ",";
             var items = new List<string>() { "Item1", "Item2" };
 
-            var result = service.GetParagraphText(openingText, items, seperator);
+            var result = service.GetParagraphText(openingText, items, seperator, null);
 
             Assert.Equal("openingText1 Item1 , Item2.", result);
         }
@@ -39,7 +39,7 @@ namespace DFC.App.JobProfileTasks.SegmentService.UnitTests.FormatContentServiceT
             var seperator = ",";
             var items = new List<string>() { "Item1", "Item2", "Item3" };
 
-            var result = service.GetParagraphText(openingText, items, seperator);
+            var result = service.GetParagraphText(openingText, items, seperator, null);
 
             Assert.Equal("openingText1 Item1, Item2 , Item3.", result);
         }

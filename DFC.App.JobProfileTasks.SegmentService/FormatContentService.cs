@@ -7,21 +7,14 @@ namespace DFC.App.JobProfileTasks.SegmentService
 {
     public class FormatContentService : IFormatContentService
     {
-        private readonly IHtmlToDataTranslator htmlTranslator;
-
-        public FormatContentService()
-        {
-            htmlTranslator = new HtmlAgilityPackDataTranslator();
-        }
-
-        public string GetParagraphText(string openingText, IEnumerable<string> dataItems, string separator)
+        public string GetParagraphText(string openingText, IEnumerable<string> dataItems, string separator, IHtmlToDataTranslator htmlToDataTranslator)
         {
             if (dataItems == null || !dataItems.Any())
             {
                 return string.Empty;
             }
 
-            var translatedDataItems = TranslateItems(dataItems);
+            var translatedDataItems = TranslateItems(htmlToDataTranslator, dataItems);
 
             switch (translatedDataItems.Count())
             {
@@ -37,13 +30,20 @@ namespace DFC.App.JobProfileTasks.SegmentService
             }
         }
 
-        private IEnumerable<string> TranslateItems(IEnumerable<string> sourceItems)
+        private IEnumerable<string> TranslateItems(IHtmlToDataTranslator htmlToDataTranslator, IEnumerable<string> sourceItems)
         {
             var result = new List<string>();
 
-            foreach (var sourceItem in sourceItems)
+            if (htmlToDataTranslator != null)
             {
-                result.AddRange(htmlTranslator.Translate(sourceItem));
+                foreach (var sourceItem in sourceItems)
+                {
+                    result.AddRange(htmlToDataTranslator.Translate(sourceItem));
+                }
+            }
+            else
+            {
+                result.AddRange(sourceItems);
             }
 
             return result;

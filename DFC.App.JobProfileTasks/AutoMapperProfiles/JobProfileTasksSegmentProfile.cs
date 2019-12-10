@@ -17,9 +17,9 @@ namespace DFC.App.JobProfileTasks.AutoMapperProfiles
             CreateMap<JobProfileTasksSegmentModel, BodyViewModel>();
 
             CreateMap<JobProfileTasksDataSegmentModel, BodyDataViewModel>()
-                .ForMember(d => d.Environment, opt => opt.ConvertUsing(new EnvironmentFormatter(), s => s.Environments != null ? s.Environments.Select(x => x.Description) : null))
-                .ForMember(d => d.Location, opt => opt.ConvertUsing(new LocationFormatter(), s => s.Locations != null ? s.Locations.Select(x => x.Description) : null))
-                .ForMember(d => d.Uniform, opt => opt.ConvertUsing(new UniformFormatter(), s => s.Uniforms != null ? s.Uniforms.Select(x => x.Description) : null))
+                .ForMember(d => d.Environment, opt => opt.ConvertUsing(new EnvironmentFormatter(null), s => s.Environments != null ? s.Environments.Select(x => x.Description) : null))
+                .ForMember(d => d.Location, opt => opt.ConvertUsing(new LocationFormatter(null), s => s.Locations != null ? s.Locations.Select(x => x.Description) : null))
+                .ForMember(d => d.Uniform, opt => opt.ConvertUsing(new UniformFormatter(null), s => s.Uniforms != null ? s.Uniforms.Select(x => x.Description) : null))
                 ;
 
             CreateMap<JobProfileTasksSegmentModel, RefreshJobProfileSegmentServiceBusModel>()

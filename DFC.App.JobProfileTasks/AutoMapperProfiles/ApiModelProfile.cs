@@ -21,9 +21,9 @@ namespace DFC.App.JobProfileTasks.AutoMapperProfiles
                 ;
 
             CreateMap<JobProfileTasksDataSegmentModel, WorkingEnvironmentApiModel>()
-                .ForMember(d => d.Environment, opt => opt.ConvertUsing(new EnvironmentFormatter(), s => s.Environments != null ? s.Environments.Select(x => x.Description) : null))
-                .ForMember(d => d.Location, opt => opt.ConvertUsing(new LocationFormatter(), s => s.Locations != null ? s.Locations.Select(x => x.Description) : null))
-                .ForMember(d => d.Uniform, opt => opt.ConvertUsing(new UniformFormatter(), s => s.Uniforms != null ? s.Uniforms.Select(x => x.Description) : null))
+                .ForMember(d => d.Environment, opt => opt.ConvertUsing(new EnvironmentFormatter(htmlDataTranslator), s => s.Environments != null ? s.Environments.Select(x => x.Description) : null))
+                .ForMember(d => d.Location, opt => opt.ConvertUsing(new LocationFormatter(htmlDataTranslator), s => s.Locations != null ? s.Locations.Select(x => x.Description) : null))
+                .ForMember(d => d.Uniform, opt => opt.ConvertUsing(new UniformFormatter(htmlDataTranslator), s => s.Uniforms != null ? s.Uniforms.Select(x => x.Description) : null))
                ;
         }
     }
