@@ -2,9 +2,11 @@
 using DFC.App.JobProfileTasks.SegmentService;
 using DFC.HtmlToDataTranslator.Contracts;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace DFC.App.JobProfileTasks.AutoMapperProfiles.ValueConverters
 {
+    [ExcludeFromCodeCoverage]
     public class UniformFormatter : FormatContentService, IValueConverter<IEnumerable<string>, string>
     {
         private readonly IHtmlToDataTranslator htmlToDataTranslator;
