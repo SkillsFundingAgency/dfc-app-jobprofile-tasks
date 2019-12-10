@@ -4,24 +4,24 @@ using DFC.App.JobProfileTasks.Data.Models.PatchModels;
 using DFC.App.JobProfileTasks.Data.Models.SegmentModels;
 using DFC.App.JobProfileTasks.Data.Models.ServiceBusModels;
 using DFC.App.JobProfileTasks.ViewModels;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace DFC.App.JobProfileTasks.AutoMapperProfiles
 {
+    [ExcludeFromCodeCoverage]
     public class JobProfileTasksSegmentProfile : Profile
     {
         public JobProfileTasksSegmentProfile()
         {
             CreateMap<JobProfileTasksSegmentModel, IndexDocumentViewModel>();
 
-            CreateMap<JobProfileTasksSegmentModel, DocumentViewModel>();
-
             CreateMap<JobProfileTasksSegmentModel, BodyViewModel>();
 
             CreateMap<JobProfileTasksDataSegmentModel, BodyDataViewModel>()
-                .ForMember(d => d.Environment, opt => opt.ConvertUsing(new EnvironmentFormatter(), s => s.Environments != null ? s.Environments.Select(x => x.Description) : null))
-                .ForMember(d => d.Location, opt => opt.ConvertUsing(new LocationFormatter(), s => s.Locations != null ? s.Locations.Select(x => x.Description) : null))
-                .ForMember(d => d.Uniform, opt => opt.ConvertUsing(new UniformFormatter(), s => s.Uniforms != null ? s.Uniforms.Select(x => x.Description) : null))
+                .ForMember(d => d.Environment, opt => opt.ConvertUsing(new EnvironmentFormatter(null), s => s.Environments != null ? s.Environments.Select(x => x.Description) : null))
+                .ForMember(d => d.Location, opt => opt.ConvertUsing(new LocationFormatter(null), s => s.Locations != null ? s.Locations.Select(x => x.Description) : null))
+                .ForMember(d => d.Uniform, opt => opt.ConvertUsing(new UniformFormatter(null), s => s.Uniforms != null ? s.Uniforms.Select(x => x.Description) : null))
                 ;
 
             CreateMap<JobProfileTasksSegmentModel, RefreshJobProfileSegmentServiceBusModel>()
