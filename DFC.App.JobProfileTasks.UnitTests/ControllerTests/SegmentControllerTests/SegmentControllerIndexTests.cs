@@ -19,9 +19,10 @@ namespace DFC.App.JobProfileTasks.UnitTests.ControllerTests.SegmentControllerTes
             const int resultsCount = 2;
             var expectedResults = A.CollectionOfFake<JobProfileTasksSegmentModel>(resultsCount);
             var controller = BuildSegmentController(mediaTypeName);
+            var indexDocumentViewModel = new IndexDocumentViewModel { CanonicalName = "job-profile-1" };
 
             A.CallTo(() => FakeJobProfileSegmentService.GetAllAsync()).Returns(expectedResults);
-            A.CallTo(() => FakeMapper.Map<IndexDocumentViewModel>(A<JobProfileTasksSegmentModel>.Ignored)).Returns(A.Fake<IndexDocumentViewModel>());
+            A.CallTo(() => FakeMapper.Map<IndexDocumentViewModel>(A<JobProfileTasksSegmentModel>.Ignored)).Returns(indexDocumentViewModel);
 
             // Act
             var result = await controller.Index().ConfigureAwait(false);
@@ -33,7 +34,7 @@ namespace DFC.App.JobProfileTasks.UnitTests.ControllerTests.SegmentControllerTes
             var viewResult = Assert.IsType<ViewResult>(result);
             var model = Assert.IsAssignableFrom<IndexViewModel>(viewResult.ViewData.Model);
 
-            A.Equals(resultsCount, model.Documents.Count());
+            Assert.Equal(model.Documents.Count(), resultsCount);
 
             controller.Dispose();
         }
@@ -46,9 +47,10 @@ namespace DFC.App.JobProfileTasks.UnitTests.ControllerTests.SegmentControllerTes
             const int resultsCount = 0;
             IEnumerable<JobProfileTasksSegmentModel> expectedResults = null;
             var controller = BuildSegmentController(mediaTypeName);
+            var indexDocumentViewModel = new IndexDocumentViewModel { CanonicalName = "job-profile-1" };
 
             A.CallTo(() => FakeJobProfileSegmentService.GetAllAsync()).Returns(expectedResults);
-            A.CallTo(() => FakeMapper.Map<IndexDocumentViewModel>(A<JobProfileTasksSegmentModel>.Ignored)).Returns(A.Fake<IndexDocumentViewModel>());
+            A.CallTo(() => FakeMapper.Map<IndexDocumentViewModel>(A<JobProfileTasksSegmentModel>.Ignored)).Returns(indexDocumentViewModel);
 
             // Act
             var result = await controller.Index().ConfigureAwait(false);
@@ -60,7 +62,7 @@ namespace DFC.App.JobProfileTasks.UnitTests.ControllerTests.SegmentControllerTes
             var viewResult = Assert.IsType<ViewResult>(result);
             var model = Assert.IsAssignableFrom<IndexViewModel>(viewResult.ViewData.Model);
 
-            A.Equals(null, model.Documents);
+            Assert.Null(model.Documents);
 
             controller.Dispose();
         }

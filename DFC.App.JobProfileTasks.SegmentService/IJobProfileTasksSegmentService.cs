@@ -23,8 +23,8 @@ namespace DFC.App.JobProfileTasks.SegmentService
 
         Task<HttpStatusCode> PatchUniformAsync(PatchUniformModel patchModel, Guid documentId);
 
-        Task<HttpStatusCode> PatchLocationAsync(PatchLocationModel model, Guid documentId);
+        Task<HttpStatusCode> PatchLocationAsync(PatchLocationModel patchModel, Guid documentId);
 
-        Task<HttpStatusCode> PatchEnvironmentAsync(PatchEnvironmentsModel model, Guid documentId);
+        Task<HttpStatusCode> PatchEnvironmentAsync(PatchEnvironmentsModel patchModel, Guid documentId);
     }
 }

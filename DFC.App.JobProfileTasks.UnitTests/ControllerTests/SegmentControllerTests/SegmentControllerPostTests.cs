@@ -17,7 +17,7 @@ namespace DFC.App.JobProfileTasks.UnitTests.ControllerTests.SegmentControllerTes
             // Arrange
             var tasksSegmentModel = A.Fake<JobProfileTasksSegmentModel>();
             var controller = BuildSegmentController(mediaTypeName);
-            var expectedUpsertResponse = HttpStatusCode.OK;
+            var expectedUpsertResponse = HttpStatusCode.Created;
 
             A.CallTo(() => FakeJobProfileSegmentService.GetByIdAsync(A<Guid>.Ignored)).Returns<JobProfileTasksSegmentModel>(null);
             A.CallTo(() => FakeJobProfileSegmentService.UpsertAsync(A<JobProfileTasksSegmentModel>.Ignored)).Returns(expectedUpsertResponse);
@@ -29,7 +29,7 @@ namespace DFC.App.JobProfileTasks.UnitTests.ControllerTests.SegmentControllerTes
             A.CallTo(() => FakeJobProfileSegmentService.UpsertAsync(A<JobProfileTasksSegmentModel>.Ignored)).MustHaveHappenedOnceExactly();
             var statusCodeResult = Assert.IsType<StatusCodeResult>(result);
 
-            Assert.Equal((int)HttpStatusCode.AlreadyReported, statusCodeResult.StatusCode);
+            Assert.Equal((int)HttpStatusCode.Created, statusCodeResult.StatusCode);
 
             controller.Dispose();
         }

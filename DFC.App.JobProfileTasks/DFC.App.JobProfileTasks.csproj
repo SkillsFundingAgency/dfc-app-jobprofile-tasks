@@ -46,7 +46,6 @@
     <ProjectReference Include="..\DFC.App.JobProfileTasks.Common\DFC.App.JobProfileTasks.Common.csproj" />
     <ProjectReference Include="..\DFC.App.JobProfileTasks.Data\DFC.App.JobProfileTasks.Data.csproj" />
     <ProjectReference Include="..\DFC.App.JobProfileTasks.Repository.CosmosDb\DFC.App.JobProfileTasks.Repository.CosmosDb.csproj" />
-    <ProjectReference Include="..\DFC.App.JobProfileTasks.Repository.SitefinityApi\DFC.App.JobProfileTasks.Repository.SitefinityApi.csproj" />
     <ProjectReference Include="..\DFC.App.JobProfileTasks.SegmentService\DFC.App.JobProfileTasks.SegmentService.csproj" />
   </ItemGroup>
 
