@@ -6,6 +6,9 @@ using DFC.App.JobProfileTasks.Data.Models.ServiceBusModels;
 using DFC.App.JobProfileTasks.ViewModels;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using Environment = DFC.App.JobProfileTasks.Data.Models.SegmentModels.Environment;
+using Location = DFC.App.JobProfileTasks.Data.Models.SegmentModels.Location;
+using Uniform = DFC.App.JobProfileTasks.Data.Models.SegmentModels.Uniform;
 
 namespace DFC.App.JobProfileTasks.AutoMapperProfiles
 {
@@ -26,13 +29,13 @@ namespace DFC.App.JobProfileTasks.AutoMapperProfiles
 
             CreateMap<JobProfileTasksSegmentModel, RefreshJobProfileSegmentServiceBusModel>()
                 .ForMember(d => d.JobProfileId, s => s.MapFrom(a => a.DocumentId))
-                .ForMember(d => d.Segment, s => s.MapFrom(a => JobProfileTasksSegmentModel.SegmentName));
+                .ForMember(d => d.Segment, s => s.MapFrom(a => JobProfileTasksDataSegmentModel.SegmentName));
 
-            CreateMap<PatchUniformModel, JobProfileTasksDataUniformSegmentModel>();
+            CreateMap<PatchUniformModel, Uniform>();
 
-            CreateMap<PatchLocationModel, JobProfileTasksDataLocationSegmentModel>();
+            CreateMap<PatchLocationModel, Location>();
 
-            CreateMap<PatchEnvironmentsModel, JobProfileTasksDataEnvironmentSegmentModel>();
+            CreateMap<PatchEnvironmentsModel, Environment>();
         }
     }
 }

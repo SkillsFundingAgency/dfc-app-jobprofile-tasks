@@ -1,126 +1,93 @@
 ﻿using AutoMapper;
 using DFC.App.JobProfileTasks.Data.Enums;
 using DFC.App.JobProfileTasks.Data.Models.PatchModels;
-using DFC.App.JobProfileTasks.Data.Models.SegmentModels;
-using DFC.App.JobProfileTasks.Data.Models.ServiceBusModels;
+using DFC.App.JobProfileTasks.Data.Models.ServiceBusModels.PatchModels;
 using Newtonsoft.Json;
 using System;
 using System.Net;
-using System.Net.Http;
-using System.Net.Mime;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace DFC.App.JobProfileTasks.MessageFunctionApp.Services
 {
     public class MessageProcessor : IMessageProcessor
     {
-        private readonly HttpClient httpClient;
         private readonly IMapper mapper;
+        private readonly IHttpClientService httpClientService;
+        private readonly IMappingService mappingService;
 
-        public MessageProcessor(IHttpClientFactory httpClientFactory, IMapper mapper)
+        public MessageProcessor(IMapper mapper, IHttpClientService httpClientService, IMappingService mappingService)
         {
-            this.httpClient = httpClientFactory.CreateClient(nameof(MessageProcessor));
             this.mapper = mapper;
+            this.httpClientService = httpClientService;
+            this.mappingService = mappingService;
         }
 
-        public async Task<HttpStatusCode> Save(
-            JobProfileServiceBusModel jobProfileServiceBusModel,
-            MessageContentType messageContentType,
-            long sequenceNumber)
+        public async Task<HttpStatusCode> ProcessAsync(string message, long sequenceNumber, MessageContentType messageContentType, MessageActionType messageAction)
         {
-            var model = mapper.Map<JobProfileTasksSegmentModel>(jobProfileServiceBusModel);
-            model.SequenceNumber = sequenceNumber;
-
-            var response = await Update(model).ConfigureAwait(false);
-            if (response.StatusCode == HttpStatusCode.NotFound)
+            switch (messageContentType)
             {
-                response = await Create(model).ConfigureAwait(false);
-                response.EnsureSuccessStatusCode();
+                case MessageContentType.Environment:
+                    {
+                        var serviceBusMessage = JsonConvert.DeserializeObject<PatchEnvironmentServiceBusModel>(message);
+                        var patchEnvironmentsModel = mapper.Map<PatchEnvironmentsModel>(serviceBusMessage);
+                        patchEnvironmentsModel.MessageAction = messageAction;
+                        patchEnvironmentsModel.SequenceNumber = sequenceNumber;
+
+                        return await httpClientService.PatchAsync(patchEnvironmentsModel, "environment").ConfigureAwait(false);
+                    }
+
+                case MessageContentType.Location:
+                    {
+                        var serviceBusMessage = JsonConvert.DeserializeObject<PatchLocationServiceBusModel>(message);
+                        var patchLocationModel = mapper.Map<PatchLocationModel>(serviceBusMessage);
+                        patchLocationModel.MessageAction = messageAction;
+                        patchLocationModel.SequenceNumber = sequenceNumber;
+
+                        return await httpClientService.PatchAsync(patchLocationModel, "location").ConfigureAwait(false);
+                    }
+
+                case MessageContentType.Uniform:
+                    {
+                        var serviceBusMessage = JsonConvert.DeserializeObject<PatchUniformServiceBusModel>(message);
+                        var patchUniformModel = mapper.Map<PatchUniformModel>(serviceBusMessage);
+                        patchUniformModel.MessageAction = messageAction;
+                        patchUniformModel.SequenceNumber = sequenceNumber;
+
+                        return await httpClientService.PatchAsync(patchUniformModel, "uniform").ConfigureAwait(false);
+                    }
+
+                case MessageContentType.JobProfile:
+                    return await ProcessJobProfileMessageAsync(message, messageAction, sequenceNumber).ConfigureAwait(false);
+
+                default:
+                    break;
             }
 
-            return response.StatusCode;
+            return await Task.FromResult(HttpStatusCode.InternalServerError).ConfigureAwait(false);
         }
 
-        public async Task<HttpStatusCode> Delete(Guid jobProfileId)
+        private async Task<HttpStatusCode> ProcessJobProfileMessageAsync(string message, MessageActionType messageAction, long sequenceNumber)
         {
-            var uri = string.Concat(httpClient.BaseAddress, "segment/", jobProfileId);
-            var response = await httpClient.DeleteAsync(uri).ConfigureAwait(false);
-            response.EnsureSuccessStatusCode();
-            return response.StatusCode;
-        }
+            var jobProfile = mappingService.MapToSegmentModel(message, sequenceNumber);
 
-        public async Task<HttpStatusCode> DeleteUniform(Guid jobProfileId, Guid uniformId)
-        {
-            var uri = $"segment/{jobProfileId}/uniform/{uniformId}";
-            return await Patch(uri).ConfigureAwait(false);
-        }
-
-        public async Task<HttpStatusCode> DeleteEnvironment(Guid jobProfileId, Guid environmentId)
-        {
-            var uri = $"segment/{jobProfileId}/environment/{environmentId}";
-            return await Patch(uri).ConfigureAwait(false);
-        }
-
-        public async Task<HttpStatusCode> DeleteLocation(Guid jobProfileId, Guid locationId)
-        {
-            var uri = $"segment/{jobProfileId}/location/{locationId}";
-            return await Patch(uri).ConfigureAwait(false);
-        }
-
-        public async Task<HttpStatusCode> PatchUniform(PatchUniformModel message)
-        {
-            var url = "segment/uniform";
-            return await Patch(message, url).ConfigureAwait(false);
-        }
-
-        public async Task<HttpStatusCode> PatchLocation(PatchLocationModel message)
-        {
-            var url = "segment/location";
-            return await Patch(message, url).ConfigureAwait(false);
-        }
-
-        public async Task<HttpStatusCode> PatchEnvironment(PatchEnvironmentsModel message)
-        {
-            var url = "segment/environment";
-            return await Patch(message, url).ConfigureAwait(false);
-        }
-
-        private async Task<HttpStatusCode> Patch(object message, string url)
-        {
-            var serialized = JsonConvert.SerializeObject(message);
-            var content = new StringContent(serialized, Encoding.UTF8, MediaTypeNames.Application.Json);
-            var uri = string.Concat(httpClient.BaseAddress, url);
-
-            var response = await httpClient.PatchAsync(uri, content).ConfigureAwait(false);
-            if (response.StatusCode == HttpStatusCode.NotFound)
+            switch (messageAction)
             {
-                await httpClient.PostAsync(uri, content).ConfigureAwait(false);
+                case MessageActionType.Draft:
+                case MessageActionType.Published:
+                    var result = await httpClientService.PutAsync(jobProfile).ConfigureAwait(false);
+                    if (result == HttpStatusCode.NotFound)
+                    {
+                        return await httpClientService.PostAsync(jobProfile).ConfigureAwait(false);
+                    }
+
+                    return result;
+
+                case MessageActionType.Deleted:
+                    return await httpClientService.DeleteAsync(jobProfile.DocumentId).ConfigureAwait(false);
+
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(messageAction), $"Invalid message action '{messageAction}' received, should be one of '{string.Join(",", Enum.GetNames(typeof(MessageActionType)))}'");
             }
-
-            return response.StatusCode;
-        }
-
-        private async Task<HttpStatusCode> Patch(string url)
-        {
-            var content = new StringContent(string.Empty, Encoding.UTF8, MediaTypeNames.Application.Json);
-            var uri = string.Concat(httpClient.BaseAddress, url);
-
-            var response = await httpClient.PatchAsync(uri, content).ConfigureAwait(false);
-
-            return response.StatusCode;
-        }
-
-        private async Task<HttpResponseMessage> Create(JobProfileTasksSegmentModel model)
-        {
-            var uri = string.Concat(httpClient.BaseAddress, "segment");
-            return await httpClient.PostAsJsonAsync(uri, model).ConfigureAwait(false);
-        }
-
-        private async Task<HttpResponseMessage> Update(JobProfileTasksSegmentModel model)
-        {
-            var uri = string.Concat(httpClient.BaseAddress, "segment");
-            return await httpClient.PutAsJsonAsync(uri, model).ConfigureAwait(false);
         }
     }
 }

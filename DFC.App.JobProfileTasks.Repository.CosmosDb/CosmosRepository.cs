@@ -1,4 +1,4 @@
-﻿using DFC.App.JobProfileTasks.Data.Contracts;
+﻿using DFC.App.JobProfileTasks.Data.Models;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Azure.Documents;
 using Microsoft.Azure.Documents.Client;
@@ -6,6 +6,7 @@ using Microsoft.Azure.Documents.Linq;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Net;
@@ -13,6 +14,7 @@ using System.Threading.Tasks;
 
 namespace DFC.App.JobProfileTasks.Repository.CosmosDb
 {
+    [ExcludeFromCodeCoverage]
     public class CosmosRepository<T> : ICosmosRepository<T>
         where T : IDataModel
     {

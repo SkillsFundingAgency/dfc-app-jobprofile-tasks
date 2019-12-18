@@ -1,6 +1,13 @@
 ﻿namespace DFC.App.JobProfileTasks.Data.Models.PatchModels
 {
-    public class PatchLocationModel : BasePatchItemModel
+    public class PatchLocationModel : BasePatchModel
     {
+        public string Title { get; set; }
+
+        public string Description { get; set; }
+
+        public string Url { get; set; }
+
+        public bool IsNegative { get; set; }
     }
 }

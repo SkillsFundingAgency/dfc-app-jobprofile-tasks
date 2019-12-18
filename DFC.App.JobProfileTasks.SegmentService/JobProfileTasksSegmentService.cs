@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using DFC.App.JobProfileTasks.Data.Enums;
+using DFC.App.JobProfileTasks.Data.Models.PatchModels;
 using DFC.App.JobProfileTasks.Data.Models.SegmentModels;
 using DFC.App.JobProfileTasks.Data.Models.ServiceBusModels;
 using DFC.App.JobProfileTasks.Repository.CosmosDb;
@@ -7,6 +9,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using Environment = DFC.App.JobProfileTasks.Data.Models.SegmentModels.Environment;
+using Location = DFC.App.JobProfileTasks.Data.Models.SegmentModels.Location;
+using Uniform = DFC.App.JobProfileTasks.Data.Models.SegmentModels.Uniform;
 
 namespace DFC.App.JobProfileTasks.SegmentService
 {
@@ -51,167 +56,127 @@ namespace DFC.App.JobProfileTasks.SegmentService
             return await repository.GetAsync(d => d.CanonicalName.ToLower() == canonicalName.ToLowerInvariant()).ConfigureAwait(false);
         }
 
-        public async Task<HttpStatusCode> UpdateUniform(Guid documentId, JobProfileTasksDataUniformSegmentModel uniformSegmentModel)
+        public async Task<HttpStatusCode> PatchUniformAsync(PatchUniformModel patchModel, Guid documentId)
         {
-            if (uniformSegmentModel == null)
+            if (patchModel == null)
             {
-                throw new ArgumentNullException(nameof(uniformSegmentModel));
+                throw new ArgumentNullException(nameof(patchModel));
             }
 
-            var existingJobProfileEntity = await GetByIdAsync(documentId).ConfigureAwait(false);
-            if (existingJobProfileEntity == null)
-            {
-                return HttpStatusCode.NotFound;
-            }
-
-            var matchingUniform = existingJobProfileEntity.Data?.Uniforms?.FirstOrDefault(x => x.Id == uniformSegmentModel.Id);
-            if (matchingUniform == null)
+            var existingSegmentModel = await GetByIdAsync(documentId).ConfigureAwait(false);
+            if (existingSegmentModel is null)
             {
                 return HttpStatusCode.NotFound;
             }
 
-            var existingUniformItems = existingJobProfileEntity.Data.Uniforms.ToList();
-            var existingItemIndex = existingUniformItems.FindIndex(x => x.Id == uniformSegmentModel.Id);
+            if (patchModel.SequenceNumber <= existingSegmentModel.SequenceNumber)
+            {
+                return HttpStatusCode.AlreadyReported;
+            }
 
-            existingUniformItems.RemoveAt(existingItemIndex);
+            var existingUniform = existingSegmentModel.Data?.Uniforms?.FirstOrDefault(u => u.Id == patchModel.Id);
+            if (existingUniform is null)
+            {
+                return patchModel.MessageAction == MessageActionType.Deleted ? HttpStatusCode.AlreadyReported : HttpStatusCode.NotFound;
+            }
 
-            matchingUniform = mapper.Map<JobProfileTasksDataUniformSegmentModel>(uniformSegmentModel);
-            existingUniformItems.Insert(existingItemIndex, matchingUniform);
+            var existingIndex = existingSegmentModel.Data.Uniforms.ToList().FindIndex(ai => ai.Id == patchModel.Id);
+            if (patchModel.MessageAction == MessageActionType.Deleted)
+            {
+                existingSegmentModel.Data.Uniforms.RemoveAt(existingIndex);
+            }
+            else
+            {
+                var updatedUniform = mapper.Map<Uniform>(patchModel);
+                existingSegmentModel.Data.Uniforms[existingIndex] = updatedUniform;
+            }
 
-            existingJobProfileEntity.Data.Uniforms = existingUniformItems;
+            existingSegmentModel.SequenceNumber = patchModel.SequenceNumber;
 
-            var result = await UpsertAsync(existingJobProfileEntity).ConfigureAwait(false);
-
-            return result.ResponseStatusCode;
+            return await UpsertAndRefreshSegmentModel(existingSegmentModel).ConfigureAwait(false);
         }
 
-        public async Task<HttpStatusCode> UpdateLocation(Guid documentId, JobProfileTasksDataLocationSegmentModel locationSegmentModel)
+        public async Task<HttpStatusCode> PatchLocationAsync(PatchLocationModel patchModel, Guid documentId)
         {
-            if (locationSegmentModel == null)
+            if (patchModel == null)
             {
-                throw new ArgumentNullException(nameof(locationSegmentModel));
+                throw new ArgumentNullException(nameof(patchModel));
             }
 
-            var existingJobProfileEntity = await GetByIdAsync(documentId).ConfigureAwait(false);
-            if (existingJobProfileEntity == null)
-            {
-                return HttpStatusCode.NotFound;
-            }
-
-            var matchingLocation = existingJobProfileEntity.Data?.Locations?.FirstOrDefault(x => x.Id == locationSegmentModel.Id);
-            if (matchingLocation == null)
+            var existingSegmentModel = await GetByIdAsync(documentId).ConfigureAwait(false);
+            if (existingSegmentModel is null)
             {
                 return HttpStatusCode.NotFound;
             }
 
-            var existingLocationItems = existingJobProfileEntity.Data.Locations.ToList();
-            var existingItemIndex = existingLocationItems.FindIndex(x => x.Id == locationSegmentModel.Id);
-            existingLocationItems.RemoveAt(existingItemIndex);
-            existingLocationItems.Insert(existingItemIndex, locationSegmentModel);
-            existingJobProfileEntity.Data.Locations = existingLocationItems;
+            if (patchModel.SequenceNumber <= existingSegmentModel.SequenceNumber)
+            {
+                return HttpStatusCode.AlreadyReported;
+            }
 
-            var result = await UpsertAsync(existingJobProfileEntity).ConfigureAwait(false);
+            var existingLocation = existingSegmentModel.Data?.Locations?.FirstOrDefault(u => u.Id == patchModel.Id);
+            if (existingLocation is null)
+            {
+                return patchModel.MessageAction == MessageActionType.Deleted ? HttpStatusCode.AlreadyReported : HttpStatusCode.NotFound;
+            }
 
-            return result.ResponseStatusCode;
+            var existingIndex = existingSegmentModel.Data.Locations.ToList().FindIndex(ai => ai.Id == patchModel.Id);
+            if (patchModel.MessageAction == MessageActionType.Deleted)
+            {
+                existingSegmentModel.Data.Locations.RemoveAt(existingIndex);
+            }
+            else
+            {
+                var updatedLocation = mapper.Map<Location>(patchModel);
+                existingSegmentModel.Data.Locations[existingIndex] = updatedLocation;
+            }
+
+            existingSegmentModel.SequenceNumber = patchModel.SequenceNumber;
+
+            return await UpsertAndRefreshSegmentModel(existingSegmentModel).ConfigureAwait(false);
         }
 
-        public async Task<HttpStatusCode> UpdateEnvironment(Guid documentId, JobProfileTasksDataEnvironmentSegmentModel environmentSegmentModel)
+        public async Task<HttpStatusCode> PatchEnvironmentAsync(PatchEnvironmentsModel patchModel, Guid documentId)
         {
-            if (environmentSegmentModel == null)
+            if (patchModel == null)
             {
-                throw new ArgumentNullException(nameof(environmentSegmentModel));
+                throw new ArgumentNullException(nameof(patchModel));
             }
 
-            var existingJobProfileEntity = await GetByIdAsync(documentId).ConfigureAwait(false);
-            if (existingJobProfileEntity == null)
-            {
-                return HttpStatusCode.NotFound;
-            }
-
-            var matchingEnvironment = existingJobProfileEntity.Data?.Environments?.FirstOrDefault(x => x.Id == environmentSegmentModel.Id);
-            if (matchingEnvironment == null)
+            var existingSegmentModel = await GetByIdAsync(documentId).ConfigureAwait(false);
+            if (existingSegmentModel is null)
             {
                 return HttpStatusCode.NotFound;
             }
 
-            var existingEnvironmentItems = existingJobProfileEntity.Data.Environments.ToList();
-            var existingItemIndex = existingEnvironmentItems.FindIndex(x => x.Id == environmentSegmentModel.Id);
-            existingEnvironmentItems.RemoveAt(existingItemIndex);
-            existingEnvironmentItems.Insert(existingItemIndex, environmentSegmentModel);
-            existingJobProfileEntity.Data.Environments = existingEnvironmentItems;
+            if (patchModel.SequenceNumber <= existingSegmentModel.SequenceNumber)
+            {
+                return HttpStatusCode.AlreadyReported;
+            }
 
-            var result = await UpsertAsync(existingJobProfileEntity).ConfigureAwait(false);
+            var existingEnvironment = existingSegmentModel.Data?.Environments?.FirstOrDefault(u => u.Id == patchModel.Id);
+            if (existingEnvironment is null)
+            {
+                return patchModel.MessageAction == MessageActionType.Deleted ? HttpStatusCode.AlreadyReported : HttpStatusCode.NotFound;
+            }
 
-            return result.ResponseStatusCode;
+            var existingIndex = existingSegmentModel.Data.Environments.ToList().FindIndex(ai => ai.Id == patchModel.Id);
+            if (patchModel.MessageAction == MessageActionType.Deleted)
+            {
+                existingSegmentModel.Data.Environments.RemoveAt(existingIndex);
+            }
+            else
+            {
+                var updatedEnvironment = mapper.Map<Environment>(patchModel);
+                existingSegmentModel.Data.Environments[existingIndex] = updatedEnvironment;
+            }
+
+            existingSegmentModel.SequenceNumber = patchModel.SequenceNumber;
+
+            return await UpsertAndRefreshSegmentModel(existingSegmentModel).ConfigureAwait(false);
         }
 
-        public async Task<HttpStatusCode> DeleteUniform(Guid jobProfileId, Guid uniformId)
-        {
-            var existingJobProfileEntity = await GetByIdAsync(jobProfileId).ConfigureAwait(false);
-            if (existingJobProfileEntity == null)
-            {
-                return HttpStatusCode.NotFound;
-            }
-
-            var uniformToDelete = existingJobProfileEntity.Data?.Uniforms?.FirstOrDefault(x => x.Id == uniformId);
-            if (uniformToDelete == null)
-            {
-                return HttpStatusCode.NotFound;
-            }
-
-            var uniforms = existingJobProfileEntity.Data.Uniforms.ToList();
-            uniforms.Remove(uniformToDelete);
-            existingJobProfileEntity.Data.Uniforms = uniforms;
-
-            var result = await UpsertAsync(existingJobProfileEntity).ConfigureAwait(false);
-            return result.ResponseStatusCode;
-        }
-
-        public async Task<HttpStatusCode> DeleteLocation(Guid jobProfileId, Guid locationId)
-        {
-            var existingJobProfileEntity = await GetByIdAsync(jobProfileId).ConfigureAwait(false);
-            if (existingJobProfileEntity == null)
-            {
-                return HttpStatusCode.NotFound;
-            }
-
-            var itemToDelete = existingJobProfileEntity.Data?.Locations?.FirstOrDefault(x => x.Id == locationId);
-            if (itemToDelete == null)
-            {
-                return HttpStatusCode.NotFound;
-            }
-
-            var locations = existingJobProfileEntity.Data.Locations.ToList();
-            locations.Remove(itemToDelete);
-            existingJobProfileEntity.Data.Locations = locations;
-
-            var result = await UpsertAsync(existingJobProfileEntity).ConfigureAwait(false);
-            return result.ResponseStatusCode;
-        }
-
-        public async Task<HttpStatusCode> DeleteEnvironment(Guid jobProfileId, Guid environmentId)
-        {
-            var existingJobProfileEntity = await GetByIdAsync(jobProfileId).ConfigureAwait(false);
-            if (existingJobProfileEntity == null)
-            {
-                return HttpStatusCode.NotFound;
-            }
-
-            var itemToDelete = existingJobProfileEntity.Data?.Environments?.FirstOrDefault(x => x.Id == environmentId);
-            if (itemToDelete == null)
-            {
-                return HttpStatusCode.NotFound;
-            }
-
-            var environments = existingJobProfileEntity.Data.Environments.ToList();
-            environments.Remove(itemToDelete);
-            existingJobProfileEntity.Data.Environments = environments;
-
-            var result = await UpsertAsync(existingJobProfileEntity).ConfigureAwait(false);
-            return result.ResponseStatusCode;
-        }
-
-        public async Task<UpsertJobProfileTasksModelResponse> UpsertAsync(JobProfileTasksSegmentModel tasksSegmentModel)
+        public async Task<HttpStatusCode> UpsertAsync(JobProfileTasksSegmentModel tasksSegmentModel)
         {
             if (tasksSegmentModel == null)
             {
@@ -223,13 +188,7 @@ namespace DFC.App.JobProfileTasks.SegmentService
                 tasksSegmentModel.Data = new JobProfileTasksDataSegmentModel();
             }
 
-            var result = await UpsertAndRefreshSegmentModel(tasksSegmentModel).ConfigureAwait(false);
-
-            return new UpsertJobProfileTasksModelResponse
-            {
-                JobProfileTasksSegmentModel = tasksSegmentModel,
-                ResponseStatusCode = result,
-            };
+            return await UpsertAndRefreshSegmentModel(tasksSegmentModel).ConfigureAwait(false);
         }
 
         public async Task<bool> DeleteAsync(Guid documentId)
