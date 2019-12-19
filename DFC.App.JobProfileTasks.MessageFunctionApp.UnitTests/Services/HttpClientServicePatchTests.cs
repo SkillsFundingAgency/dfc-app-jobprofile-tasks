@@ -1,8 +1,8 @@
-﻿using DFC.App.JobProfileTasks.Common.Contracts;
-using DFC.App.JobProfileTasks.Data.Models.PatchModels;
+﻿using DFC.App.JobProfileTasks.Data.Models.PatchModels;
 using DFC.App.JobProfileTasks.MessageFunctionApp.HttpClientPolicies;
 using DFC.App.JobProfileTasks.MessageFunctionApp.Services;
 using DFC.App.JobProfileTasks.MessageFunctionApp.UnitTests.ClientHandlers;
+using DFC.Logger.AppInsights.Contracts;
 using FakeItEasy;
 using System;
 using System.Net;

@@ -1,7 +1,7 @@
-﻿using DFC.App.JobProfileTasks.Common.Contracts;
-using DFC.App.JobProfileTasks.Data.Models.PatchModels;
+﻿using DFC.App.JobProfileTasks.Data.Models.PatchModels;
 using DFC.App.JobProfileTasks.MessageFunctionApp.Functions;
 using DFC.App.JobProfileTasks.MessageFunctionApp.Services;
+using DFC.Logger.AppInsights.Contracts;
 using FakeItEasy;
 using Microsoft.Azure.ServiceBus;
 using Newtonsoft.Json;

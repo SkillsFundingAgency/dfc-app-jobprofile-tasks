@@ -6,8 +6,6 @@ namespace DFC.App.JobProfileTasks.Views.UnitTests.Tests
 {
     public class TestBase
     {
-        private readonly IConfigurationRoot configuration;
-
         protected static string CurrencySymbol => CultureInfo.CurrentCulture.NumberFormat.CurrencySymbol;
 
         protected string ViewRootPath => "..\\..\\..\\..\\DFC.App.JobProfileTasks\\";

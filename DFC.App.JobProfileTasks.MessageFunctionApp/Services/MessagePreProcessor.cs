@@ -1,7 +1,7 @@
-﻿using DFC.App.JobProfileTasks.Common.Contracts;
-using DFC.App.JobProfileTasks.Data.Constants;
+﻿using DFC.App.JobProfileTasks.Data.Constants;
 using DFC.App.JobProfileTasks.Data.Enums;
 using DFC.App.JobProfileTasks.MessageFunctionApp.Functions;
+using DFC.Logger.AppInsights.Contracts;
 using Microsoft.ApplicationInsights.DataContracts;
 using Microsoft.Azure.ServiceBus;
 using System;
@@ -61,19 +61,19 @@ namespace DFC.App.JobProfileTasks.MessageFunctionApp.Services
             switch (result)
             {
                 case HttpStatusCode.OK:
-                    logService.LogMessage($"{ClassFullName}: JobProfile Id: {messageContentId}: Updated segment");
+                    logService.LogInformation($"{ClassFullName}: JobProfile Id: {messageContentId}: Updated segment");
                     break;
 
                 case HttpStatusCode.Created:
-                    logService.LogMessage($"{ClassFullName}: JobProfile Id: {messageContentId}: Created segment");
+                    logService.LogInformation($"{ClassFullName}: JobProfile Id: {messageContentId}: Created segment");
                     break;
 
                 case HttpStatusCode.AlreadyReported:
-                    logService.LogMessage($"{ClassFullName}: JobProfile Id: {messageContentId}: Segment previously updated");
+                    logService.LogInformation($"{ClassFullName}: JobProfile Id: {messageContentId}: Segment previously updated");
                     break;
 
                 default:
-                    logService.LogMessage($"{ClassFullName}: JobProfile Id: {messageContentId}: Segment not Posted: Status: {result}", SeverityLevel.Warning);
+                    logService.LogWarning($"{ClassFullName}: JobProfile Id: {messageContentId}: Segment not Posted: Status: {result}");
                     break;
             }
         }

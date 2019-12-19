@@ -51,13 +51,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Functions", "Functions", "{
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DFC.App.JobProfileTasks.MessageFunctionApp", "DFC.App.JobProfileTasks.MessageFunctionApp\DFC.App.JobProfileTasks.MessageFunctionApp.csproj", "{738B009D-9896-4625-9EC9-0B04B6707E66}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{B452F0D1-C7B5-499F-A86E-A207B07913C5}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DFC.App.JobProfileTasks.Common", "DFC.App.JobProfileTasks.Common\DFC.App.JobProfileTasks.Common.csproj", "{E4E1E79E-CF1C-404F-B7EE-67E50A668366}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MessagingFunction", "MessagingFunction", "{7C89975A-E902-4DE3-8857-35AE73DCB596}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DFC.App.JobProfileTasks.MessageFunctionApp.UnitTests", "DFC.App.JobProfileTasks.MessageFunctionApp.UnitTests\DFC.App.JobProfileTasks.MessageFunctionApp.UnitTests.csproj", "{3F71A289-6A56-4CD1-932D-B986B033D0E7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DFC.App.JobProfileTasks.MessageFunctionApp.UnitTests", "DFC.App.JobProfileTasks.MessageFunctionApp.UnitTests\DFC.App.JobProfileTasks.MessageFunctionApp.UnitTests.csproj", "{3F71A289-6A56-4CD1-932D-B986B033D0E7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -101,10 +97,6 @@ Global
 		{738B009D-9896-4625-9EC9-0B04B6707E66}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{738B009D-9896-4625-9EC9-0B04B6707E66}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{738B009D-9896-4625-9EC9-0B04B6707E66}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E4E1E79E-CF1C-404F-B7EE-67E50A668366}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E4E1E79E-CF1C-404F-B7EE-67E50A668366}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E4E1E79E-CF1C-404F-B7EE-67E50A668366}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E4E1E79E-CF1C-404F-B7EE-67E50A668366}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3F71A289-6A56-4CD1-932D-B986B033D0E7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{3F71A289-6A56-4CD1-932D-B986B033D0E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3F71A289-6A56-4CD1-932D-B986B033D0E7}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -127,7 +119,6 @@ Global
 		{520A43F2-E7B1-4ADB-B6E5-4417B445889B} = {3AE31B85-B71A-4124-9EC4-9E7EEE8C6C90}
 		{2D4F874A-ECBE-4405-B726-AE00D6DB67F1} = {520A43F2-E7B1-4ADB-B6E5-4417B445889B}
 		{738B009D-9896-4625-9EC9-0B04B6707E66} = {C2509DDB-D175-435F-BC89-B2BF8C2F659B}
-		{E4E1E79E-CF1C-404F-B7EE-67E50A668366} = {B452F0D1-C7B5-499F-A86E-A207B07913C5}
 		{7C89975A-E902-4DE3-8857-35AE73DCB596} = {3AE31B85-B71A-4124-9EC4-9E7EEE8C6C90}
 		{3F71A289-6A56-4CD1-932D-B986B033D0E7} = {7C89975A-E902-4DE3-8857-35AE73DCB596}
 	EndGlobalSection

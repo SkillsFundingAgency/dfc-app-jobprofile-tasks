@@ -1,8 +1,8 @@
-﻿using DFC.App.JobProfileTasks.Common.Constants;
-using DFC.App.JobProfileTasks.Common.Contracts;
-using DFC.App.JobProfileTasks.Data.Models.PatchModels;
+﻿using DFC.App.JobProfileTasks.Data.Models.PatchModels;
 using DFC.App.JobProfileTasks.Data.Models.SegmentModels;
 using DFC.App.JobProfileTasks.MessageFunctionApp.HttpClientPolicies;
+using DFC.Logger.AppInsights.Constants;
+using DFC.Logger.AppInsights.Contracts;
 using Microsoft.ApplicationInsights.DataContracts;
 using System;
 using System.Net;
@@ -39,7 +39,7 @@ namespace DFC.App.JobProfileTasks.MessageFunctionApp.Services
                 if (!response.IsSuccessStatusCode)
                 {
                     var responseContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                    logger.LogMessage($"Failure status code '{response.StatusCode}' received with content '{responseContent}', for POST, Id: {tasksSegmentModel?.DocumentId}.", SeverityLevel.Error);
+                    logger.LogError($"Failure status code '{response.StatusCode}' received with content '{responseContent}', for POST, Id: {tasksSegmentModel?.DocumentId}.");
                     response.EnsureSuccessStatusCode();
                 }
 
@@ -59,7 +59,7 @@ namespace DFC.App.JobProfileTasks.MessageFunctionApp.Services
                 if (!response.IsSuccessStatusCode && response.StatusCode != HttpStatusCode.NotFound)
                 {
                     var responseContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                    logger.LogMessage($"Failure status code '{response.StatusCode}' received with content '{responseContent}', for Put type {typeof(JobProfileTasksSegmentModel)}, Id: {tasksSegmentModel?.DocumentId}", SeverityLevel.Error);
+                    logger.LogError($"Failure status code '{response.StatusCode}' received with content '{responseContent}', for Put type {typeof(JobProfileTasksSegmentModel)}, Id: {tasksSegmentModel?.DocumentId}");
                     response.EnsureSuccessStatusCode();
                 }
 
@@ -71,13 +71,15 @@ namespace DFC.App.JobProfileTasks.MessageFunctionApp.Services
             where T : BasePatchModel
         {
             var url = new Uri($"{jobProfileClientOptions.BaseAddress}segment/{patchModel?.JobProfileId}/{patchTypeEndpoint}");
+            ConfigureHttpClient();
+
             using (var content = new ObjectContent<T>(patchModel, new JsonMediaTypeFormatter(), MediaTypeNames.Application.Json))
             {
                 var response = await httpClient.PatchAsync(url, content).ConfigureAwait(false);
                 if (!response.IsSuccessStatusCode && response.StatusCode != HttpStatusCode.NotFound)
                 {
                     var responseContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                    logger.LogMessage($"Failure status code '{response.StatusCode}' received with content '{responseContent}', for patch type {typeof(T)}, Id: {patchModel?.JobProfileId}", SeverityLevel.Error);
+                    logger.LogError($"Failure status code '{response.StatusCode}' received with content '{responseContent}', for patch type {typeof(T)}, Id: {patchModel?.JobProfileId}");
                     response.EnsureSuccessStatusCode();
                 }
 
@@ -94,7 +96,7 @@ namespace DFC.App.JobProfileTasks.MessageFunctionApp.Services
             if (!response.IsSuccessStatusCode && response.StatusCode != HttpStatusCode.NotFound)
             {
                 var responseContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                logger.LogMessage($"Failure status code '{response.StatusCode}' received with content '{responseContent}', for DELETE, Id: {id}.", SeverityLevel.Error);
+                logger.LogError($"Failure status code '{response.StatusCode}' received with content '{responseContent}', for DELETE, Id: {id}.");
                 response.EnsureSuccessStatusCode();
             }
 
