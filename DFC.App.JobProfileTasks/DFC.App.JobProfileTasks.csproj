@@ -29,10 +29,11 @@
   <ItemGroup>
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="7.0.0" />
     <PackageReference Include="DFC.HtmlToDataTranslator" Version="1.0.6" />
-    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.8.2" />
+    <PackageReference Include="DFC.Logger.AppInsights" Version="1.0.6" />
+    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.12.0" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
-    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.9.6">
+    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.9.8">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
@@ -43,7 +44,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DFC.App.JobProfileTasks.Common\DFC.App.JobProfileTasks.Common.csproj" />
     <ProjectReference Include="..\DFC.App.JobProfileTasks.Data\DFC.App.JobProfileTasks.Data.csproj" />
     <ProjectReference Include="..\DFC.App.JobProfileTasks.Repository.CosmosDb\DFC.App.JobProfileTasks.Repository.CosmosDb.csproj" />
     <ProjectReference Include="..\DFC.App.JobProfileTasks.SegmentService\DFC.App.JobProfileTasks.SegmentService.csproj" />

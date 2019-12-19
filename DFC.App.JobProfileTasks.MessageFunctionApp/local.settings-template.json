@@ -5,7 +5,8 @@
     "FUNCTIONS_WORKER_RUNTIME": "dotnet",
     "service-bus-connection-string": "[Placeholder]",
     "cms-messages-topic": "cms-messages",
-    "cms-messages-subscription": "job-profile-tasks"
+    "cms-messages-subscription": "job-profile-tasks",
+    "APPINSIGHTS_INSTRUMENTATIONKEY": "[instrumentation key]"
   },
   "JobProfileTasksSegmentClientOptions": {
     "Timeout": "00:00:10",

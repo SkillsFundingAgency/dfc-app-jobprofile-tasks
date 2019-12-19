@@ -8,7 +8,7 @@ namespace DFC.App.JobProfileTasks.SegmentService
     {
         public string GetParagraphText(string openingText, IEnumerable<string> dataItems, string separator, IHtmlToDataTranslator htmlToDataTranslator)
         {
-            if ((!dataItems?.Any()).GetValueOrDefault())
+            if (dataItems == null || !dataItems.Any())
             {
                 return string.Empty;
             }

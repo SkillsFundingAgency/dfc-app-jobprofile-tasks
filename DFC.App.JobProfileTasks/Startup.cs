@@ -1,11 +1,10 @@
 ﻿using AutoMapper;
-using DFC.App.JobProfileTasks.Common.Contracts;
-using DFC.App.JobProfileTasks.Common.Services;
 using DFC.App.JobProfileTasks.Data.Models;
 using DFC.App.JobProfileTasks.Data.Models.SegmentModels;
 using DFC.App.JobProfileTasks.Data.Models.ServiceBusModels;
 using DFC.App.JobProfileTasks.Repository.CosmosDb;
 using DFC.App.JobProfileTasks.SegmentService;
+using DFC.Logger.AppInsights.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -76,11 +75,11 @@ namespace DFC.App.JobProfileTasks
             services.AddSingleton<IDocumentClient>(documentClient);
             services.AddSingleton<ITopicClient>(topicClient);
             services.AddSingleton<ICosmosRepository<JobProfileTasksSegmentModel>, CosmosRepository<JobProfileTasksSegmentModel>>();
-            services.AddSingleton<IJobProfileTasksSegmentService, JobProfileTasksSegmentService>();
+            services.AddScoped<IJobProfileTasksSegmentService, JobProfileTasksSegmentService>();
             services.AddAutoMapper(typeof(Startup).Assembly);
-            services.AddSingleton<IJobProfileSegmentRefreshService<RefreshJobProfileSegmentServiceBusModel>, JobProfileSegmentRefreshService<RefreshJobProfileSegmentServiceBusModel>>();
-            services.AddScoped<ICorrelationIdProvider, RequestHeaderCorrelationIdProvider>();
-            services.AddScoped<ILogService, LogService>();
+            services.AddScoped<IJobProfileSegmentRefreshService<RefreshJobProfileSegmentServiceBusModel>, JobProfileSegmentRefreshService<RefreshJobProfileSegmentServiceBusModel>>();
+            services.AddDFCLogging(configuration["ApplicationInsights:InstrumentationKey"]);
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
     }
