@@ -34,6 +34,21 @@ namespace DFC.App.JobProfileTasks.SegmentService.UnitTests.RefreshServiceTests
         }
 
         [Fact]
+        public async Task SendMessageListDoesNotSendMessagesWhenListIsNull()
+        {
+            // Arrange
+            var fakeTopicClient = A.Fake<ITopicClient>();
+            var correlationIdProvider = A.Fake<ICorrelationIdProvider>();
+            var refreshService = new JobProfileSegmentRefreshService<RefreshJobProfileSegmentServiceBusModel>(fakeTopicClient, correlationIdProvider);
+
+            // Act
+            await refreshService.SendMessageListAsync(null).ConfigureAwait(false);
+
+            // Assert
+            A.CallTo(() => fakeTopicClient.SendAsync(A<Message>.Ignored)).MustNotHaveHappened();
+        }
+
+        [Fact]
         public async Task SendMessageListSendsListOfMessagesOnTopicClient()
         {
             // Arrange
