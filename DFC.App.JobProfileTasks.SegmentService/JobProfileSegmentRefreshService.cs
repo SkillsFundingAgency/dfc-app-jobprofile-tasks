@@ -31,15 +31,18 @@ namespace DFC.App.JobProfileTasks.SegmentService
 
         public async Task SendMessageListAsync(IList<TModel> models)
         {
-            foreach (var model in models)
+            if (models != null)
             {
-                var messageJson = JsonConvert.SerializeObject(model);
-                var message = new Message(Encoding.UTF8.GetBytes(messageJson))
+                foreach (var model in models)
                 {
-                    CorrelationId = correlationIdProvider.CorrelationId,
-                };
+                    var messageJson = JsonConvert.SerializeObject(model);
+                    var message = new Message(Encoding.UTF8.GetBytes(messageJson))
+                    {
+                        CorrelationId = correlationIdProvider.CorrelationId,
+                    };
 
-                await topicClient.SendAsync(message).ConfigureAwait(false);
+                    await topicClient.SendAsync(message).ConfigureAwait(false);
+                }
             }
         }
     }
