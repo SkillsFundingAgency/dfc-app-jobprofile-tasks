@@ -1,6 +1,7 @@
 ﻿using DFC.Logger.AppInsights.Contracts;
 using Microsoft.Azure.ServiceBus;
 using Newtonsoft.Json;
+using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -20,10 +21,26 @@ namespace DFC.App.JobProfileTasks.SegmentService
         public async Task SendMessageAsync(TModel model)
         {
             var messageJson = JsonConvert.SerializeObject(model);
-            var message = new Message(Encoding.UTF8.GetBytes(messageJson));
-            message.CorrelationId = correlationIdProvider.CorrelationId;
+            var message = new Message(Encoding.UTF8.GetBytes(messageJson))
+            {
+                CorrelationId = correlationIdProvider.CorrelationId,
+            };
 
             await topicClient.SendAsync(message).ConfigureAwait(false);
+        }
+
+        public async Task SendMessageListAsync(IList<TModel> models)
+        {
+            foreach (var model in models)
+            {
+                var messageJson = JsonConvert.SerializeObject(model);
+                var message = new Message(Encoding.UTF8.GetBytes(messageJson))
+                {
+                    CorrelationId = correlationIdProvider.CorrelationId,
+                };
+
+                await topicClient.SendAsync(message).ConfigureAwait(false);
+            }
         }
     }
 }
