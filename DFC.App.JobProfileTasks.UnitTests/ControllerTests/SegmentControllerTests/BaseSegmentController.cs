@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Net.Http.Headers;
 using System.Collections.Generic;
 using System.Net.Mime;
+using DFC.App.JobProfileTasks.Data.Models.ServiceBusModels;
 
 namespace DFC.App.JobProfileTasks.UnitTests.ControllerTests.SegmentControllerTests
 {
@@ -17,6 +18,7 @@ namespace DFC.App.JobProfileTasks.UnitTests.ControllerTests.SegmentControllerTes
             FakeJobProfileSegmentService = A.Fake<IJobProfileTasksSegmentService>();
             FakeMapper = A.Fake<AutoMapper.IMapper>();
             FakeLogger = A.Fake<ILogService>();
+            FakeJobProfileSegmentRefreshService = A.Fake<IJobProfileSegmentRefreshService<RefreshJobProfileSegmentServiceBusModel>>();
         }
 
         public static IEnumerable<object[]> HtmlMediaTypes => new List<object[]>
@@ -39,6 +41,8 @@ namespace DFC.App.JobProfileTasks.UnitTests.ControllerTests.SegmentControllerTes
 
         protected IJobProfileTasksSegmentService FakeJobProfileSegmentService { get; }
 
+        protected IJobProfileSegmentRefreshService<RefreshJobProfileSegmentServiceBusModel> FakeJobProfileSegmentRefreshService { get; }
+
         protected AutoMapper.IMapper FakeMapper { get; }
 
         protected SegmentController BuildSegmentController(string mediaTypeName = MediaTypeNames.Application.Json)
@@ -47,7 +51,7 @@ namespace DFC.App.JobProfileTasks.UnitTests.ControllerTests.SegmentControllerTes
 
             httpContext.Request.Headers[HeaderNames.Accept] = mediaTypeName;
 
-            var controller = new SegmentController(FakeJobProfileSegmentService, FakeMapper, FakeLogger)
+            var controller = new SegmentController(FakeJobProfileSegmentService, FakeMapper, FakeLogger, FakeJobProfileSegmentRefreshService)
             {
                 ControllerContext = new ControllerContext()
                 {

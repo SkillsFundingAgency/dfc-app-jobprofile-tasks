@@ -1,13 +1,14 @@
 ﻿using DFC.App.JobProfileTasks.ApiModels;
 using DFC.App.JobProfileTasks.Data.Models.PatchModels;
 using DFC.App.JobProfileTasks.Data.Models.SegmentModels;
+using DFC.App.JobProfileTasks.Data.Models.ServiceBusModels;
 using DFC.App.JobProfileTasks.Extensions;
 using DFC.App.JobProfileTasks.SegmentService;
 using DFC.App.JobProfileTasks.ViewModels;
 using DFC.Logger.AppInsights.Contracts;
-using Microsoft.ApplicationInsights.DataContracts;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -29,12 +30,14 @@ namespace DFC.App.JobProfileTasks.Controllers
         private readonly IJobProfileTasksSegmentService jobProfileTasksSegmentService;
         private readonly AutoMapper.IMapper mapper;
         private readonly ILogService logService;
+        private readonly IJobProfileSegmentRefreshService<RefreshJobProfileSegmentServiceBusModel> refreshService;
 
-        public SegmentController(IJobProfileTasksSegmentService jobProfileTasksSegmentService, AutoMapper.IMapper mapper, ILogService logService)
+        public SegmentController(IJobProfileTasksSegmentService jobProfileTasksSegmentService, AutoMapper.IMapper mapper, ILogService logService, IJobProfileSegmentRefreshService<RefreshJobProfileSegmentServiceBusModel> refreshService)
         {
             this.jobProfileTasksSegmentService = jobProfileTasksSegmentService;
             this.mapper = mapper;
             this.logService = logService;
+            this.refreshService = refreshService;
         }
 
         [HttpGet]
@@ -82,6 +85,30 @@ namespace DFC.App.JobProfileTasks.Controllers
 
             logService.LogInformation($"{DocumentActionName} has returned no content for: {article}");
 
+            return NoContent();
+        }
+
+        [HttpPost]
+        [Route("{controller}/refreshDocuments")]
+        public async Task<IActionResult> RefreshDocuments()
+        {
+            logService.LogInformation($"{IndexActionName} has been called");
+
+            var segmentModels = await jobProfileTasksSegmentService.GetAllAsync().ConfigureAwait(false);
+            if (segmentModels != null)
+            {
+                var result = segmentModels
+                    .OrderBy(x => x.CanonicalName)
+                    .Select(x => mapper.Map<RefreshJobProfileSegmentServiceBusModel>(x))
+                    .ToList();
+
+                await refreshService.SendMessageListAsync(result).ConfigureAwait(false);
+
+                logService.LogInformation($"{IndexActionName} has succeeded");
+                return Json(result);
+            }
+
+            logService.LogWarning($"{IndexActionName} has returned with no results");
             return NoContent();
         }
 
