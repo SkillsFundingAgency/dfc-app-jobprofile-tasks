@@ -2,6 +2,7 @@
 using Microsoft.Azure.ServiceBus;
 using Newtonsoft.Json;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -20,12 +21,7 @@ namespace DFC.App.JobProfileTasks.SegmentService
 
         public async Task SendMessageAsync(TModel model)
         {
-            var messageJson = JsonConvert.SerializeObject(model);
-            var message = new Message(Encoding.UTF8.GetBytes(messageJson))
-            {
-                CorrelationId = correlationIdProvider.CorrelationId,
-            };
-
+            var message = CreateMessage(model);
             await topicClient.SendAsync(message).ConfigureAwait(false);
         }
 
@@ -33,17 +29,19 @@ namespace DFC.App.JobProfileTasks.SegmentService
         {
             if (models != null)
             {
-                foreach (var model in models)
-                {
-                    var messageJson = JsonConvert.SerializeObject(model);
-                    var message = new Message(Encoding.UTF8.GetBytes(messageJson))
-                    {
-                        CorrelationId = correlationIdProvider.CorrelationId,
-                    };
-
-                    await topicClient.SendAsync(message).ConfigureAwait(false);
-                }
+                var listOfMessages = new List<Message>();
+                listOfMessages.AddRange(models.Select(CreateMessage));
+                await topicClient.SendAsync(listOfMessages).ConfigureAwait(false);
             }
+        }
+
+        private Message CreateMessage(TModel model)
+        {
+            var messageJson = JsonConvert.SerializeObject(model);
+            return new Message(Encoding.UTF8.GetBytes(messageJson))
+            {
+                CorrelationId = correlationIdProvider.CorrelationId,
+            };
         }
     }
 }
