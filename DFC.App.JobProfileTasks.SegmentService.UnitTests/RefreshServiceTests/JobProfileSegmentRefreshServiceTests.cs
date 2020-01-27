@@ -82,7 +82,7 @@ namespace DFC.App.JobProfileTasks.SegmentService.UnitTests.RefreshServiceTests
             await refreshService.SendMessageListAsync(model).ConfigureAwait(false);
 
             // Assert
-            A.CallTo(() => fakeTopicClient.SendAsync(A<Message>.Ignored)).MustHaveHappened(model.Count, Times.Exactly);
+            A.CallTo(() => fakeTopicClient.SendAsync(A<List<Message>>.Ignored)).MustHaveHappenedOnceExactly();
         }
     }
 }
