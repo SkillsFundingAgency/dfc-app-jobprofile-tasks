@@ -1,4 +1,5 @@
-﻿using DFC.App.JobProfileTasks.Data.Models.SegmentModels;
+﻿using DFC.App.JobProfileTasks.Data.Models.PatchModels;
+using DFC.App.JobProfileTasks.Data.Models.SegmentModels;
 using System;
 using System.Collections.Generic;
 using System.Net;
@@ -16,20 +17,14 @@ namespace DFC.App.JobProfileTasks.SegmentService
 
         Task<JobProfileTasksSegmentModel> GetByNameAsync(string canonicalName);
 
-        Task<UpsertJobProfileTasksModelResponse> UpsertAsync(JobProfileTasksSegmentModel tasksSegmentModel);
+        Task<HttpStatusCode> UpsertAsync(JobProfileTasksSegmentModel tasksSegmentModel);
 
         Task<bool> DeleteAsync(Guid documentId);
 
-        Task<HttpStatusCode> UpdateUniform(Guid documentId, JobProfileTasksDataUniformSegmentModel model);
+        Task<HttpStatusCode> PatchUniformAsync(PatchUniformModel patchModel, Guid documentId);
 
-        Task<HttpStatusCode> UpdateLocation(Guid documentId, JobProfileTasksDataLocationSegmentModel model);
+        Task<HttpStatusCode> PatchLocationAsync(PatchLocationModel patchModel, Guid documentId);
 
-        Task<HttpStatusCode> UpdateEnvironment(Guid documentId, JobProfileTasksDataEnvironmentSegmentModel model);
-
-        Task<HttpStatusCode> DeleteUniform(Guid jobProfileId, Guid uniformId);
-
-        Task<HttpStatusCode> DeleteLocation(Guid jobProfileId, Guid locationId);
-
-        Task<HttpStatusCode> DeleteEnvironment(Guid jobProfileId, Guid environmentId);
+        Task<HttpStatusCode> PatchEnvironmentAsync(PatchEnvironmentsModel patchModel, Guid documentId);
     }
 }

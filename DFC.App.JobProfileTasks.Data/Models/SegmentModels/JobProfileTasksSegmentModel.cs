@@ -1,5 +1,4 @@
-﻿using DFC.App.JobProfileTasks.Data.Contracts;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using System;
 using System.ComponentModel.DataAnnotations;
 
@@ -7,8 +6,6 @@ namespace DFC.App.JobProfileTasks.Data.Models.SegmentModels
 {
     public class JobProfileTasksSegmentModel : IDataModel
     {
-        public const string SegmentName = "WhatYouWillDo";
-
         [JsonProperty(PropertyName = "id")]
         public Guid DocumentId { get; set; }
 

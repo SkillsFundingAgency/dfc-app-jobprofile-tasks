@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 
-namespace DFC.App.JobProfileTasks.Data.Contracts
+namespace DFC.App.JobProfileTasks.Data.Models
 {
     public interface IDataModel
     {

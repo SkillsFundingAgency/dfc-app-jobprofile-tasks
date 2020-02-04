@@ -1,5 +1,4 @@
 ﻿using DFC.HtmlToDataTranslator.Contracts;
-using DFC.HtmlToDataTranslator.Services;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -16,7 +15,7 @@ namespace DFC.App.JobProfileTasks.SegmentService
 
             var translatedDataItems = TranslateItems(htmlToDataTranslator, dataItems);
 
-            switch (translatedDataItems.Count())
+            switch (translatedDataItems.Count)
             {
                 case 1:
                     return $"{openingText} {translatedDataItems.FirstOrDefault()}.";
@@ -30,7 +29,7 @@ namespace DFC.App.JobProfileTasks.SegmentService
             }
         }
 
-        private IEnumerable<string> TranslateItems(IHtmlToDataTranslator htmlToDataTranslator, IEnumerable<string> sourceItems)
+        private IList<string> TranslateItems(IHtmlToDataTranslator htmlToDataTranslator, IEnumerable<string> sourceItems)
         {
             var result = new List<string>();
 
@@ -46,7 +45,7 @@ namespace DFC.App.JobProfileTasks.SegmentService
                 result.AddRange(sourceItems);
             }
 
-            return result;
+            return result.ToList();
         }
     }
 }

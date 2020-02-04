@@ -1,6 +1,7 @@
 ﻿using DFC.App.JobProfileTasks.Data.Models.SegmentModels;
 using FakeItEasy;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Net;
 using System.Threading.Tasks;
 using Xunit;
@@ -14,21 +15,21 @@ namespace DFC.App.JobProfileTasks.UnitTests.ControllerTests.SegmentControllerTes
         public async Task ReturnsSuccess(string mediaTypeName)
         {
             // Arrange
-            var tasksSegmentModel = A.Fake<JobProfileTasksSegmentModel>();
-            tasksSegmentModel.SequenceNumber = int.MaxValue;
+            var existingModel = new JobProfileTasksSegmentModel { SequenceNumber = 123 };
+            var modelToUpsert = new JobProfileTasksSegmentModel { SequenceNumber = 124 };
             var controller = BuildSegmentController(mediaTypeName);
-            var expectedUpsertResponse = BuildExpectedUpsertResponse(A.Fake<JobProfileTasksSegmentModel>());
+            var expectedUpsertResponse = HttpStatusCode.OK;
 
+            A.CallTo(() => FakeJobProfileSegmentService.GetByIdAsync(A<Guid>.Ignored)).Returns(existingModel);
             A.CallTo(() => FakeJobProfileSegmentService.UpsertAsync(A<JobProfileTasksSegmentModel>.Ignored)).Returns(expectedUpsertResponse);
 
             // Act
-            var result = await controller.Put(tasksSegmentModel).ConfigureAwait(false);
+            var result = await controller.Put(modelToUpsert).ConfigureAwait(false);
 
             // Assert
             A.CallTo(() => FakeJobProfileSegmentService.UpsertAsync(A<JobProfileTasksSegmentModel>.Ignored)).MustHaveHappenedOnceExactly();
-            var okObjectResult = Assert.IsType<OkObjectResult>(result);
-
-            Assert.Equal((int)HttpStatusCode.OK, okObjectResult.StatusCode);
+            var statusCodeResult = Assert.IsType<StatusCodeResult>(result);
+            Assert.Equal((int)HttpStatusCode.OK, statusCodeResult.StatusCode);
 
             controller.Dispose();
         }
@@ -70,12 +71,46 @@ namespace DFC.App.JobProfileTasks.UnitTests.ControllerTests.SegmentControllerTes
             controller.Dispose();
         }
 
-        private UpsertJobProfileTasksModelResponse BuildExpectedUpsertResponse(JobProfileTasksSegmentModel model)
+        [Fact]
+        public async Task ReturnsNotFoundWhenDocumentDoesNotAlreadyExist()
         {
-            return new UpsertJobProfileTasksModelResponse
-            {
-                JobProfileTasksSegmentModel = model,
-            };
+            // Arrange
+            var jobProfileTasksSegmentModel = new JobProfileTasksSegmentModel();
+            var controller = BuildSegmentController();
+
+            A.CallTo(() => FakeJobProfileSegmentService.GetByIdAsync(A<Guid>.Ignored)).Returns((JobProfileTasksSegmentModel)null);
+
+            // Act
+            var result = await controller.Put(jobProfileTasksSegmentModel).ConfigureAwait(false);
+
+            // Assert
+            A.CallTo(() => FakeJobProfileSegmentService.UpsertAsync(A<JobProfileTasksSegmentModel>.Ignored)).MustNotHaveHappened();
+            var statusCodeResult = Assert.IsType<StatusCodeResult>(result);
+
+            Assert.Equal((int)HttpStatusCode.NotFound, statusCodeResult.StatusCode);
+
+            controller.Dispose();
+        }
+
+        [Fact]
+        public async Task ReturnsAlreadyReportedWhenExistingSequenceNumberIsHigher()
+        {
+            // Arrange
+            var existingModel = new JobProfileTasksSegmentModel { SequenceNumber = 999 };
+            var modelToUpsert = new JobProfileTasksSegmentModel { SequenceNumber = 124 };
+            var controller = BuildSegmentController();
+
+            A.CallTo(() => FakeJobProfileSegmentService.GetByIdAsync(A<Guid>.Ignored)).Returns(existingModel);
+
+            // Act
+            var result = await controller.Put(modelToUpsert).ConfigureAwait(false);
+
+            // Assert
+            A.CallTo(() => FakeJobProfileSegmentService.UpsertAsync(A<JobProfileTasksSegmentModel>.Ignored)).MustNotHaveHappened();
+            var statusCodeResult = Assert.IsType<StatusCodeResult>(result);
+            Assert.Equal((int)HttpStatusCode.AlreadyReported, statusCodeResult.StatusCode);
+
+            controller.Dispose();
         }
     }
 }

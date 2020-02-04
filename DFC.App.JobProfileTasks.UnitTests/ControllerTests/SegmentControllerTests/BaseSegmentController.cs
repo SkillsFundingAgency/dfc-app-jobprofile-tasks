@@ -1,12 +1,13 @@
 ﻿using DFC.App.JobProfileTasks.Controllers;
 using DFC.App.JobProfileTasks.SegmentService;
+using DFC.Logger.AppInsights.Contracts;
 using FakeItEasy;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using Microsoft.Net.Http.Headers;
 using System.Collections.Generic;
 using System.Net.Mime;
+using DFC.App.JobProfileTasks.Data.Models.ServiceBusModels;
 
 namespace DFC.App.JobProfileTasks.UnitTests.ControllerTests.SegmentControllerTests
 {
@@ -14,9 +15,10 @@ namespace DFC.App.JobProfileTasks.UnitTests.ControllerTests.SegmentControllerTes
     {
         public BaseSegmentController()
         {
-            FakeLogger = A.Fake<ILogger<SegmentController>>();
             FakeJobProfileSegmentService = A.Fake<IJobProfileTasksSegmentService>();
-            Mapper = A.Fake<AutoMapper.IMapper>();
+            FakeMapper = A.Fake<AutoMapper.IMapper>();
+            FakeLogger = A.Fake<ILogService>();
+            FakeJobProfileSegmentRefreshService = A.Fake<IJobProfileSegmentRefreshService<RefreshJobProfileSegmentServiceBusModel>>();
         }
 
         public static IEnumerable<object[]> HtmlMediaTypes => new List<object[]>
@@ -35,19 +37,21 @@ namespace DFC.App.JobProfileTasks.UnitTests.ControllerTests.SegmentControllerTes
             new string[] { MediaTypeNames.Application.Json },
         };
 
-        protected ILogger<SegmentController> FakeLogger { get; }
+        protected ILogService FakeLogger { get; }
 
         protected IJobProfileTasksSegmentService FakeJobProfileSegmentService { get; }
 
-        protected AutoMapper.IMapper Mapper { get; }
+        protected IJobProfileSegmentRefreshService<RefreshJobProfileSegmentServiceBusModel> FakeJobProfileSegmentRefreshService { get; }
 
-        protected SegmentController BuildSegmentController(string mediaTypeName)
+        protected AutoMapper.IMapper FakeMapper { get; }
+
+        protected SegmentController BuildSegmentController(string mediaTypeName = MediaTypeNames.Application.Json)
         {
             var httpContext = new DefaultHttpContext();
 
             httpContext.Request.Headers[HeaderNames.Accept] = mediaTypeName;
 
-            var controller = new SegmentController(FakeLogger, FakeJobProfileSegmentService, Mapper)
+            var controller = new SegmentController(FakeJobProfileSegmentService, FakeMapper, FakeLogger, FakeJobProfileSegmentRefreshService)
             {
                 ControllerContext = new ControllerContext()
                 {
