@@ -17,7 +17,7 @@ namespace DFC.App.JobProfileTasks.UnitTests.ControllerTests.SegmentControllerTes
             // Arrange
             var tasksSegmentModel = A.Fake<JobProfileTasksSegmentModel>();
             var controller = BuildSegmentController(mediaTypeName);
-            var expectedUpsertResponse = BuildExpectedUpsertResponse(A.Fake<JobProfileTasksSegmentModel>(), HttpStatusCode.AlreadyReported);
+            var expectedUpsertResponse = HttpStatusCode.Created;
 
             A.CallTo(() => FakeJobProfileSegmentService.GetByIdAsync(A<Guid>.Ignored)).Returns<JobProfileTasksSegmentModel>(null);
             A.CallTo(() => FakeJobProfileSegmentService.UpsertAsync(A<JobProfileTasksSegmentModel>.Ignored)).Returns(expectedUpsertResponse);
@@ -29,7 +29,7 @@ namespace DFC.App.JobProfileTasks.UnitTests.ControllerTests.SegmentControllerTes
             A.CallTo(() => FakeJobProfileSegmentService.UpsertAsync(A<JobProfileTasksSegmentModel>.Ignored)).MustHaveHappenedOnceExactly();
             var statusCodeResult = Assert.IsType<StatusCodeResult>(result);
 
-            Assert.Equal((int)HttpStatusCode.AlreadyReported, statusCodeResult.StatusCode);
+            Assert.Equal((int)HttpStatusCode.Created, statusCodeResult.StatusCode);
 
             controller.Dispose();
         }
@@ -41,7 +41,7 @@ namespace DFC.App.JobProfileTasks.UnitTests.ControllerTests.SegmentControllerTes
             // Arrange
             var tasksSegmentModel = A.Fake<JobProfileTasksSegmentModel>();
             var controller = BuildSegmentController(mediaTypeName);
-            var expectedUpsertResponse = BuildExpectedUpsertResponse(A.Fake<JobProfileTasksSegmentModel>());
+            var expectedUpsertResponse = HttpStatusCode.AlreadyReported;
 
             A.CallTo(() => FakeJobProfileSegmentService.GetByIdAsync(A<Guid>.Ignored)).Returns(tasksSegmentModel);
             A.CallTo(() => FakeJobProfileSegmentService.UpsertAsync(A<JobProfileTasksSegmentModel>.Ignored)).Returns(expectedUpsertResponse);
@@ -93,15 +93,6 @@ namespace DFC.App.JobProfileTasks.UnitTests.ControllerTests.SegmentControllerTes
             Assert.Equal((int)HttpStatusCode.BadRequest, statusResult.StatusCode);
 
             controller.Dispose();
-        }
-
-        private UpsertJobProfileTasksModelResponse BuildExpectedUpsertResponse(JobProfileTasksSegmentModel model, HttpStatusCode statusCode = HttpStatusCode.Created)
-        {
-            return new UpsertJobProfileTasksModelResponse
-            {
-                JobProfileTasksSegmentModel = model,
-                ResponseStatusCode = statusCode,
-            };
         }
     }
 }

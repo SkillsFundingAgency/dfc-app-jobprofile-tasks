@@ -3,18 +3,13 @@
   "Values": {
     "AzureWebJobsStorage": "UseDevelopmentStorage=true",
     "FUNCTIONS_WORKER_RUNTIME": "dotnet",
-    "cms-messages-subscription": "job-profile-metadata",
-    "cms-messages-topic": "cms-messages-localdev-id",
-    "job-profiles-refresh-subscription": "job-profile-segment-refresh",
-    "job-profiles-refresh-topic": "job-profile-refresh",
-    "service-bus-connection-string": "[service bus connection string]"
+    "service-bus-connection-string": "[Placeholder]",
+    "cms-messages-topic": "cms-messages",
+    "cms-messages-subscription": "job-profile-tasks",
+    "APPINSIGHTS_INSTRUMENTATIONKEY": "[instrumentation key]"
   },
   "JobProfileTasksSegmentClientOptions": {
     "Timeout": "00:00:10",
     "BaseAddress": "https://localhost/"
-  },
-  "ServiceBusOptions": {
-    "ServiceBusConnectionString": "[service bus connection string]",
-    "topicName": "job-profile-refresh"
   }
 }
