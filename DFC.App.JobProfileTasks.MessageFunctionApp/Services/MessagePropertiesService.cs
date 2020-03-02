@@ -6,7 +6,7 @@ namespace DFC.App.JobProfileTasks.MessageFunctionApp.Services
     {
         public long GetSequenceNumber(Message message)
         {
-            return (message.SystemProperties?.SequenceNumber).GetValueOrDefault();
+            return (message?.SystemProperties?.SequenceNumber).GetValueOrDefault();
         }
     }
 }

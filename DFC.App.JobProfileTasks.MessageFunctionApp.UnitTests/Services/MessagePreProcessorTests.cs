@@ -2,7 +2,6 @@
 using DFC.App.JobProfileTasks.MessageFunctionApp.Services;
 using DFC.Logger.AppInsights.Contracts;
 using FakeItEasy;
-using Microsoft.ApplicationInsights.DataContracts;
 using Microsoft.Azure.ServiceBus;
 using System;
 using System.Collections.Generic;
