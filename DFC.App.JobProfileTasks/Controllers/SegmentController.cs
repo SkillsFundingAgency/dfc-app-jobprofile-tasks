@@ -80,6 +80,7 @@ namespace DFC.App.JobProfileTasks.Controllers
 
                 return View(DocumentActionName, viewModel);
             }
+
             logService.LogInformation($"{DocumentActionName} has returned no content for: {article}");
 
             return NoContent();
