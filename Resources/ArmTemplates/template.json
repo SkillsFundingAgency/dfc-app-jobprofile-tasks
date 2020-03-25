@@ -4,13 +4,13 @@
     "parameters": {
         "appServiceDomain": {
             "type": "string"
-        },        
+        },
         "appSharedResourceGroup": {
             "type": "string"
         },
         "appSharedServiceBusName": {
             "type": "string"
-        },        
+        },
         "appSharedStorageAccountName": {
             "type": "string"
         },
@@ -90,7 +90,7 @@
         "cosmosDbDatabaseName": "dfc-app-jobprofiles",
         "cosmosDbEndpoint": "[concat('https://', parameters('cosmosDbName'), '.documents.azure.com:443/')]",
         "resourcePrefix": "[tolower(concat('dfc-', parameters('Environment'), '-app-jobproftasks'))]",
-        "urlJobprofileTasks": "[toLower(concat('https://', variables('webAppName'), '.', parameters('appServiceDomain')))]",        
+        "urlJobprofileTasks": "[toLower(concat('https://', variables('webAppName'), '.', parameters('appServiceDomain')))]",
         "webAppName": "[concat(variables('ResourcePrefix'), '-as')]",
         "webAppInsightsName": "[concat(variables('webAppName'), '-ai')]",
         "functionAppName": "[concat(variables('ResourcePrefix'), '-fa')]",
@@ -280,9 +280,9 @@
                     },
                     "appServiceAppSettings": {
                         "value": [
-                             {
+                            {
                                 "name": "FUNCTIONS_EXTENSION_VERSION",
-                                "value": "~2"
+                                "value": "~3"
                             },
                             {
                                 "name": "MSDEPLOY_RENAME_LOCKED_FILES",
@@ -402,169 +402,170 @@
             }
         },
         {
-          "apiVersion": "2019-05-01",
-          "name": "[concat(variables('webAppInsightsName'), '-metric-exceptions')]",
-          "type": "Microsoft.Resources/deployments",
-          "dependsOn": [
-              "[variables('webAppInsightsName')]"
-          ],
-          "properties": {
-              "mode": "Incremental",
-              "templateLink": {
-                  "uri": "[concat(variables('BuildingBlocksDfcBaseUrl'), 'Application-Insights/metric-alerts.json')]",
-                  "contentVersion": "1.0.0.0"
-              },
-              "parameters": {
-                  "enabled": {
-                      "value": "[parameters('enableAlerts')]"
-                  },
-                  "alertName": {
-                      "value": "[concat(variables('webAppInsightsName'), '-metric-exceptions')]"
-                  },
-                  "alertSeverity": {
-                      "value": 3
-                  },
-                  "metricName": {
-                      "value": "exceptions/count"
-                  },
-                  "operator": {
-                      "value": "GreaterThan"
-                  },
-                  "threshold": {
-                      "value": "0"
-                  },
-                  "aggregation": {
-                      "value": "Count"
-                  },
-                  "windowSize": {
-                      "value": "PT5M"
-                  },
-                  "evaluationFrequency": {
-                      "value": "PT1M"
-                  },
-                  "actionGroupName": {
-                      "value": "[variables('ActionGroupName')]"
-                  },
-                  "actionGroupResourceGroup": {
-                      "value": "[parameters('appSharedResourceGroup')]"
-                  },
-                  "resourceId": {
-                      "value": "[resourceId('Microsoft.Insights/Components', variables('webAppInsightsName'))]"
-                  }
-              }
-          }
+            "apiVersion": "2019-05-01",
+            "name": "[concat(variables('webAppInsightsName'), '-metric-exceptions')]",
+            "type": "Microsoft.Resources/deployments",
+            "dependsOn": [
+                "[variables('webAppInsightsName')]"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[concat(variables('BuildingBlocksDfcBaseUrl'), 'Application-Insights/metric-alerts.json')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "enabled": {
+                        "value": "[parameters('enableAlerts')]"
+                    },
+                    "alertName": {
+                        "value": "[concat(variables('webAppInsightsName'), '-metric-exceptions')]"
+                    },
+                    "alertSeverity": {
+                        "value": 3
+                    },
+                    "metricName": {
+                        "value": "exceptions/count"
+                    },
+                    "operator": {
+                        "value": "GreaterThan"
+                    },
+                    "threshold": {
+                        "value": "0"
+                    },
+                    "aggregation": {
+                        "value": "Count"
+                    },
+                    "windowSize": {
+                        "value": "PT5M"
+                    },
+                    "evaluationFrequency": {
+                        "value": "PT1M"
+                    },
+                    "actionGroupName": {
+                        "value": "[variables('ActionGroupName')]"
+                    },
+                    "actionGroupResourceGroup": {
+                        "value": "[parameters('appSharedResourceGroup')]"
+                    },
+                    "resourceId": {
+                        "value": "[resourceId('Microsoft.Insights/Components', variables('webAppInsightsName'))]"
+                    }
+                }
+            }
         },
         {
-          "apiVersion": "2019-05-01",
-          "name": "[concat(variables('webAppInsightsName'), '-failure-anomaly-v2')]",
-          "type": "Microsoft.Resources/deployments",
-          "dependsOn": [
-              "[variables('webAppInsightsName')]"
-          ],
-          "properties": {
-              "mode": "Incremental",
-              "templateLink": {
-                  "uri": "[concat(variables('BuildingBlocksDfcBaseUrl'), 'Application-Insights/failure-anomaly-rule.json')]",
-                  "contentVersion": "1.0.0.0"
-              },
-              "parameters": {
-                  "alertName": {
-                      "value": "[concat(variables('webAppInsightsName'), '-failure-anomaly-v2')]"
-                  },
-                  "enabled": {
-                      "value": "[parameters('enableAlerts')]"
-                  },
-                  "resourceId": {
-                      "value": "[resourceId('Microsoft.Insights/Components', variables('webAppInsightsName'))]"
-                  },
-                  "actionGroupId": {
-                      "value": "[resourceId(parameters('appSharedResourceGroup'), 'microsoft.insights/actionGroups', variables('ActionGroupName'))]"
-                  }
-              }
-          }
+            "apiVersion": "2019-05-01",
+            "name": "[concat(variables('webAppInsightsName'), '-failure-anomaly-v2')]",
+            "type": "Microsoft.Resources/deployments",
+            "dependsOn": [
+                "[variables('webAppInsightsName')]"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[concat(variables('BuildingBlocksDfcBaseUrl'), 'Application-Insights/failure-anomaly-rule.json')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "alertName": {
+                        "value": "[concat(variables('webAppInsightsName'), '-failure-anomaly-v2')]"
+                    },
+                    "enabled": {
+                        "value": "[parameters('enableAlerts')]"
+                    },
+                    "resourceId": {
+                        "value": "[resourceId('Microsoft.Insights/Components', variables('webAppInsightsName'))]"
+                    },
+                    "actionGroupId": {
+                        "value": "[resourceId(parameters('appSharedResourceGroup'), 'microsoft.insights/actionGroups', variables('ActionGroupName'))]"
+                    }
+                }
+            }
         },
         {
-          "apiVersion": "2019-05-01",
-          "name": "[concat(variables('functionAppInsightsName'), '-metric-exceptions')]",
-          "type": "Microsoft.Resources/deployments",
-          "dependsOn": [
-              "[variables('webAppInsightsName')]"
-          ],
-          "properties": {
-              "mode": "Incremental",
-              "templateLink": {
-                  "uri": "[concat(variables('BuildingBlocksDfcBaseUrl'), 'Application-Insights/metric-alerts.json')]",
-                  "contentVersion": "1.0.0.0"
-              },
-              "parameters": {
-                  "enabled": {
-                      "value": "[parameters('enableAlerts')]"
-                  },
-                  "alertName": {
-                      "value": "[concat(variables('functionAppInsightsName'), '-metric-exceptions')]"
-                  },
-                  "alertSeverity": {
-                      "value": 3
-                  },
-                  "metricName": {
-                      "value": "exceptions/count"
-                  },
-                  "operator": {
-                      "value": "GreaterThan"
-                  },
-                  "threshold": {
-                      "value": "0"
-                  },
-                  "aggregation": {
-                      "value": "Count"
-                  },
-                  "windowSize": {
-                      "value": "PT5M"
-                  },
-                  "evaluationFrequency": {
-                      "value": "PT1M"
-                  },
-                  "actionGroupName": {
-                      "value": "[variables('ActionGroupName')]"
-                  },
-                  "actionGroupResourceGroup": {
-                      "value": "[parameters('appSharedResourceGroup')]"
-                  },
-                  "resourceId": {
-                      "value": "[resourceId('Microsoft.Insights/Components', variables('functionAppInsightsName'))]"
-                  }
-              }
-          }
+            "apiVersion": "2019-05-01",
+            "name": "[concat(variables('functionAppInsightsName'), '-metric-exceptions')]",
+            "type": "Microsoft.Resources/deployments",
+            "dependsOn": [
+                "[variables('webAppInsightsName')]"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[concat(variables('BuildingBlocksDfcBaseUrl'), 'Application-Insights/metric-alerts.json')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "enabled": {
+                        "value": "[parameters('enableAlerts')]"
+                    },
+                    "alertName": {
+                        "value": "[concat(variables('functionAppInsightsName'), '-metric-exceptions')]"
+                    },
+                    "alertSeverity": {
+                        "value": 3
+                    },
+                    "metricName": {
+                        "value": "exceptions/count"
+                    },
+                    "operator": {
+                        "value": "GreaterThan"
+                    },
+                    "threshold": {
+                        "value": "0"
+                    },
+                    "aggregation": {
+                        "value": "Count"
+                    },
+                    "windowSize": {
+                        "value": "PT5M"
+                    },
+                    "evaluationFrequency": {
+                        "value": "PT1M"
+                    },
+                    "actionGroupName": {
+                        "value": "[variables('ActionGroupName')]"
+                    },
+                    "actionGroupResourceGroup": {
+                        "value": "[parameters('appSharedResourceGroup')]"
+                    },
+                    "resourceId": {
+                        "value": "[resourceId('Microsoft.Insights/Components', variables('functionAppInsightsName'))]"
+                    }
+                }
+            }
         },
         {
-          "apiVersion": "2019-05-01",
-          "name": "[concat(variables('functionAppInsightsName'), '-failure-anomaly-v2')]",
-          "type": "Microsoft.Resources/deployments",
-          "dependsOn": [
-              "[variables('functionAppInsightsName')]"
-          ],
-          "properties": {
-              "mode": "Incremental",
-              "templateLink": {
-                  "uri": "[concat(variables('BuildingBlocksDfcBaseUrl'), 'Application-Insights/failure-anomaly-rule.json')]",
-                  "contentVersion": "1.0.0.0"
-              },
-              "parameters": {
-                  "alertName": {
-                      "value": "[concat(variables('functionAppInsightsName'), '-failure-anomaly-v2')]"
-                  },
-                  "enabled": {
-                      "value": "[parameters('enableAlerts')]"
-                  },
-                  "resourceId": {
-                      "value": "[resourceId('Microsoft.Insights/Components', variables('functionAppInsightsName'))]"
-                  },
-                  "actionGroupId": {
-                      "value": "[resourceId(parameters('appSharedResourceGroup'), 'microsoft.insights/actionGroups', variables('ActionGroupName'))]"
-                  }
-              }
-          }
+            "apiVersion": "2019-05-01",
+            "name": "[concat(variables('functionAppInsightsName'), '-failure-anomaly-v2')]",
+            "type": "Microsoft.Resources/deployments",
+            "dependsOn": [
+                "[variables('functionAppInsightsName')]"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[concat(variables('BuildingBlocksDfcBaseUrl'), 'Application-Insights/failure-anomaly-rule.json')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "alertName": {
+                        "value": "[concat(variables('functionAppInsightsName'), '-failure-anomaly-v2')]"
+                    },
+                    "enabled": {
+                        "value": "[parameters('enableAlerts')]"
+                    },
+                    "resourceId": {
+                        "value": "[resourceId('Microsoft.Insights/Components', variables('functionAppInsightsName'))]"
+                    },
+                    "actionGroupId": {
+                        "value": "[resourceId(parameters('appSharedResourceGroup'), 'microsoft.insights/actionGroups', variables('ActionGroupName'))]"
+                    }
+                }
+            }
         }
     ],
-        "outputs": {}
+    "outputs": {
     }
+}
