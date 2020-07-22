@@ -73,18 +73,40 @@ namespace DFC.App.JobProfileTasks.Controllers
             logService.LogInformation($"{DocumentActionName} has been called with: {article}");
 
             var careerPathSegmentModel = await jobProfileTasksSegmentService.GetByNameAsync(article).ConfigureAwait(false);
-
             if (careerPathSegmentModel != null)
             {
-                var viewModel = mapper.Map<BodyViewModel>(careerPathSegmentModel);
-
+                var viewModel = mapper.Map<DocumentViewModel>(careerPathSegmentModel);
                 logService.LogInformation($"{DocumentActionName} has succeeded for: {article}");
 
-                return View(nameof(Body), viewModel);
+                return View(DocumentActionName, viewModel);
             }
 
             logService.LogInformation($"{DocumentActionName} has returned no content for: {article}");
 
+            return NoContent();
+        }
+
+        [HttpPost]
+        [Route("{controller}/refreshDocuments")]
+        public async Task<IActionResult> RefreshDocuments()
+        {
+            logService.LogInformation($"{IndexActionName} has been called");
+
+            var segmentModels = await jobProfileTasksSegmentService.GetAllAsync().ConfigureAwait(false);
+            if (segmentModels != null)
+            {
+                var result = segmentModels
+                    .OrderBy(x => x.CanonicalName)
+                    .Select(x => mapper.Map<RefreshJobProfileSegmentServiceBusModel>(x))
+                    .ToList();
+
+                await refreshService.SendMessageListAsync(result).ConfigureAwait(false);
+
+                logService.LogInformation($"{IndexActionName} has succeeded");
+                return Json(result);
+            }
+
+            logService.LogWarning($"{IndexActionName} has returned with no results");
             return NoContent();
         }
 

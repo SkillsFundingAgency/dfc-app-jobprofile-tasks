@@ -50,7 +50,7 @@ namespace DFC.App.JobProfileTasks.SegmentService.UnitTests.SegmentServiceTests
             var exceptionResult = await Assert.ThrowsAsync<ArgumentNullException>(async () => await jobProfileTasksSegmentService.GetByNameAsync(null).ConfigureAwait(false)).ConfigureAwait(false);
 
             // assert
-            Assert.Equal("Value cannot be null.\r\nParameter name: canonicalName", exceptionResult.Message);
+            Assert.Equal("Value cannot be null. (Parameter 'canonicalName')", exceptionResult.Message);
         }
 
         [Fact]

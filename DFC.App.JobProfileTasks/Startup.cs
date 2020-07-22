@@ -14,6 +14,7 @@ using Microsoft.Azure.Documents.Client;
 using Microsoft.Azure.ServiceBus;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using System;
 using System.Diagnostics.CodeAnalysis;
 
@@ -33,7 +34,7 @@ namespace DFC.App.JobProfileTasks
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public static void Configure(IApplicationBuilder app, IHostingEnvironment env, IMapper mapper)
+        public static void Configure(IApplicationBuilder app, IWebHostEnvironment env, IMapper mapper)
         {
             if (env.IsDevelopment())
             {
@@ -50,11 +51,15 @@ namespace DFC.App.JobProfileTasks
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
+            app.UseRouting();
 
-            app.UseMvc(routes =>
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Health}/{action=Ping}"));
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapRazorPages();
+
+                // add the default route
+                endpoints.MapControllerRoute("default", "{controller=Health}/{action=Ping}");
+            });
 
             mapper?.ConfigurationProvider.AssertConfigurationIsValid();
         }
@@ -84,7 +89,7 @@ namespace DFC.App.JobProfileTasks
             services.AddScoped<IJobProfileSegmentRefreshService<RefreshJobProfileSegmentServiceBusModel>, JobProfileSegmentRefreshService<RefreshJobProfileSegmentServiceBusModel>>();
             services.AddDFCLogging(configuration["ApplicationInsights:InstrumentationKey"]);
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddMvc().AddNewtonsoftJson().SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
         }
     }
 }

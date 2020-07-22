@@ -52,6 +52,9 @@
         },
         "refreshTopicName": {
             "value": "__refreshTopicName__"
+        },
+        "enableAlerts": {
+            "value": __EnableAzureMonitorAlerting__
         }
     }
 }
