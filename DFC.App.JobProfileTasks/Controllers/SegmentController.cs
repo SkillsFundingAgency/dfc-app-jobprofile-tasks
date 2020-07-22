@@ -110,30 +110,6 @@ namespace DFC.App.JobProfileTasks.Controllers
             return NoContent();
         }
 
-        [HttpPost]
-        [Route("{controller}/refreshDocuments")]
-        public async Task<IActionResult> RefreshDocuments()
-        {
-            logService.LogInformation($"{IndexActionName} has been called");
-
-            var segmentModels = await jobProfileTasksSegmentService.GetAllAsync().ConfigureAwait(false);
-            if (segmentModels != null)
-            {
-                var result = segmentModels
-                    .OrderBy(x => x.CanonicalName)
-                    .Select(x => mapper.Map<RefreshJobProfileSegmentServiceBusModel>(x))
-                    .ToList();
-
-                await refreshService.SendMessageListAsync(result).ConfigureAwait(false);
-
-                logService.LogInformation($"{IndexActionName} has succeeded");
-                return Json(result);
-            }
-
-            logService.LogWarning($"{IndexActionName} has returned with no results");
-            return NoContent();
-        }
-
         [HttpGet]
         [Route("{controller}/{documentId}/contents")]
         public async Task<IActionResult> Body(Guid documentId)
