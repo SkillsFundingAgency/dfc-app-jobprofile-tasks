@@ -3,7 +3,6 @@ using DFC.App.JobProfileTasks.Data.Models.SegmentModels;
 using DFC.App.JobProfileTasks.MessageFunctionApp.HttpClientPolicies;
 using DFC.Logger.AppInsights.Constants;
 using DFC.Logger.AppInsights.Contracts;
-using Microsoft.ApplicationInsights.DataContracts;
 using System;
 using System.Net;
 using System.Net.Http;

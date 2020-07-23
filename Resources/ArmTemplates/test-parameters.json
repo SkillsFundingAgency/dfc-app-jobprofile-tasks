@@ -31,6 +31,9 @@
         },
         "cosmosDbCollectionName": {
             "value": "a-test-collection"
+        },
+        "enableAlerts": {
+            "value": false
         }
     }
 }

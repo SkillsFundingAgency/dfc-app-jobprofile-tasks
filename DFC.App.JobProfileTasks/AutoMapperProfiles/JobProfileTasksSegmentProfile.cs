@@ -4,6 +4,7 @@ using DFC.App.JobProfileTasks.Data.Models.PatchModels;
 using DFC.App.JobProfileTasks.Data.Models.SegmentModels;
 using DFC.App.JobProfileTasks.Data.Models.ServiceBusModels;
 using DFC.App.JobProfileTasks.ViewModels;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Environment = DFC.App.JobProfileTasks.Data.Models.SegmentModels.Environment;
@@ -21,11 +22,18 @@ namespace DFC.App.JobProfileTasks.AutoMapperProfiles
 
             CreateMap<JobProfileTasksSegmentModel, BodyViewModel>();
 
+            CreateMap<JobProfileTasksSegmentModel, DocumentViewModel>()
+                .ForMember(d => d.Data, s => s.MapFrom(a => a.Data));
+
+            CreateMap<JobProfileTasksDataSegmentModel, DocumentDataViewModel>()
+                .ForMember(d => d.Environment, opt => opt.ConvertUsing(new EnvironmentFormatter(null), s => GetEnvironmentsDescription(s)))
+                .ForMember(d => d.Location, opt => opt.ConvertUsing(new LocationFormatter(null), s => GetLocationsDescription(s)))
+                .ForMember(d => d.Uniform, opt => opt.ConvertUsing(new UniformFormatter(null), s => GetUniformsDescription(s)));
+
             CreateMap<JobProfileTasksDataSegmentModel, BodyDataViewModel>()
-                .ForMember(d => d.Environment, opt => opt.ConvertUsing(new EnvironmentFormatter(null), s => s.Environments != null ? s.Environments.Select(x => x.Description) : null))
-                .ForMember(d => d.Location, opt => opt.ConvertUsing(new LocationFormatter(null), s => s.Locations != null ? s.Locations.Select(x => x.Description) : null))
-                .ForMember(d => d.Uniform, opt => opt.ConvertUsing(new UniformFormatter(null), s => s.Uniforms != null ? s.Uniforms.Select(x => x.Description) : null))
-                ;
+                .ForMember(d => d.Environment, opt => opt.ConvertUsing(new EnvironmentFormatter(null), s => GetEnvironmentsDescription(s)))
+                .ForMember(d => d.Location, opt => opt.ConvertUsing(new LocationFormatter(null), s => GetLocationsDescription(s)))
+                .ForMember(d => d.Uniform, opt => opt.ConvertUsing(new UniformFormatter(null), s => GetUniformsDescription(s)));
 
             CreateMap<JobProfileTasksSegmentModel, RefreshJobProfileSegmentServiceBusModel>()
                 .ForMember(d => d.JobProfileId, s => s.MapFrom(a => a.DocumentId))
@@ -36,6 +44,21 @@ namespace DFC.App.JobProfileTasks.AutoMapperProfiles
             CreateMap<PatchLocationModel, Location>();
 
             CreateMap<PatchEnvironmentsModel, Environment>();
+        }
+
+        private static IEnumerable<string> GetEnvironmentsDescription(JobProfileTasksDataSegmentModel segmentModel)
+        {
+            return segmentModel.Environments?.Select(environment => environment.Description);
+        }
+
+        private static IEnumerable<string> GetLocationsDescription(JobProfileTasksDataSegmentModel segmentModel)
+        {
+            return segmentModel.Locations?.Select(location => location.Description);
+        }
+
+        private static IEnumerable<string> GetUniformsDescription(JobProfileTasksDataSegmentModel segmentModel)
+        {
+            return segmentModel.Uniforms?.Select(uniform => uniform.Description);
         }
     }
 }

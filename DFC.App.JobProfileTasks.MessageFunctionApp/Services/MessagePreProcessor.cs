@@ -2,7 +2,6 @@
 using DFC.App.JobProfileTasks.Data.Enums;
 using DFC.App.JobProfileTasks.MessageFunctionApp.Functions;
 using DFC.Logger.AppInsights.Contracts;
-using Microsoft.ApplicationInsights.DataContracts;
 using Microsoft.Azure.ServiceBus;
 using System;
 using System.Net;

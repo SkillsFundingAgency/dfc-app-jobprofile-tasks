@@ -73,14 +73,12 @@ namespace DFC.App.JobProfileTasks.Controllers
             logService.LogInformation($"{DocumentActionName} has been called with: {article}");
 
             var careerPathSegmentModel = await jobProfileTasksSegmentService.GetByNameAsync(article).ConfigureAwait(false);
-
             if (careerPathSegmentModel != null)
             {
-                var viewModel = mapper.Map<BodyViewModel>(careerPathSegmentModel);
-
+                var viewModel = mapper.Map<DocumentViewModel>(careerPathSegmentModel);
                 logService.LogInformation($"{DocumentActionName} has succeeded for: {article}");
 
-                return View(nameof(Body), viewModel);
+                return View(DocumentActionName, viewModel);
             }
 
             logService.LogInformation($"{DocumentActionName} has returned no content for: {article}");

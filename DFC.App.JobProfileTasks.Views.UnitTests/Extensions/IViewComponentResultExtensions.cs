@@ -9,7 +9,7 @@ namespace DFC.App.JobProfileTasks.Views.UnitTests.Extensions
         {
             var componentResult = viewComponentResult as ViewViewComponentResult;
 
-            var viewComponentModel = (T)componentResult.ViewData.Model;
+            var viewComponentModel = (T)componentResult?.ViewData.Model;
 
             return viewComponentModel;
         }

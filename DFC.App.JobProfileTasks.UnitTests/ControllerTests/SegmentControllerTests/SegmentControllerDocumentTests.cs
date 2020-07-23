@@ -20,20 +20,20 @@ namespace DFC.App.JobProfileTasks.UnitTests.ControllerTests.SegmentControllerTes
             // Arrange
             var expectedResult = A.Fake<JobProfileTasksSegmentModel>();
             var controller = BuildSegmentController(mediaTypeName);
-            var bodyViewModel = GetBodyViewModel();
+            var bodyViewModel = GetDocumentViewModel();
 
             A.CallTo(() => FakeJobProfileSegmentService.GetByNameAsync(A<string>.Ignored)).Returns(expectedResult);
-            A.CallTo(() => FakeMapper.Map<BodyViewModel>(A<JobProfileTasksSegmentModel>.Ignored)).Returns(bodyViewModel);
+            A.CallTo(() => FakeMapper.Map<DocumentViewModel>(A<JobProfileTasksSegmentModel>.Ignored)).Returns(bodyViewModel);
 
             // Act
             var result = await controller.Document(Article).ConfigureAwait(false);
 
             // Assert
             A.CallTo(() => FakeJobProfileSegmentService.GetByNameAsync(A<string>.Ignored)).MustHaveHappenedOnceExactly();
-            A.CallTo(() => FakeMapper.Map<BodyViewModel>(A<JobProfileTasksSegmentModel>.Ignored)).MustHaveHappenedOnceExactly();
+            A.CallTo(() => FakeMapper.Map<DocumentViewModel>(A<JobProfileTasksSegmentModel>.Ignored)).MustHaveHappenedOnceExactly();
 
             var viewResult = Assert.IsType<ViewResult>(result);
-            Assert.IsAssignableFrom<BodyViewModel>(viewResult.ViewData.Model);
+            Assert.IsAssignableFrom<DocumentViewModel>(viewResult.ViewData.Model);
 
             controller.Dispose();
         }
@@ -61,14 +61,16 @@ namespace DFC.App.JobProfileTasks.UnitTests.ControllerTests.SegmentControllerTes
             controller.Dispose();
         }
 
-        private BodyViewModel GetBodyViewModel()
+        private DocumentViewModel GetDocumentViewModel()
         {
-            return new BodyViewModel
+            return new DocumentViewModel
             {
                 DocumentId = Guid.NewGuid(),
                 CanonicalName = "job-profile-1",
-                Data = new BodyDataViewModel
+                SequenceNumber = 123,
+                Data = new DocumentDataViewModel
                 {
+                    LastReviewed = DateTime.UtcNow,
                     Environment = "Environment1",
                     Location = "Location1",
                     Uniform = "Uniform1",

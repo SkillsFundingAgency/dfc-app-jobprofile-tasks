@@ -16,21 +16,16 @@ namespace DFC.App.JobProfileTasks.Views.UnitTests.Services
 
         public string Render(string templateValue, object model, IDictionary<string, object> viewBag)
         {
-            var result = string.Empty;
-
-            var razorConfig = new TemplateServiceConfiguration()
+            var razorConfig = new TemplateServiceConfiguration
             {
                 TemplateManager = CreateTemplateManager(),
                 BaseTemplateType = typeof(HtmlSupportTemplateBase<>),
             };
 
-            using (var razorEngine = RazorEngineService.Create(razorConfig))
-            {
-                var dynamicViewBag = new DynamicViewBag(viewBag);
-                result = razorEngine.RunCompile(templateValue, model.GetType(), model, dynamicViewBag);
-            }
+            using var razorEngine = RazorEngineService.Create(razorConfig);
 
-            return result;
+            var dynamicViewBag = new DynamicViewBag(viewBag);
+            return razorEngine.RunCompile(templateValue, model?.GetType(), model, dynamicViewBag);
         }
 
         private ITemplateManager CreateTemplateManager()

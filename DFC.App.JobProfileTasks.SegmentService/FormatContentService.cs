@@ -25,7 +25,7 @@ namespace DFC.App.JobProfileTasks.SegmentService
 
                 default:
                     return
-                        $"{openingText} {string.Join(", ", translatedDataItems.Take(translatedDataItems.Count() - 1))} {separator} {translatedDataItems.Last()}.";
+                        $"{openingText} {string.Join(", ", translatedDataItems.Take(translatedDataItems.Count - 1))} {separator} {translatedDataItems.Last()}.";
             }
         }
 
