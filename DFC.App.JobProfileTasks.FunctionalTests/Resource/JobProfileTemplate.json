@@ -150,33 +150,9 @@
   },
   "WhatYouWillDoData": {
     "DailyTasks": "Daily tasks HTML",
-    "Locations": [
-      {
-        "Id": "83e69574-735a-4981-b8cf-756afb57ba59",
-        "Title": "Commercial Building",
-        "Description": "in a commercial building",
-        "Url": "/Commercial-Building",
-        "IsNegative": false
-      }
-    ],
-    "Uniforms": [
-      {
-        "Id": "0342e756-71eb-483d-a6f1-b716d966f7d0",
-        "Title": "Safety Clothing",
-        "Description": "safety clothing",
-        "Url": "/Safety-Clothing",
-        "IsNegative": false
-      }
-    ],
-    "Environments": [
-      {
-        "Id": "a779d756-b612-40f3-9969-18445944d5e0",
-        "Title": "Height",
-        "Description": "Environment description",
-        "Url": "/Height",
-        "IsNegative": false
-      }
-    ],
+    "Locations": [],
+    "Uniforms": [],
+    "Environments": [],
     "Introduction": "WYD intro"
   },
   "SocCodeData": {

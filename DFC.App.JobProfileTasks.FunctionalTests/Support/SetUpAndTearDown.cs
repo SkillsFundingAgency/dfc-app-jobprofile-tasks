@@ -5,9 +5,9 @@ using DFC.App.JobProfileTasks.FunctionalTests.Support.AzureServiceBus.ServiceBus
 using Microsoft.Extensions.Configuration;
 using NUnit.Framework;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
+using Environment = DFC.App.JobProfileTasks.FunctionalTests.Model.ContentType.JobProfile.Environment;
 
 namespace DFC.App.JobProfileTasks.FunctionalTests.Support
 {
@@ -46,64 +46,36 @@ namespace DFC.App.JobProfileTasks.FunctionalTests.Support
             this.JobProfile.JobProfileId = Guid.NewGuid().ToString();
             this.JobProfile.CanonicalName = this.CommonAction.RandomString(10).ToLowerInvariant();
 
-            var socCode = this.CommonAction.RandomString(5);
-            var socCodeData = new SocCodeData()
+            var uniform = new Uniform()
             {
-                SOCCode = socCode,
+                Description = "This is a test uniform description",
                 Id = Guid.NewGuid().ToString(),
-                UrlName = socCode.ToUpperInvariant(),
-                Description = "This an automated SOC code data record",
-                ONetOccupationalCode = this.CommonAction.RandomString(5),
-                ApprenticeshipFramework = new List<ApprenticeshipFramework>()
-            {
-                new ApprenticeshipFramework()
-                {
-                    Id = Guid.NewGuid().ToString(),
-                    Description = "This is an automated apprenticeship framework",
-                    Title = "This is an automated apprenticeship framework title",
-                    Url = new Uri($"https://{this.CommonAction.RandomString(10)}.com/"),
-                },
-            },
-                ApprenticeshipStandards = new List<ApprenticeshipStandard>()
-            {
-                new ApprenticeshipStandard()
-                {
-                    Id = Guid.NewGuid().ToString(),
-                    Description = "This is an automated apprenticeship standard",
-                    Title = "This is an automated apprenticeship standard title",
-                    Url = new Uri($"https://{this.CommonAction.RandomString(10)}.com/"),
-                },
-            },
+                IsNegative = false,
+                Title = "This is a test uniform title",
+                Url = new Uri($"https://{this.CommonAction.RandomString(10)}.com/"),
             };
-
-            var workingHoursDetail = new WorkingHoursDetail()
+            
+            var location = new Location()
             {
+                Description = "This is a test location description",
                 Id = Guid.NewGuid().ToString(),
-                Description = "default-description",
-                Title = "default-title",
+                IsNegative = false,
+                Title = "This is a test location title",
+                Url = new Uri($"https://{this.CommonAction.RandomString(10)}.com/"),
+            };
+            
+            var environment = new Environment()
+            {
+                Description = "This is a test environment description",
+                Id = Guid.NewGuid().ToString(),
+                IsNegative = false,
+                Title = "This is a test environment title",
                 Url = new Uri($"https://{this.CommonAction.RandomString(10)}.com/"),
             };
 
-            var workingPattern = new WorkingPattern()
-            {
-                Id = Guid.NewGuid().ToString(),
-                Description = "default-description",
-                Title = "default-title",
-                Url = new Uri($"https://{this.CommonAction.RandomString(10)}.com/"),
-            };
-
-            var workingPatternDetails = new WorkingPatternDetail()
-            {
-                Id = Guid.NewGuid().ToString(),
-                Description = "default-description",
-                Title = "default-title",
-                Url = new Uri($"https://{this.CommonAction.RandomString(10)}.com/"),
-            };
-
-            this.JobProfile.SocCodeData = socCodeData;
-            this.JobProfile.WorkingHoursDetails.Add(workingHoursDetail);
-            this.JobProfile.WorkingPattern.Add(workingPattern);
-            this.JobProfile.WorkingPatternDetails.Add(workingPatternDetails);
+            this.JobProfile.WhatYouWillDoData.Uniforms.Add(uniform);
+            this.JobProfile.WhatYouWillDoData.Locations.Add(location);
+            this.JobProfile.WhatYouWillDoData.Environments.Add(environment);
 
             // Send job profile to the service bus
             jobProfileMessageBody = this.CommonAction.ConvertObjectToByteArray(this.JobProfile);

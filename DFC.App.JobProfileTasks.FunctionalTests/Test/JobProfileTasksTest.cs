@@ -1,121 +1,90 @@
-using DFC.App.JobProfileTasks.FunctionalTests.Model.Classification;
-using DFC.App.JobProfileTasks.FunctionalTests.Model.ContentType;
+using DFC.App.JobProfileTasks.FunctionalTests.Model.MessageBody;
 using DFC.App.JobProfileTasks.FunctionalTests.Support;
 using DFC.App.JobProfileTasks.FunctionalTests.Support.API;
 using DFC.App.JobProfileTasks.FunctionalTests.Support.API.RestFactory;
 using DFC.App.JobProfileTasks.FunctionalTests.Support.AzureServiceBus.ServiceBusFactory;
 using NUnit.Framework;
-using System.Net;
 using System.Threading.Tasks;
 
 namespace DFC.App.JobProfileTasks.FunctionalTests.Test
 {
     public class JobProfileTasksTest : SetUpAndTearDown
     {
-        private IJobProfileOverviewAPI jobProfileOverviewApi;
+        private IJobProfileTasksAPI jobProfileTasksApi;
 
         [SetUp]
         public void SetUp()
         {
-            this.jobProfileOverviewApi = new JobProfileOverviewAPI(new RestClientFactory(), new RestRequestFactory(), this.AppSettings);
+            this.jobProfileTasksApi = new JobProfileTasksAPI(new RestClientFactory(), new RestRequestFactory(), this.AppSettings);
         }
 
         [Test]
-        public async Task JobProfileOverviewJobProfileSOC()
+        public async Task UniformCType()
         {
-            var socCode = this.CommonAction.RandomString(5);
-            var socCodeContentType = new SOCCodeContentType()
+            var uniformMessageBody = new UniformMessageBody()
             {
-                SOCCode = socCode,
-                Id = this.JobProfile?.SocCodeData.Id,
                 JobProfileId = this.JobProfile.JobProfileId,
                 JobProfileTitle = this.JobProfile.Title,
-                UrlName = this.JobProfile.SocCodeData.UrlName,
-                Title = socCode,
-                Description = "This is an updated SOC code",
-                ONetOccupationalCode = "12.1234-00",
-                ApprenticeshipFramework = this.JobProfile.SocCodeData.ApprenticeshipFramework,
-                ApprenticeshipStandards = this.JobProfile.SocCodeData.ApprenticeshipStandards,
+                Description = "This is updated uniform data",
+                IsNegative = false,
+                Id = this.JobProfile.WhatYouWillDoData.Uniforms[0].Id,
+                Title = this.JobProfile.WhatYouWillDoData.Uniforms[0].Title,
+                Url = this.JobProfile.WhatYouWillDoData.Uniforms[0].Url.ToString(),
             };
 
-            var messageBody = this.CommonAction.ConvertObjectToByteArray(socCodeContentType);
-            var message = new MessageFactory().Create(this.JobProfile.JobProfileId, messageBody, "Published", "JobProfileSoc");
+            var messageBody = this.CommonAction.ConvertObjectToByteArray(uniformMessageBody);
+            var message = new MessageFactory().Create(this.JobProfile.JobProfileId, messageBody, "Published", "Uniform");
             await this.ServiceBus.SendMessage(message).ConfigureAwait(false);
-            await Task.Delay(10000).ConfigureAwait(false);
-            var apiResponse = await this.jobProfileOverviewApi.GetById(this.JobProfile.JobProfileId).ConfigureAwait(false);
+            await Task.Delay(5000).ConfigureAwait(true);
+            var response = await this.jobProfileTasksApi.GetById(this.JobProfile.JobProfileId).ConfigureAwait(true);
 
-            Assert.AreEqual(HttpStatusCode.OK, apiResponse.StatusCode);
-            Assert.AreEqual(socCodeContentType.SOCCode.Substring(0, 4), apiResponse.Data.SOC);
-            Assert.AreEqual(socCodeContentType.ONetOccupationalCode, apiResponse.Data.ONetOccupationalCode);
+            Assert.AreEqual($"You may need to wear {uniformMessageBody.Description}.", response.Data.workingEnvironment.uniform);
         }
-
+        
         [Test]
-        public async Task JobProfileOverviewWorkingHoursDetails()
+        public async Task LocationCType()
         {
-            var workingHoursDetailsClassification = new WorkingHoursDetailsClassification()
+            var locationMessageBody = new LocationMessageBody()
             {
-                Id = this.JobProfile?.WorkingHoursDetails[0].Id,
-                Description = "This is an updated working course detail",
                 JobProfileId = this.JobProfile.JobProfileId,
                 JobProfileTitle = this.JobProfile.Title,
-                Title = "This is an updated working course detail title",
-                Url = this.JobProfile.WorkingHoursDetails[0].Url,
+                Description = "This is updated location data",
+                IsNegative = false,
+                Id = this.JobProfile.WhatYouWillDoData.Locations[0].Id,
+                Title = this.JobProfile.WhatYouWillDoData.Locations[0].Title,
+                Url = this.JobProfile.WhatYouWillDoData.Locations[0].Url.ToString(),
             };
 
-            var messageBody = this.CommonAction.ConvertObjectToByteArray(workingHoursDetailsClassification);
-            var message = new MessageFactory().Create(this.JobProfile.JobProfileId, messageBody, "Published", "WorkingHoursDetails");
+            var messageBody = this.CommonAction.ConvertObjectToByteArray(locationMessageBody);
+            var message = new MessageFactory().Create(this.JobProfile.JobProfileId, messageBody, "Published", "Location");
             await this.ServiceBus.SendMessage(message).ConfigureAwait(false);
-            await Task.Delay(10000).ConfigureAwait(false);
-            var apiResponse = await this.jobProfileOverviewApi.GetById(this.JobProfile.JobProfileId).ConfigureAwait(false);
+            await Task.Delay(5000).ConfigureAwait(true);
+            var response = await this.jobProfileTasksApi.GetById(this.JobProfile.JobProfileId).ConfigureAwait(true);
 
-            Assert.AreEqual(HttpStatusCode.OK, apiResponse.StatusCode);
-            Assert.AreEqual(workingHoursDetailsClassification.Title, apiResponse.Data.WorkingHoursDetails);
+            Assert.AreEqual($"You could work {locationMessageBody.Description}.", response.Data.workingEnvironment.location);
         }
-
+        
         [Test]
-        public async Task JobProfileOverviewWorkingPattern()
+        public async Task EnvironmentCType()
         {
-            var workingPatternClassification = new WorkingPatternClassification()
+            var environmentMessageBody = new EnvironmentMessageBody()
             {
-                Id = this.JobProfile?.WorkingPattern[0].Id,
-                Description = "This is an updated working pattern classification",
                 JobProfileId = this.JobProfile.JobProfileId,
                 JobProfileTitle = this.JobProfile.Title,
-                Title = "This is an updated working pattern classification title",
-                Url = this.JobProfile.WorkingPattern[0].Url,
+                Description = "This is updated environment data",
+                IsNegative = false,
+                Id = this.JobProfile.WhatYouWillDoData.Environments[0].Id,
+                Title = this.JobProfile.WhatYouWillDoData.Environments[0].Title,
+                Url = this.JobProfile.WhatYouWillDoData.Environments[0].Url.ToString(),
             };
 
-            var messageBody = this.CommonAction.ConvertObjectToByteArray(workingPatternClassification);
-            var message = new MessageFactory().Create(this.JobProfile.JobProfileId, messageBody, "Published", "WorkingPattern");
+            var messageBody = this.CommonAction.ConvertObjectToByteArray(environmentMessageBody);
+            var message = new MessageFactory().Create(this.JobProfile.JobProfileId, messageBody, "Published", "Environment");
             await this.ServiceBus.SendMessage(message).ConfigureAwait(false);
-            await Task.Delay(10000).ConfigureAwait(false);
-            var apiResponse = await this.jobProfileOverviewApi.GetById(this.JobProfile.JobProfileId).ConfigureAwait(false);
+            await Task.Delay(5000).ConfigureAwait(true);
+            var response = await this.jobProfileTasksApi.GetById(this.JobProfile.JobProfileId).ConfigureAwait(true);
 
-            Assert.AreEqual(HttpStatusCode.OK, apiResponse.StatusCode);
-            Assert.AreEqual(workingPatternClassification.Title, apiResponse.Data.WorkingPattern);
-        }
-
-        [Test]
-        public async Task JobProfileOverviewWorkingPatternDetails()
-        {
-            var workingPatternDetailClassification = new WorkingPatternDetailClassification()
-            {
-                Id = this.JobProfile?.WorkingPatternDetails[0].Id,
-                Description = "This is an updated working pattern detail",
-                JobProfileId = this.JobProfile.JobProfileId,
-                JobProfileTitle = this.JobProfile.Title,
-                Title = "This is an updated working pattern detail title",
-                Url = this.JobProfile.WorkingPatternDetails[0].Url,
-            };
-
-            var messageBody = this.CommonAction.ConvertObjectToByteArray(workingPatternDetailClassification);
-            var message = new MessageFactory().Create(this.JobProfile.JobProfileId, messageBody, "Published", "WorkingPatternDetails");
-            await this.ServiceBus.SendMessage(message).ConfigureAwait(false);
-            await Task.Delay(10000).ConfigureAwait(false);
-            var apiResponse = await this.jobProfileOverviewApi.GetById(this.JobProfile.JobProfileId).ConfigureAwait(false);
-
-            Assert.AreEqual(HttpStatusCode.OK, apiResponse.StatusCode);
-            Assert.AreEqual(workingPatternDetailClassification.Title, apiResponse.Data.WorkingPatternDetails);
+            Assert.AreEqual($"Your working environment may be {environmentMessageBody.Description}.", response.Data.workingEnvironment.environment);
         }
     }
 }

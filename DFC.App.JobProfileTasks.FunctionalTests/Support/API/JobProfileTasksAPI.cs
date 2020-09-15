@@ -6,20 +6,20 @@ using System.Threading.Tasks;
 
 namespace DFC.App.JobProfileTasks.FunctionalTests.Support.API
 {
-    public class JobProfileOverviewAPI : IJobProfileOverviewAPI
+    public class JobProfileTasksAPI : IJobProfileTasksAPI
     {
         private IRestClientFactory restClientFactory;
         private IRestRequestFactory restRequestFactory;
         private AppSettings appSettings;
 
-        public JobProfileOverviewAPI(IRestClientFactory restClientFactory, IRestRequestFactory restRequestFactory, AppSettings appSettings)
+        public JobProfileTasksAPI(IRestClientFactory restClientFactory, IRestRequestFactory restRequestFactory, AppSettings appSettings)
         {
             this.restClientFactory = restClientFactory;
             this.restRequestFactory = restRequestFactory;
             this.appSettings = appSettings;
         }
 
-        public async Task<IRestResponse<JobProfileOverviewApiResponse>> GetById(string id)
+        public async Task<IRestResponse<JobProfileTasksResponse>> GetById(string id)
         {
             if (string.IsNullOrEmpty(id))
             {
@@ -29,7 +29,7 @@ namespace DFC.App.JobProfileTasks.FunctionalTests.Support.API
             var restClient = this.restClientFactory.Create(this.appSettings.APIConfig.EndpointBaseUrl);
             var restRequest = this.restRequestFactory.Create($"/segment/{id}/contents");
             restRequest.AddHeader("Accept", "application/json");
-            return await Task.Run(() => restClient.Execute<JobProfileOverviewApiResponse>(restRequest)).ConfigureAwait(false);
+            return await Task.Run(() => restClient.Execute<JobProfileTasksResponse>(restRequest)).ConfigureAwait(false);
         }
     }
 }

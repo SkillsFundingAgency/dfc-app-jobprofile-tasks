@@ -4,8 +4,8 @@ using System.Threading.Tasks;
 
 namespace DFC.App.JobProfileTasks.FunctionalTests.Support.API
 {
-    public interface IJobProfileOverviewAPI
+    public interface IJobProfileTasksAPI
     {
-        Task<IRestResponse<JobProfileOverviewApiResponse>> GetById(string id);
+        Task<IRestResponse<JobProfileTasksResponse>> GetById(string id);
     }
 }
