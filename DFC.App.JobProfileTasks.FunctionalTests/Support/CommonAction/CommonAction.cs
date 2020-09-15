@@ -1,11 +1,11 @@
-﻿using DFC.App.JobProfileOverview.Tests.IntegrationTests.API.Support.Interface;
+﻿using DFC.App.JobProfileTasks.FunctionalTests.Support.Interface;
 using Newtonsoft.Json;
 using System;
 using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace DFC.App.JobProfileOverview.Tests.IntegrationTests.API.Support
+namespace DFC.App.JobProfileTasks.FunctionalTests.Support
 {
     public class CommonAction : IGeneralSupport
     {

@@ -1,4 +1,4 @@
-﻿namespace DFC.App.JobProfileOverview.Tests.IntegrationTests.API.Model.ContentType.JobProfile
+﻿namespace DFC.App.JobProfileTasks.FunctionalTests.Model.ContentType.JobProfile
 {
     public class Restriction
     {

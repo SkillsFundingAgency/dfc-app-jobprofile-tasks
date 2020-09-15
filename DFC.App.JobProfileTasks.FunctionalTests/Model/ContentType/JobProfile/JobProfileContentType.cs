@@ -1,8 +1,8 @@
-﻿using DFC.App.JobProfileOverview.Tests.IntegrationTests.API.ContentType;
+﻿using DFC.App.JobProfileTasks.FunctionalTests.ContentType;
 using System;
 using System.Collections.Generic;
 
-namespace DFC.App.JobProfileOverview.Tests.IntegrationTests.API.Model.ContentType.JobProfile
+namespace DFC.App.JobProfileTasks.FunctionalTests.Model.ContentType.JobProfile
 {
     public class JobProfileContentType
     {

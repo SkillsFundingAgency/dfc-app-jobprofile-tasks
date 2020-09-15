@@ -1,16 +1,16 @@
-using DFC.App.JobProfileOverview.Tests.IntegrationTests.API.Model.Classification;
-using DFC.App.JobProfileOverview.Tests.IntegrationTests.API.Model.ContentType;
-using DFC.App.JobProfileOverview.Tests.IntegrationTests.API.Support;
-using DFC.App.JobProfileOverview.Tests.IntegrationTests.API.Support.API;
-using DFC.App.JobProfileOverview.Tests.IntegrationTests.API.Support.API.RestFactory;
-using DFC.App.JobProfileOverview.Tests.IntegrationTests.API.Support.AzureServiceBus.ServiceBusFactory;
+using DFC.App.JobProfileTasks.FunctionalTests.Model.Classification;
+using DFC.App.JobProfileTasks.FunctionalTests.Model.ContentType;
+using DFC.App.JobProfileTasks.FunctionalTests.Support;
+using DFC.App.JobProfileTasks.FunctionalTests.Support.API;
+using DFC.App.JobProfileTasks.FunctionalTests.Support.API.RestFactory;
+using DFC.App.JobProfileTasks.FunctionalTests.Support.AzureServiceBus.ServiceBusFactory;
 using NUnit.Framework;
 using System.Net;
 using System.Threading.Tasks;
 
-namespace DFC.App.JobProfileOverview.Tests.IntegrationTests.API.Test
+namespace DFC.App.JobProfileTasks.FunctionalTests.Test
 {
-    public class JobProfileOverviewTest : SetUpAndTearDown
+    public class JobProfileTasksTest : SetUpAndTearDown
     {
         private IJobProfileOverviewAPI jobProfileOverviewApi;
 

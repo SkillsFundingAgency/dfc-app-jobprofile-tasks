@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace DFC.App.JobProfileOverview.Tests.IntegrationTests.API.Model.Classification
+namespace DFC.App.JobProfileTasks.FunctionalTests.Model.Classification
 {
     public class WorkingHoursDetailsClassification
     {

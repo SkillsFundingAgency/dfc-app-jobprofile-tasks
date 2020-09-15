@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace DFC.App.JobProfileOverview.Tests.IntegrationTests.API.Model.API
+namespace DFC.App.JobProfileTasks.FunctionalTests.Model.API
 {
     public class JobProfileOverviewApiResponse
     {
