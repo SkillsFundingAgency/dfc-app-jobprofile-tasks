@@ -55,9 +55,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MessagingFunction", "Messag
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DFC.App.JobProfileTasks.MessageFunctionApp.UnitTests", "DFC.App.JobProfileTasks.MessageFunctionApp.UnitTests\DFC.App.JobProfileTasks.MessageFunctionApp.UnitTests.csproj", "{3F71A289-6A56-4CD1-932D-B986B033D0E7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DFC.App.JobProfileTasks.FunctionalTests", "DFC.App.JobProfileTasks.FunctionalTests\DFC.App.JobProfileTasks.FunctionalTests.csproj", "{FC34633B-A93C-4D00-AA7B-534ED736027C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DFC.App.JobProfileTasks.FunctionalTests", "DFC.App.JobProfileTasks.FunctionalTests\DFC.App.JobProfileTasks.FunctionalTests.csproj", "{FC34633B-A93C-4D00-AA7B-534ED736027C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "FunctionalTests", "FunctionalTests", "{6090C1C5-C639-41D3-B133-AC961C1FD69A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TestFrameworks", "TestFrameworks", "{9B4DC4B9-EE33-4C6A-9D42-B3292915B584}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DFC.App.JobProfileTasks.TestFramework.UnitTests", "DFC.App.JobProfileTasks.TestFramework.UnitTests\DFC.App.JobProfileTasks.TestFramework.UnitTests.csproj", "{1E76DA58-77F4-48DF-BEED-36A41109037C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -109,6 +113,10 @@ Global
 		{FC34633B-A93C-4D00-AA7B-534ED736027C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FC34633B-A93C-4D00-AA7B-534ED736027C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FC34633B-A93C-4D00-AA7B-534ED736027C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1E76DA58-77F4-48DF-BEED-36A41109037C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1E76DA58-77F4-48DF-BEED-36A41109037C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1E76DA58-77F4-48DF-BEED-36A41109037C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1E76DA58-77F4-48DF-BEED-36A41109037C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -131,6 +139,8 @@ Global
 		{3F71A289-6A56-4CD1-932D-B986B033D0E7} = {7C89975A-E902-4DE3-8857-35AE73DCB596}
 		{FC34633B-A93C-4D00-AA7B-534ED736027C} = {6090C1C5-C639-41D3-B133-AC961C1FD69A}
 		{6090C1C5-C639-41D3-B133-AC961C1FD69A} = {A3F23ED3-A6B1-4300-923C-40ACBC307F2E}
+		{9B4DC4B9-EE33-4C6A-9D42-B3292915B584} = {3AE31B85-B71A-4124-9EC4-9E7EEE8C6C90}
+		{1E76DA58-77F4-48DF-BEED-36A41109037C} = {9B4DC4B9-EE33-4C6A-9D42-B3292915B584}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F46A82FA-0A56-4C92-8FBD-69383C30A26F}
