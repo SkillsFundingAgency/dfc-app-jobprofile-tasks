@@ -1,14 +1,14 @@
-﻿using DFC.App.RelatedCareers.Tests.IntegrationTests.API.Model.Support;
-using DFC.App.RelatedCareers.Tests.IntegrationTests.API.Support.AzureServiceBus;
-using DFC.App.RelatedCareers.Tests.IntegrationTests.API.Support.AzureServiceBus.ServiceBusFactory;
-using DFC.App.RelatedCareers.Tests.IntegrationTests.API.Support.AzureServiceBus.ServiceBusFactory.Interface;
+﻿using DFC.App.JobProfileTasks.FunctionalTests.Model.Support;
+using DFC.App.JobProfileTasks.FunctionalTests.Support.AzureServiceBus;
+using DFC.App.JobProfileTasks.FunctionalTests.Support.AzureServiceBus.ServiceBusFactory;
+using DFC.App.JobProfileTasks.FunctionalTests.Support.AzureServiceBus.ServiceBusFactory.Interface;
 using FakeItEasy;
 using Microsoft.Azure.ServiceBus;
 using System;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace DFC.App.RelatedCareers.Tests.TestFramework.UnitTests
+namespace DFC.App.JobProfileTasks.TestFramework.UnitTests
 {
     public class ServiceBusTests
     {

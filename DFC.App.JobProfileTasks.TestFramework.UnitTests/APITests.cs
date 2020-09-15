@@ -1,23 +1,22 @@
-using DFC.App.RelatedCareers.Tests.IntegrationTests.API.Model.API;
-using DFC.App.RelatedCareers.Tests.IntegrationTests.API.Model.Support;
-using DFC.App.RelatedCareers.Tests.IntegrationTests.API.Support.API;
-using DFC.App.RelatedCareers.Tests.IntegrationTests.API.Support.API.RestFactory.Interface;
+using DFC.App.JobProfileTasks.FunctionalTests.Model.API;
+using DFC.App.JobProfileTasks.FunctionalTests.Model.Support;
+using DFC.App.JobProfileTasks.FunctionalTests.Support.API;
+using DFC.App.JobProfileTasks.FunctionalTests.Support.API.RestFactory.Interface;
 using FakeItEasy;
 using RestSharp;
 using System;
-using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace DFC.App.RelatedCareers.Tests.TestFramework.UnitTests
+namespace DFC.App.JobProfileTasks.TestFramework.UnitTests
 {
     public class APITests
     {
         private AppSettings appSettings;
         private IRestClientFactory restClientFactory;
         private IRestRequestFactory restRequestFactory;
-        private IRelatedCareersAPI careerPathApi;
+        private IJobProfileTasksAPI jobProfileTasksAPI;
         private IRestClient restClient;
         private IRestRequest restRequest;
 
@@ -30,7 +29,7 @@ namespace DFC.App.RelatedCareers.Tests.TestFramework.UnitTests
             this.restRequest = A.Fake<IRestRequest>();
             A.CallTo(() => this.restClientFactory.Create(A<Uri>.Ignored)).Returns(this.restClient);
             A.CallTo(() => this.restRequestFactory.Create(A<string>.Ignored)).Returns(this.restRequest);
-            this.careerPathApi = new RelatedCareersAPI(this.restClientFactory, this.restRequestFactory, this.appSettings);
+            this.jobProfileTasksAPI = new JobProfileTasksAPI(this.restClientFactory, this.restRequestFactory, this.appSettings);
         }
 
         [Theory]
@@ -38,16 +37,16 @@ namespace DFC.App.RelatedCareers.Tests.TestFramework.UnitTests
         [InlineData("")]
         public async Task EmptyOrNullIdResultsInNullBeingReturned(string id)
         {
-            Assert.Null(await this.careerPathApi.GetById(id).ConfigureAwait(true));
+            Assert.Null(await this.jobProfileTasksAPI.GetById(id).ConfigureAwait(true));
         }
 
         [Fact]
         public async Task SuccessfulGetRequest()
         {
-            var apiResponse = new RestResponse<List<RelatedCareersResponse>>();
+            var apiResponse = new RestResponse<JobProfileTasksResponse>();
             apiResponse.StatusCode = HttpStatusCode.OK;
-            A.CallTo(() => this.restClient.Execute<List<RelatedCareersResponse>>(A<IRestRequest>.Ignored)).Returns(apiResponse);
-            var response = await this.careerPathApi.GetById("id").ConfigureAwait(false);
+            A.CallTo(() => this.restClient.Execute<JobProfileTasksResponse>(A<IRestRequest>.Ignored)).Returns(apiResponse);
+            var response = await this.jobProfileTasksAPI.GetById("id").ConfigureAwait(false);
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         }
 
@@ -55,7 +54,7 @@ namespace DFC.App.RelatedCareers.Tests.TestFramework.UnitTests
         [InlineData("Accept", "application/json")]
         public async Task AllRequestHeadersAreSet(string headerKey, string headerValue)
         {
-            var response = await this.careerPathApi.GetById("id").ConfigureAwait(false);
+            var response = await this.jobProfileTasksAPI.GetById("id").ConfigureAwait(false);
             A.CallTo(() => this.restRequest.AddHeader(headerKey, headerValue)).MustHaveHappenedOnceExactly();
         }
     }
