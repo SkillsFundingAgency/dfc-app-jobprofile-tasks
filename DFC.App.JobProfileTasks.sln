@@ -61,7 +61,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "FunctionalTests", "Function
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TestFrameworks", "TestFrameworks", "{9B4DC4B9-EE33-4C6A-9D42-B3292915B584}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DFC.App.JobProfileTasks.TestFramework.UnitTests", "DFC.App.JobProfileTasks.TestFramework.UnitTests\DFC.App.JobProfileTasks.TestFramework.UnitTests.csproj", "{1E76DA58-77F4-48DF-BEED-36A41109037C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DFC.App.JobProfileTasks.TestFramework.UnitTests", "DFC.App.JobProfileTasks.TestFramework.UnitTests\DFC.App.JobProfileTasks.TestFramework.UnitTests.csproj", "{1E76DA58-77F4-48DF-BEED-36A41109037C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
