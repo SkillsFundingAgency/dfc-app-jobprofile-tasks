@@ -19,10 +19,10 @@ namespace DFC.App.JobProfileTasks.MessageFunctionApp.Services
         private readonly ILogService logger;
         private readonly ICorrelationIdProvider correlationIdProvider;
 
-        public HttpClientService(JobProfileClientOptions jobProfileClientOptions, HttpClient httpClient, ILogService logger, ICorrelationIdProvider correlationIdProvider)
+        public HttpClientService(JobProfileClientOptions jobProfileClientOptions, IHttpClientFactory httpClientFactory, ILogService logger, ICorrelationIdProvider correlationIdProvider)
         {
             this.jobProfileClientOptions = jobProfileClientOptions;
-            this.httpClient = httpClient;
+            this.httpClient = httpClientFactory.CreateClient();
             this.logger = logger;
             this.correlationIdProvider = correlationIdProvider;
         }
