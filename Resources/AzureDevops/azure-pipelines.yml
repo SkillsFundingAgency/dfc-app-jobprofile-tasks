@@ -60,13 +60,3 @@ jobs:
       BuildPlatform: $(BuildPlatform)
       BuildConfiguration: $(BuildConfiguration)
 
- #Build functional Tests
-- job: Buildfunctionaltests
-  displayName: Build functional tests
-  steps:
-  # Build all Functional Tests that ends with .FunctionalTests
-  - template: AzureDevOpsTemplates\Build\StepTemplates\dfc-dotnetcore-build-sonar.yml@dfc-devops
-    parameters:
-      SolutionBaseName: $(SolutionBaseName).FunctionalTests
-      BuildPlatform: $(BuildPlatform)
-      BuildConfiguration: $(BuildConfiguration)
