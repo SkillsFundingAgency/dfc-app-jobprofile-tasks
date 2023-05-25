@@ -55,6 +55,8 @@
         },
         "enableAlerts": {
             "value": __EnableAzureMonitorAlerting__
+        },"appInsightsInstrumentationKey": {
+            "value": "__appInsightsInstrumentationKey__" 
         }
     }
 }
