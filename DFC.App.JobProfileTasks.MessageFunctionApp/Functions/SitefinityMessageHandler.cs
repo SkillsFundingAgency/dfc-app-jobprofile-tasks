@@ -23,6 +23,8 @@ namespace DFC.App.JobProfileTasks.MessageFunctionApp.Functions
         [FunctionName("SitefinityMessageHandler")]
         public async Task Run([ServiceBusTrigger("%cms-messages-topic%", "%cms-messages-subscription%", Connection = "service-bus-connection-string")] Message sitefinityMessage)
         {
+            logService.LogInformation($"{nameof(Run)} has been called");
+
             if (sitefinityMessage == null)
             {
                 throw new ArgumentNullException(nameof(sitefinityMessage));
