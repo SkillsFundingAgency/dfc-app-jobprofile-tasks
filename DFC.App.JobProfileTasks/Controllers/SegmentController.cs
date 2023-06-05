@@ -242,9 +242,13 @@ namespace DFC.App.JobProfileTasks.Controllers
                 return BadRequest(ModelState);
             }
 
-            var statusCode = await jobProfileTasksSegmentService.PatchUniformAsync(patchDocument, documentId).ConfigureAwait(false);
+            var response = await jobProfileTasksSegmentService.PatchUniformAsync(patchDocument, documentId).ConfigureAwait(false);
+            if (response != HttpStatusCode.OK && response != HttpStatusCode.Created)
+            {
+                logService.LogError($"{PatchUniformActionName}: Error while patching Uniform content for Job Profile with Id: {patchDocument.JobProfileId} for {patchDocument.Title} ");
+            }
 
-            return StatusCode((int)statusCode);
+            return new StatusCodeResult((int)response);
         }
 
         [HttpPatch]
@@ -265,9 +269,13 @@ namespace DFC.App.JobProfileTasks.Controllers
                 return BadRequest(ModelState);
             }
 
-            var statusCode = await jobProfileTasksSegmentService.PatchLocationAsync(patchDocument, documentId).ConfigureAwait(false);
+            var response = await jobProfileTasksSegmentService.PatchLocationAsync(patchDocument, documentId).ConfigureAwait(false);
+            if (response != HttpStatusCode.OK && response != HttpStatusCode.Created)
+            {
+                logService.LogError($"{PatchLocationActionName}: Error while patching Location content for Job Profile with Id: {patchDocument.JobProfileId} for {patchDocument.Title} ");
+            }
 
-            return StatusCode((int)statusCode);
+            return new StatusCodeResult((int)response);
         }
 
         [HttpPatch]
@@ -288,9 +296,13 @@ namespace DFC.App.JobProfileTasks.Controllers
                 return BadRequest(ModelState);
             }
 
-            var statusCode = await jobProfileTasksSegmentService.PatchEnvironmentAsync(patchDocument, documentId).ConfigureAwait(false);
+            var response = await jobProfileTasksSegmentService.PatchEnvironmentAsync(patchDocument, documentId).ConfigureAwait(false);
+            if (response != HttpStatusCode.OK && response != HttpStatusCode.Created)
+            {
+                logService.LogError($"{PatchEnvironmentActionName}: Error while patching Environment content for Job Profile with Id: {patchDocument.JobProfileId} for {patchDocument.Description} ");
+            }
 
-            return StatusCode((int)statusCode);
+            return new StatusCodeResult((int)response);
         }
     }
 }
