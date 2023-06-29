@@ -16,19 +16,21 @@ namespace DFC.App.JobProfileTasks.MessageFunctionApp.Services
     {
         private readonly JobProfileClientOptions jobProfileClientOptions;
         private readonly HttpClient httpClient;
-        private readonly ILogService logger;
+        private readonly ILogService logService;
         private readonly ICorrelationIdProvider correlationIdProvider;
 
-        public HttpClientService(JobProfileClientOptions jobProfileClientOptions, HttpClient httpClient, ILogService logger, ICorrelationIdProvider correlationIdProvider)
+        public HttpClientService(JobProfileClientOptions jobProfileClientOptions, HttpClient httpClient, ILogService logService, ICorrelationIdProvider correlationIdProvider)
         {
             this.jobProfileClientOptions = jobProfileClientOptions;
             this.httpClient = httpClient;
-            this.logger = logger;
+            this.logService = logService;
             this.correlationIdProvider = correlationIdProvider;
         }
 
         public async Task<HttpStatusCode> PostAsync(JobProfileTasksSegmentModel tasksSegmentModel)
         {
+            logService.LogInformation($"{nameof(PostAsync)} has been called with JobProfileSkillSegmentModel {nameof(tasksSegmentModel)}");
+
             var url = new Uri($"{jobProfileClientOptions?.BaseAddress}segment");
 
             using (var content = new ObjectContent(typeof(JobProfileTasksSegmentModel), tasksSegmentModel, new JsonMediaTypeFormatter(), MediaTypeNames.Application.Json))
@@ -38,7 +40,7 @@ namespace DFC.App.JobProfileTasks.MessageFunctionApp.Services
                 if (!response.IsSuccessStatusCode)
                 {
                     var responseContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                    logger.LogError($"Failure status code '{response.StatusCode}' received with content '{responseContent}', for POST, Id: {tasksSegmentModel?.DocumentId}.");
+                    logService.LogError($"Failure status code '{response.StatusCode}' received with content '{responseContent}', for POST, Id: {tasksSegmentModel?.DocumentId}.");
                     response.EnsureSuccessStatusCode();
                 }
 
@@ -48,6 +50,8 @@ namespace DFC.App.JobProfileTasks.MessageFunctionApp.Services
 
         public async Task<HttpStatusCode> PutAsync(JobProfileTasksSegmentModel tasksSegmentModel)
         {
+            logService.LogInformation($"{nameof(PutAsync)} has been called with JobProfileSkillSegmentModel {nameof(tasksSegmentModel)}");
+
             var url = new Uri($"{jobProfileClientOptions?.BaseAddress}segment");
 
             using (var content = new ObjectContent(typeof(JobProfileTasksSegmentModel), tasksSegmentModel, new JsonMediaTypeFormatter(), MediaTypeNames.Application.Json))
@@ -58,7 +62,7 @@ namespace DFC.App.JobProfileTasks.MessageFunctionApp.Services
                 if (!response.IsSuccessStatusCode && response.StatusCode != HttpStatusCode.NotFound)
                 {
                     var responseContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                    logger.LogError($"Failure status code '{response.StatusCode}' received with content '{responseContent}', for Put type {typeof(JobProfileTasksSegmentModel)}, Id: {tasksSegmentModel?.DocumentId}");
+                    logService.LogError($"Failure status code '{response.StatusCode}' received with content '{responseContent}', for Put type {typeof(JobProfileTasksSegmentModel)}, Id: {tasksSegmentModel?.DocumentId}");
                     response.EnsureSuccessStatusCode();
                 }
 
@@ -69,6 +73,8 @@ namespace DFC.App.JobProfileTasks.MessageFunctionApp.Services
         public async Task<HttpStatusCode> PatchAsync<T>(T patchModel, string patchTypeEndpoint)
             where T : BasePatchModel
         {
+            logService.LogInformation($"{nameof(PatchAsync)} has been called with patchModel {nameof(patchModel)}");
+
             var url = new Uri($"{jobProfileClientOptions.BaseAddress}segment/{patchModel?.JobProfileId}/{patchTypeEndpoint}");
             ConfigureHttpClient();
 
@@ -78,7 +84,7 @@ namespace DFC.App.JobProfileTasks.MessageFunctionApp.Services
                 if (!response.IsSuccessStatusCode && response.StatusCode != HttpStatusCode.NotFound)
                 {
                     var responseContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                    logger.LogError($"Failure status code '{response.StatusCode}' received with content '{responseContent}', for patch type {typeof(T)}, Id: {patchModel?.JobProfileId}");
+                    logService.LogError($"Failure status code '{response.StatusCode}' received with content '{responseContent}', for patch type {typeof(T)}, Id: {patchModel?.JobProfileId}");
                     response.EnsureSuccessStatusCode();
                 }
 
@@ -88,6 +94,8 @@ namespace DFC.App.JobProfileTasks.MessageFunctionApp.Services
 
         public async Task<HttpStatusCode> DeleteAsync(Guid id)
         {
+            logService.LogInformation($"{nameof(DeleteAsync)} has been called with id {nameof(id)}");
+
             var url = new Uri($"{jobProfileClientOptions?.BaseAddress}segment/{id}");
             ConfigureHttpClient();
             var response = await httpClient.DeleteAsync(url).ConfigureAwait(false);
@@ -95,7 +103,7 @@ namespace DFC.App.JobProfileTasks.MessageFunctionApp.Services
             if (!response.IsSuccessStatusCode && response.StatusCode != HttpStatusCode.NotFound)
             {
                 var responseContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                logger.LogError($"Failure status code '{response.StatusCode}' received with content '{responseContent}', for DELETE, Id: {id}.");
+                logService.LogError($"Failure status code '{response.StatusCode}' received with content '{responseContent}', for DELETE, Id: {id}.");
                 response.EnsureSuccessStatusCode();
             }
 
@@ -104,8 +112,12 @@ namespace DFC.App.JobProfileTasks.MessageFunctionApp.Services
 
         private void ConfigureHttpClient()
         {
+            logService.LogInformation($"{nameof(ConfigureHttpClient)} has been called");
+
             if (!httpClient.DefaultRequestHeaders.Contains(HeaderName.CorrelationId))
             {
+                logService.LogInformation($"{nameof(ConfigureHttpClient)} does not contain {nameof(HeaderName.CorrelationId)}");
+
                 httpClient.DefaultRequestHeaders.Add(HeaderName.CorrelationId, correlationIdProvider.CorrelationId);
             }
         }
