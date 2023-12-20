@@ -4,13 +4,13 @@
     "parameters": {
         "appServiceDomain": {
             "value": "__appServiceDomain__"
-        },        
+        },
         "appSharedResourceGroup": {
             "value": "__appSharedResourceGroup__"
         },
         "appSharedServiceBusName": {
             "value": "__appSharedServiceBusName__"
-        },        
+        },
         "appSharedStorageAccountName": {
             "value": "__appSharedStorageAccountName__"
         },
@@ -55,6 +55,12 @@
         },
         "enableAlerts": {
             "value": __EnableAzureMonitorAlerting__
+        },
+        "workspaceName": {
+            "value": "__sharedLogAnalyticsWorkspace__"
+        },
+        "workspaceResourceGroup": {
+            "value": "__sharedLogAnalyticsResourceGroup__"
         }
     }
 }

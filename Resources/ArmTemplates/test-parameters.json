@@ -4,13 +4,13 @@
     "parameters": {
         "appServiceDomain": {
             "value": "azurewebsites.net"
-        },        
+        },
         "appSharedResourceGroup": {
             "value": "dfc-dev-app-sharedresources-rg"
         },
         "appSharedServiceBusName": {
             "value": "dfc-dev-app-sharedresources-ns"
-        },        
+        },
         "appSharedStorageAccountName": {
             "value": "dfcdevappsharedstr"
         },
@@ -34,6 +34,12 @@
         },
         "enableAlerts": {
             "value": false
+        },
+        "workspaceName": {
+            "value": "aTestLogAnalyticsAccount"
+        },
+        "workspaceResourceGroup": {
+            "value": "aResourceGroup"
         }
     }
 }
