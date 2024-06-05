@@ -14,6 +14,15 @@
         "appSharedStorageAccountName": {
             "type": "string"
         },
+        "appServicePlanSuffix": {
+            "type": "string"
+        },
+        "appServiceName": {
+            "type": "string"
+        },
+        "functionAppName": {
+            "type": "string"
+        },
         "aseHostingEnvironmentName": {
             "type": "string",
             "defaultValue": ""
@@ -89,18 +98,16 @@
         }
     },
     "variables": {
-        "appServicePlanName": "[if(greater(length(parameters('sharedAppServicePlanName')), 0), parameters('sharedAppServicePlanName'), concat(variables('resourcePrefix'), '-asp'))]",
+        "appServicePlanName": "[if(greater(length(parameters('sharedAppServicePlanName')), 0), parameters('sharedAppServicePlanName'), concat(variables('resourcePrefix'), parameters('appServicePlanSuffix'), '-asp'))]",
         "appServicePlanResourceGroup": "[if(greater(length(parameters('SharedAppServicePlanResourceGroup')), 0), parameters('SharedAppServicePlanResourceGroup'), resourceGroup().name)]",
         "buildingBlocksDfcBaseUrl": "https://raw.githubusercontent.com/SkillsFundingAgency/dfc-devops/master/ArmTemplates/",
         "cosmosDbCollectionPartitionKey": "/PartitionKey",
         "cosmosDbDatabaseName": "dfc-app-jobprofiles",
         "cosmosDbEndpoint": "[concat('https://', parameters('cosmosDbName'), '.documents.azure.com:443/')]",
         "resourcePrefix": "[tolower(concat('dfc-', parameters('Environment'), '-app-jobproftasks'))]",
-        "urlJobprofileTasks": "[toLower(concat('https://', variables('webAppName'), '.', parameters('appServiceDomain')))]",
-        "webAppName": "[concat(variables('ResourcePrefix'), '-as')]",
-        "webAppInsightsName": "[concat(variables('webAppName'), '-ai')]",
-        "functionAppName": "[concat(variables('ResourcePrefix'), '-fa')]",
-        "functionAppInsightsName": "[concat(variables('functionAppName'), '-ai')]",
+        "urlJobprofileTasks": "[toLower(concat('https://', parameters('appServiceName'), '.', parameters('appServiceDomain')))]",
+        "webAppInsightsName": "[concat(parameters('appServiceName'), '-ai')]",
+        "functionAppInsightsName": "[concat(parameters('functionAppName'), '-ai')]",
         "cmsSubscriptionName": "job-profile-tasks",
         "ActionGroupName": "[concat('dfc-', replace(tolower(parameters('Environment')), '-draft', ''), '-app-sharedresources-actgrp')]"
     },
@@ -166,7 +173,7 @@
         },
         {
             "apiVersion": "2017-05-10",
-            "name": "[variables('webAppName')]",
+            "name": "[parameters('appServiceName')]",
             "type": "Microsoft.Resources/deployments",
             "properties": {
                 "mode": "Incremental",
@@ -176,7 +183,7 @@
                 },
                 "parameters": {
                     "appServiceName": {
-                        "value": "[variables('webAppName')]"
+                        "value": "[parameters('appServiceName')]"
                     },
                     "appServicePlanName": {
                         "value": "[variables('appServicePlanName')]"
@@ -272,7 +279,7 @@
         },
         {
             "apiVersion": "2017-05-10",
-            "name": "[variables('functionAppName')]",
+            "name": "[parameters('functionAppName')]",
             "type": "Microsoft.Resources/deployments",
             "properties": {
                 "mode": "Incremental",
@@ -282,7 +289,7 @@
                 },
                 "parameters": {
                     "appServiceName": {
-                        "value": "[variables('functionAppName')]"
+                        "value": "[parameters('functionAppName')]"
                     },
                     "appServicePlanName": {
                         "value": "[variables('appServicePlanName')]"
